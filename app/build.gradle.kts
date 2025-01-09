@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.infoquizapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.infoquizapp"
@@ -63,5 +63,5 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.logging)
     implementation(libs.androidx.room)
-    implementation(libs.androidx.room.compiler)
+    annotationProcessor(libs.androidx.room.compiler)
 }
