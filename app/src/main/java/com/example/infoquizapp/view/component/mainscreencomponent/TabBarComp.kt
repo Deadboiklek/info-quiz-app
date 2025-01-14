@@ -1,8 +1,6 @@
 package com.example.infoquizapp.view.component.mainscreencomponent
 
-import android.graphics.Color
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Home
