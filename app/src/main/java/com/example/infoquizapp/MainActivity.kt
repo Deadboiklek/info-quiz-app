@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.compose.AppTheme
-import com.example.infoquizapp.view.component.mainscreencomponent.ActivityCard
-import com.example.infoquizapp.view.component.mainscreencomponent.TabBar
 
 class MainActivity : ComponentActivity() {
 
@@ -15,7 +13,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme() {
-
             }
         }
     }

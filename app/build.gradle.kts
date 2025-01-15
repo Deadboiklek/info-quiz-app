@@ -58,6 +58,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation (libs.androidx.material.icons.extended)
     implementation(libs.kodein.di)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
