@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.compose.AppTheme
+import com.example.infoquizapp.view.component.lessonscreencomponent.LessonCard
+import com.example.infoquizapp.view.component.lessonscreencomponent.data.Lesson
 
 class MainActivity : ComponentActivity() {
 
