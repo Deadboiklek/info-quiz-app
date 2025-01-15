@@ -22,7 +22,7 @@ fun TabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         val tabs = listOf(
             TabItem("Главная", Icons.Outlined.Home),
             TabItem("Уроки", Icons.Outlined.CheckCircle),
-            TabItem("Разделы", Icons.Outlined.DateRange)
+            TabItem("Пробник", Icons.Outlined.DateRange)
         )
 
         tabs.forEachIndexed { index, tab ->
