@@ -26,7 +26,8 @@ fun TheoryCard(theory: TheoryCardData) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable{ TODO("Сделать логику") }
+            .clickable{ TODO("Сделать логику") },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row (
             modifier = Modifier
@@ -50,14 +51,16 @@ fun TheoryCard(theory: TheoryCardData) {
                 // Название раздела
                 Text(
                     text = theory.title,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
                 // Описание урока
                 Text(
                     text = "${theory.pagesAmount} страниц",
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
