@@ -28,7 +28,8 @@ fun TestCard() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable{ TODO("Сделать логику") }
+            .clickable{ TODO("Сделать логику") },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
             modifier = Modifier
@@ -52,14 +53,16 @@ fun TestCard() {
                 // Заголовок
                 Text(
                     text = "Пробный вариант", // Тут мб еще надо будет поменять
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
                 // Описание урока
                 Text(
                     text = "Реши пробный вариант, чтобы проверить свои знания",
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }

@@ -30,7 +30,7 @@ fun ActivityCard() {
             .clickable { TODO( " сделать логику " ) },
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainer),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -38,8 +38,10 @@ fun ActivityCard() {
             // Заголовок
             Text(
                 text = "Моя активность за месяц",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             // Дни недели
@@ -49,7 +51,8 @@ fun ActivityCard() {
                         text = day,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
@@ -68,7 +71,8 @@ fun ActivityCard() {
                                 modifier = Modifier
                                     .size(36.dp)
                                     .background(
-                                        if (rowIndex == 4 && columnIndex == 5) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer,
+                                        if (rowIndex == 4 && columnIndex == 5) MaterialTheme.colorScheme.tertiary
+                                        else MaterialTheme.colorScheme.primary,
                                         shape = RoundedCornerShape(4.dp)
                                     )
                             )

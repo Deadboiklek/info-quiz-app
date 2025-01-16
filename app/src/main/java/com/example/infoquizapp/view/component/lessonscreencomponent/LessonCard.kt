@@ -31,7 +31,8 @@ fun LessonCard(lesson: Lesson) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable{ TODO("Сделать логику") }
+            .clickable{ TODO("Сделать логику") },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
             modifier = Modifier
@@ -54,14 +55,16 @@ fun LessonCard(lesson: Lesson) {
                 // Название урока
                 Text(
                     text = lesson.title,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
                 // Описание урока
                 Text(
                     text = lesson.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.secondary
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -69,7 +72,8 @@ fun LessonCard(lesson: Lesson) {
                 // Пройденные темы
                 Text(
                     text = "Пройдено тем: ${lesson.completedTopics} из ${lesson.totalTopics}",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
