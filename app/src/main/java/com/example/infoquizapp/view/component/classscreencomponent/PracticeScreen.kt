@@ -6,23 +6,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.infoquizapp.view.component.classscreencomponent.data.TheoryCardData
+import com.example.infoquizapp.view.component.classscreencomponent.data.PracticeCardData
 
-val theories = listOf(
-    TheoryCardData("1", "Раздел 1", 4),
-    TheoryCardData("2", "Раздел 2", 1),
-    TheoryCardData("3", "Раздел 3", 2)
+val practicies = listOf(
+    PracticeCardData("Практика 1", 5),
+    PracticeCardData("Практика 2", 3),
+    PracticeCardData("Практика 3", 10)
 )
 
 @Composable
-fun TheoryScreen() {
+fun PracticeScreen() {
     Scaffold { paddingValues ->
         LazyColumn(
             contentPadding = paddingValues,
             modifier = Modifier.fillMaxSize()
         ) {
-            items(theories) { theory ->
-                TheoryCard(theory = theory)
+            items(practicies) { practice ->
+                PracticeCard(practice = practice)
             }
         }
     }
