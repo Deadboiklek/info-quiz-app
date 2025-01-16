@@ -39,7 +39,7 @@ fun TheoryCard(theory: TheoryCardData) {
             Text(
                 text = theory.count,
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.secondary
             )
 
             Spacer(modifier = Modifier.width(16.dp))

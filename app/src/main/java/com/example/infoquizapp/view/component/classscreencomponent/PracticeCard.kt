@@ -24,7 +24,8 @@ fun PracticeCard(practice: PracticeCardData) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable{ TODO("Сделать логику") }
+            .clickable{ TODO("Сделать логику") },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row (
             modifier = Modifier
@@ -38,14 +39,16 @@ fun PracticeCard(practice: PracticeCardData) {
                 // Название раздела
                 Text(
                     text = practice.title,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
                 // Количество вопросов в задании
                 Text(
                     text = "${practice.questionsAmount} вопросов",
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp)
+                    modifier = Modifier.padding(top = 4.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
