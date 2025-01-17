@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,14 +26,24 @@ fun TaskCard() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clickable { TODO( " сделать логику " ) }
+            .clickable { TODO( " сделать логику " ) },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = "Задания", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+            Text(text = "Задания",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Вы выполнили 3 из 5 заданий на сегодня!")
+            Text(
+                text = "Вы выполнили 3 из 5 заданий на сегодня!",
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
     }
 }

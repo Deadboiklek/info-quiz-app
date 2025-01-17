@@ -17,6 +17,8 @@ import com.example.infoquizapp.view.component.lessonscreencomponent.LessonCard
 import com.example.infoquizapp.view.component.lessonscreencomponent.data.Lesson
 import com.example.infoquizapp.view.component.mainscreencomponent.TabBar
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 
 // Список уроков для визуализации
 val lessons = listOf(
@@ -27,14 +29,14 @@ val lessons = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LessonsScreen() {
+fun LessonScreen() {
 
     var selectedTab by remember { mutableStateOf(1) } // для TabBarComp
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Уроки", fontWeight = FontWeight.Bold) },
+                title = { Text("Уроки", fontWeight = FontWeight.Bold) }
             )
         },
         bottomBar = {

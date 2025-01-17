@@ -21,7 +21,7 @@ import com.example.infoquizapp.view.component.mainscreencomponent.TaskCard
 import com.example.infoquizapp.view.component.mainscreencomponent.UserProgressBar
 
 @Composable
-fun HomeScreen(
+fun MainScreen(
     userName: String = "Имя Пользователя",
     userLevel: Int = 5,
     progress: Float = 0.7f      //тут надо всё это сделать, а не статичные данные
