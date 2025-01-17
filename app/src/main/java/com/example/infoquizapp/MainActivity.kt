@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onExit = {
-                        // действие при выходе
+                        // действие при выход
                         println("Выход из практики")
                     }
                 )
