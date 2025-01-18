@@ -4,78 +4,52 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import com.example.compose.AppTheme
-import com.example.infoquizapp.view.component.practicecontentscreencomponent.data.PracticeContentData
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import com.example.infoquizapp.view.screen.PracticeContentScreen
+import com.example.infoquizapp.view.component.questsscreencomponent.data.Quest
+import com.example.infoquizapp.view.screen.TasksScreen
+
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        val questions = listOf(
-            PracticeContentData(
-                id = 1,
-                questionText = "Какое из перечисленных значений соответствует слову «характер»?",
-                answers = listOf(
-                    "Умственная способность человека или потенциал рациональной мысли.",
-                    "Способность понимать явления без рассуждений.",
-                    "Характеристика индивида с точки зрения психики.",
-                    "Индивидуальный склад человека."
-                ),
-                correctAnswerIndex = 2
-            ),
-            PracticeContentData(
-                id = 2,
-                questionText = "Что является столицей Франции?",
-                answers = listOf(
-                    "Берлин",
-                    "Париж",
-                    "Рим",
-                    "Мадрид"
-                ),
-                correctAnswerIndex = 1
-            )
-        )
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme() {
-                val currentQuestionIndex = remember { mutableStateOf(0) }
-
-                PracticeContentScreen(
-                    questions = questions,
-                    currentQuestionIndex = currentQuestionIndex.value,
-                    onQuestionSelected = { index ->
-                        currentQuestionIndex.value = index // переход к выбранному вопросу
-                    },
-                    onAnswerSelected = { selectedIndex ->
-                        // обработка ответа ну чисто на отъебись для примера
-                        val currentQuestion = questions[currentQuestionIndex.value]
-                        if (selectedIndex == currentQuestion.correctAnswerIndex) {
-                            println("Ответ верный")
-                        } else {
-                            println("Ответ неверный")
-                        }
-                        // автоматический переход к следующему вопросу
-                        if (currentQuestionIndex.value < questions.size - 1) {
-                            currentQuestionIndex.value++
-                        }
-                    },
-                    onSkip = {
-                        // пропустить вопрос
-                        if (currentQuestionIndex.value < questions.size - 1) {
-                            currentQuestionIndex.value++
-                        }
-                    },
-                    onExit = {
-                        // действие при выходе
-                        println("Выход из практики")
-                    }
-                )
+                TasksApp()
             }
         }
     }
+}
+
+@Composable
+fun TasksApp() {
+    val quests = listOf(
+        Quest(
+            id = 1,
+            title = "Пройти тест",
+            description = "Пройдите тест на тему 'Основы информатики'.",
+            image = painterResource(id = R.drawable.ic_launcher_background), // Убедитесь, что ресурс существует
+            counter = 5
+        ),
+        Quest(
+            id = 2,
+            title = "Решить задачу",
+            description = "Решите задачу по алгоритмам.",
+            image = painterResource(id = R.drawable.ic_launcher_background) // Убедитесь, что ресурс существует
+        ),
+        Quest(
+            id = 3,
+            title = "Прочитать материал",
+            description = "Изучите материал по структурам данных.",
+            image = painterResource(id = R.drawable.ic_launcher_background) // Убедитесь, что ресурс существует
+        )
+    )
+
+    TasksScreen(
+        quests = quests,
+        onClose = { println("Закрыть экран") }
+    )
 }
