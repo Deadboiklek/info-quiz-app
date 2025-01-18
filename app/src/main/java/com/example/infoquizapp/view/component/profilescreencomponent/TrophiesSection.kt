@@ -30,7 +30,8 @@ fun TrophiesSection() {
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp),
+        onClick = { TODO("Сделать логику") }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

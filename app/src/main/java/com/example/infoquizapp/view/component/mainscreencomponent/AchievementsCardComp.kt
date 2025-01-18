@@ -25,9 +25,9 @@ fun AchievementsCard() {
         elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clickable { TODO( " сделать логику " ) },
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        onClick = { TODO("Сделать логику") }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

@@ -26,11 +26,11 @@ fun ActivityCard() {
     Card(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
-            .clickable { TODO( " сделать логику " ) },
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        onClick = { TODO("Сделать логику") }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
