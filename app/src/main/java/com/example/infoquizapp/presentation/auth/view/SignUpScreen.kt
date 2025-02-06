@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation.auth.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,9 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginScreen(){
-
-    Column(
+fun SignUpScreen () {
+    Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -33,16 +32,33 @@ fun LoginScreen(){
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Log in",
+            text = "Sign up",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        //Email textfield
+        Text(
+            text = "Create your account",
+            style = TextStyle(color = MaterialTheme.colorScheme.onBackground, fontSize = 16.sp),
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
+        // Name TextField
         OutlinedTextField(
-            value = "Тут сделать",
-            onValueChange = {TODO( "пока не сделано, надо подумать" )},
-            label = { Text("Email") },
+            value = "тут сделать",
+            onValueChange = { TODO( "тут сделать надо" ) },
+            label = { Text("Name") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            singleLine = true
+        )
+
+        // Email TextField
+        OutlinedTextField(
+            value = "тут сделать",
+            onValueChange = { TODO( "тут надо сделать" ) },
+            label = { Text("E-mail") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
@@ -60,18 +76,9 @@ fun LoginScreen(){
             singleLine = true
         )
 
-        //Forgot passsword
-        Text(
-            text = "Forgot password?",
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable{TODO( "пока не сделано, надо подумать" )},
-            style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp)
-        )
-
         Spacer(modifier = Modifier.height(24.dp))
 
-        //Log in button
+        //Sign up button
         Button(
             onClick = {TODO( "пока не сделано, надо подумать" )},
             colors = ButtonDefaults.buttonColors(
@@ -83,14 +90,14 @@ fun LoginScreen(){
                 .height(50.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "Log in", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Sign up", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Sign up Text
         Text(
-            text = "Sign up",
+            text = "Log in",
             modifier = Modifier
                 .clickable { TODO( "пока не сделано, надо подумать" ) },
             style = TextStyle(
