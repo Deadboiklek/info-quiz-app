@@ -15,15 +15,40 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.presentation.auth.viewmodel.AuthUiState
+import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+
+    viewModel: AuthViewModel,
+    onLoginSuccess: (token: String) -> Unit
+
+){
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            onLoginSuccess((uiState as AuthUiState.Success).token)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -33,15 +58,15 @@ fun LoginScreen(){
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Log in",
+            text = "Авторизация",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
         //Email textfield
         OutlinedTextField(
-            value = "Тут сделать",
-            onValueChange = {TODO( "пока не сделано, надо подумать" )},
+            value = email,
+            onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -51,29 +76,21 @@ fun LoginScreen(){
 
         //Password textfield
         OutlinedTextField(
-            value = "Тут сделать",
-            onValueChange = {TODO( "пока не сделано, надо подумать" )},
+            value = password,
+            onValueChange = { password = it },
             label = { Text("Password") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+            visualTransformation = PasswordVisualTransformation(),
             singleLine = true
-        )
-
-        //Forgot passsword
-        Text(
-            text = "Forgot password?",
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable{TODO( "пока не сделано, надо подумать" )},
-            style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         //Log in button
         Button(
-            onClick = {TODO( "пока не сделано, надо подумать" )},
+            onClick = { viewModel.login(email, password) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -83,14 +100,14 @@ fun LoginScreen(){
                 .height(50.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "Log in", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Войти", fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Sign up Text
         Text(
-            text = "Sign up",
+            text = "Нет аккаунта? Зарегистрируйтесь!",
             modifier = Modifier
                 .clickable { TODO( "пока не сделано, надо подумать" ) },
             style = TextStyle(
