@@ -1,14 +1,14 @@
 package com.example.infoquizapp.domain.auth.usecases
 
+import com.example.infoquizapp.data.auth.network.Response
 import com.example.infoquizapp.domain.auth.repository.AuthRepository
 
 class LoginUseCase(private val repository: AuthRepository) {
     suspend operator fun invoke(email: String, password: String): AuthResult {
-        return try {
-            val token = repository.login(email, password)
-            AuthResult(token = token, error = null)
-        } catch (e: Exception) {
-            AuthResult(token = null, error = e.message ?: "Ошибка авторизации")
+        val token = repository.login(email, password)
+        return when(token) {
+            is Response.Error -> AuthResult(token = null, error = token.error.message)
+            is Response.Succes -> AuthResult(token = token.result.access_token, error = null)
         }
     }
 }
