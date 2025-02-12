@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.profilescreencomponent
+package com.example.infoquizapp.presentation.profile.view.profilescreencomponent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

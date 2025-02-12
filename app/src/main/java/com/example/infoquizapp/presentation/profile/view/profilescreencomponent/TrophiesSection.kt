@@ -1,5 +1,6 @@
-package com.example.infoquizapp.presentation.view.component.profilescreencomponent
+package com.example.infoquizapp.presentation.profile.view.profilescreencomponent
 
+import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.infoquizapp.presentation.view.component.profilescreencomponent.utilcomp.TrophyItem
+import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.utilcomp.TrophyItem
 
 @Composable
 fun TrophiesSection() {
@@ -55,10 +56,10 @@ fun TrophiesSection() {
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                TrophyItem(painterResource(android.R.drawable.ic_menu_gallery), count = 0)
-                TrophyItem(painterResource(android.R.drawable.ic_menu_gallery), count = 0)
-                TrophyItem(painterResource(android.R.drawable.ic_menu_gallery), count = 0)
-                TrophyItem(painterResource(android.R.drawable.ic_menu_gallery), count = 1)
+                TrophyItem(painterResource(R.drawable.ic_menu_gallery), count = 0)
+                TrophyItem(painterResource(R.drawable.ic_menu_gallery), count = 0)
+                TrophyItem(painterResource(R.drawable.ic_menu_gallery), count = 0)
+                TrophyItem(painterResource(R.drawable.ic_menu_gallery), count = 1)
             }
         }
     }
