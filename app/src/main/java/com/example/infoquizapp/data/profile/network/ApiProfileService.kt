@@ -1,6 +1,5 @@
 package com.example.infoquizapp.data.profile.network
 
-import com.example.infoquizapp.data.auth.model.TokenResponse
 import com.example.infoquizapp.data.profile.model.UserOut
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
