@@ -48,7 +48,7 @@ fun ProfileScreen() {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            UserProfileSection()
+            UserProfileSection("")
 
             Spacer(modifier = Modifier.height(16.dp))
 
