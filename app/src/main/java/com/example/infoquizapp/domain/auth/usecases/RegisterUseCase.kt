@@ -8,7 +8,7 @@ class RegisterUseCase(private val repository: AuthRepository) {
         val token = repository.register(username, email, password)
         return when(token) {
             is Response.Error -> AuthResult(token = null, error = token.error.message)
-            is Response.Succes -> AuthResult(token = token.result.access_token, error = null)
+            is Response.Succes -> AuthResult(token = token.result.accessToken, error = null)
         }
     }
 }

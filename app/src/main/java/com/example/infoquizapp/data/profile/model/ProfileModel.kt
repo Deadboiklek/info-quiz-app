@@ -6,5 +6,5 @@ data class UserOut(
     val email: String,
     val level: Int,
     val experience: Int,
-    val created_at: String
+    val createdAt: String
 )
