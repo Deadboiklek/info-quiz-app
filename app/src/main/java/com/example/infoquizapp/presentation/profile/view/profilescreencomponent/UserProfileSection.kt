@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.profilescreencomponent
+package com.example.infoquizapp.presentation.profile.view.profilescreencomponent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun UserProfileSection() {
+fun UserProfileSection(name: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -46,17 +46,10 @@ fun UserProfileSection() {
 
         // Имя пользователя
         Text(
-            text = "Александр Савченко",
+            text = name,
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
             color = MaterialTheme.colorScheme.onBackground
-        )
-
-        // Никнейм пользователя
-        Text(
-            text = "@vsele_1488",
-            color = MaterialTheme.colorScheme.secondary,
-            fontSize = 16.sp
         )
     }
 }

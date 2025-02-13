@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation.profile.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +17,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.profilescreencomponent.TrophiesSection
-import com.example.infoquizapp.presentation.view.component.profilescreencomponent.UserProfileSection
+import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.TrophiesSection
+import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.UserProfileSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +48,7 @@ fun ProfileScreen() {
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            UserProfileSection()
+            UserProfileSection("")
 
             Spacer(modifier = Modifier.height(16.dp))
 

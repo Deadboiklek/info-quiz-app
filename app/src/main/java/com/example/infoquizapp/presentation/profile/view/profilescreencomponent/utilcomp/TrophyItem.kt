@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.profilescreencomponent.utilcomp
+package com.example.infoquizapp.presentation.profile.view.profilescreencomponent.utilcomp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
