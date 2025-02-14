@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation.achievement.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,8 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.achievementsscreencomponent.AchievementCard
-import com.example.infoquizapp.presentation.view.component.achievementsscreencomponent.data.Achievement
+import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.AchievementCard
+import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data.Achievement
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

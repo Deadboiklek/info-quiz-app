@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.achievementsscreencomponent
+package com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.achievementsscreencomponent.data.Achievement
+import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data.Achievement
 
 @Composable
 fun AchievementCard(achievement: Achievement) {

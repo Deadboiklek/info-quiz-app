@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.achievementsscreencomponent.data
+package com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
