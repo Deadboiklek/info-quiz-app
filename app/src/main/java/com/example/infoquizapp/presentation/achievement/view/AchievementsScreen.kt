@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.AchievementCard
-import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data.Achievement
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

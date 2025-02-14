@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data.Achievement
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsUiModel
 
 @Composable
