@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -19,10 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.data.Achievement
+import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsUiModel
 
 @Composable
-fun AchievementCard(achievement: Achievement) {
+fun AchievementCard(uiModel: AchievementsUiModel) {
+
+    val textColor = if (uiModel.isObtained) {
+        MaterialTheme.colorScheme.onBackground
+    } else {
+        MaterialTheme.colorScheme.secondary
+    }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -33,31 +42,28 @@ fun AchievementCard(achievement: Achievement) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = achievement.icon,
-                contentDescription = achievement.title,
-                tint = if (achievement.completed) Color.Unspecified else MaterialTheme.colorScheme.secondary,
+                imageVector = Icons.Default.Star,
+                contentDescription = uiModel.achievement.name,
+                tint = if (uiModel.isObtained) Color.Unspecified else MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
-                    text = achievement.title,
+                    text = uiModel.achievement.name,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = if (achievement.completed) MaterialTheme.colorScheme.onBackground
-                    else MaterialTheme.colorScheme.secondary,
+                    color = textColor,
                 )
                 Text(
-                    text = achievement.description,
+                    text = uiModel.achievement.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (achievement.completed) MaterialTheme.colorScheme.onBackground
-                    else MaterialTheme.colorScheme.secondary,
+                    color = textColor,
                 )
                 Text(
-                    text = achievement.rarity,
+                    text = "Bonus XP: ${uiModel.achievement.experienceBonus}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (achievement.completed) MaterialTheme.colorScheme.onBackground
-                    else MaterialTheme.colorScheme.secondary,
+                    color = textColor,
                 )
             }
         }
