@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,12 +18,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.data.Quest
+import com.example.infoquizapp.data.quest.model.QuestOut
+import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 
 @Composable
-fun QuestionCard(quest: Quest) {
+fun QuestionCard(quest: QuestOut, token: String, viewModel: UserQuestsViewModel) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -34,7 +37,7 @@ fun QuestionCard(quest: Quest) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = quest.image,
+                painter = ColorPainter(Color.DarkGray),
                 contentDescription = quest.title,
                 modifier = Modifier
                     .size(64.dp)
@@ -58,12 +61,33 @@ fun QuestionCard(quest: Quest) {
                     color = MaterialTheme.colorScheme.secondary
                 )
 
-                quest.counter?.let { count ->
-                    Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Награда: ${quest.experienceReward} XP",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+
+                if (quest.isActive) {
+                    Button(
+                        onClick = {
+                            viewModel.completeQuest(quest.id, token) { result ->
+                                if (result.error == null) {
+                                    println("Квест завершён: ${result.response?.message}")
+                                } else {
+                                    println("Ошибка: ${result.error}")
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text("Завершить квест")
+                    }
+                } else {
                     Text(
-                        text = "Осталось: $count",
+                        text = "Квест не активен",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(top = 8.dp)
                     )
                 }
             }
