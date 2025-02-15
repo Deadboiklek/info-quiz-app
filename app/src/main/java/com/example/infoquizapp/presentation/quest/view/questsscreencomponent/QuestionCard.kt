@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.questsscreencomponent
+package com.example.infoquizapp.presentation.quest.view.questsscreencomponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.questsscreencomponent.data.Quest
+import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.data.Quest
 
 @Composable
 fun QuestionCard(quest: Quest) {

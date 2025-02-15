@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation.quest.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +14,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.questsscreencomponent.QuestionCard
-import com.example.infoquizapp.presentation.view.component.questsscreencomponent.data.Quest
+import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.QuestionCard
+import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.data.Quest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

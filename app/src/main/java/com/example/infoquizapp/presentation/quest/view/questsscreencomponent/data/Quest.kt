@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.questsscreencomponent.data
+package com.example.infoquizapp.presentation.quest.view.questsscreencomponent.data
 
 import androidx.compose.ui.graphics.painter.Painter
 
