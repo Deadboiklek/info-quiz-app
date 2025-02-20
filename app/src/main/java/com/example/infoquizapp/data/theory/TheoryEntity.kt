@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class TheoryEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val title: String,
     val content: String
 )
