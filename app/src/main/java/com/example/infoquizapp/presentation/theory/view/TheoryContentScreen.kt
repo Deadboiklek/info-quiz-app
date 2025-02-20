@@ -74,13 +74,20 @@ fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
                                 Button(
-                                    onClick = { TODO("сделать логику") },
+                                    onClick = { TODO("здесь должна быть навигация \"назад\"") },
                                     modifier = Modifier.padding(8.dp)
                                 ) {
                                     Text(text = "Назад")
                                 }
                                 Button(
-                                    onClick = { TODO("сделать логику") },
+                                    onClick = {
+                                        if (theory != null && !theory.isRead) {
+                                            viewModel.markTheoryAsRead(theoryId)
+                                            // TODO: здесь должна быть навигация "назад"
+                                        } else {
+                                            // TODO: здесь должна быть навигация "назад"
+                                        }
+                                    },
                                     modifier = Modifier.padding(8.dp)
                                 ) {
                                     Text(text = "Закончить")
