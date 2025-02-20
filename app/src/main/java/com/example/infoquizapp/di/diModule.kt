@@ -8,6 +8,7 @@ import com.example.infoquizapp.data.profile.network.ApiProfileService
 import com.example.infoquizapp.data.profile.repository.ProfileRepositoryImpl
 import com.example.infoquizapp.data.quest.network.ApiQuestService
 import com.example.infoquizapp.data.quest.repository.QuestRepositoryImpl
+import com.example.infoquizapp.data.theory.repository.TheoryRepositoryImpl
 import com.example.infoquizapp.domain.achievement.repository.AchievementRepository
 import com.example.infoquizapp.domain.achievement.usecases.GetAllAchievementsUseCase
 import com.example.infoquizapp.domain.achievement.usecases.GetUserAchievementsUseCase
@@ -19,10 +20,14 @@ import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
 import com.example.infoquizapp.domain.quest.usecases.GetUserQuestsUseCase
+import com.example.infoquizapp.domain.theory.repository.TheoryRepository
+import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
+import com.example.infoquizapp.domain.theory.usecases.MarkTheoryAsReadUseCase
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import org.kodein.di.DI
@@ -61,6 +66,8 @@ val appModule = DI.Module("appModule") {
     bind<AchievementRepository>() with singleton { AchievementsRepositoryImpl(instance()) }
     //quest
     bind<QuestRepository>() with singleton { QuestRepositoryImpl(instance()) }
+    //theory
+    bind<TheoryRepository>() with singleton { TheoryRepositoryImpl(instance()) }
 
 
     //usecases
@@ -75,6 +82,9 @@ val appModule = DI.Module("appModule") {
     //quest
     bind<GetUserQuestsUseCase>() with singleton { GetUserQuestsUseCase(instance()) }
     bind<CompleteQuestResult>() with singleton { CompleteQuestResult(instance(), instance()) }
+    //theory
+    bind<GetTheoryUseCase>() with singleton { GetTheoryUseCase(instance()) }
+    bind<MarkTheoryAsReadUseCase>() with singleton { MarkTheoryAsReadUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -85,6 +95,6 @@ val appModule = DI.Module("appModule") {
     bind<AchievementsViewModel>() with singleton { AchievementsViewModel(instance(), instance()) }
     //quest
     bind<UserQuestsViewModel>() with singleton { UserQuestsViewModel(instance(), instance()) }
-
-
+    //theory
+    bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance()) }
 }
