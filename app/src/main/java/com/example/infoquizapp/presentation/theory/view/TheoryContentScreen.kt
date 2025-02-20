@@ -8,71 +8,110 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.theorycontentscreencomponent.data.TheoryContentData
+import com.example.infoquizapp.presentation.theory.viewmodel.TheoryUiState
+import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TheoryContentScreen(theory: TheoryContentData) {
+fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
 
-    Scaffold (
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = theory.title,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onBackground
+    val uiState by viewModel.uiState.collectAsState()
+
+    var text by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf("") }
+
+    LaunchedEffect(theoryId) {
+        viewModel.loadTheory(theoryId)
+    }
+
+    when(uiState) {
+        TheoryUiState.Loading -> CircularProgressIndicator()
+
+        is TheoryUiState.Success -> {
+
+            val theory = (uiState as TheoryUiState.Success).theory
+
+            if (text.isEmpty() && theory != null) {
+                text = theory.content
+                title = theory.title
+            }
+
+            Scaffold (
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = title,
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.headlineMedium,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomAppBar(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        content = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Button(
+                                    onClick = { TODO("сделать логику") },
+                                    modifier = Modifier.padding(8.dp)
+                                ) {
+                                    Text(text = "Назад")
+                                }
+                                Button(
+                                    onClick = { TODO("сделать логику") },
+                                    modifier = Modifier.padding(8.dp)
+                                ) {
+                                    Text(text = "Закончить")
+                                }
+                            }
+                        }
                     )
                 }
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.background,
-                content = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Button(
-                            onClick = { TODO("сделать логику") },
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text(text = "Назад")
-                        }
-                        Button(
-                            onClick = { TODO("сделать логику") },
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text(text = "Закончить")
-                        }
+            ) { innerPadding ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    item {
+                        Text(
+                            text = text,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 }
-            )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            item {
-                Text(
-                    text = theory.body,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
             }
         }
+
+        is TheoryUiState.Error -> {
+            Text(
+                text = (uiState as TheoryUiState.Error).message,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        TheoryUiState.Idle -> {  }
     }
 }
