@@ -15,4 +15,7 @@ interface TheoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTheory(theory: TheoryEntity)
+
+    @Query("UPDATE theory SET isRead = :read WHERE id = :id")
+    suspend fun updateReadStatus(id: Int, read: Boolean)
 }
