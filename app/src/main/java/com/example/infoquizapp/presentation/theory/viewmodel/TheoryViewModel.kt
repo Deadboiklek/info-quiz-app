@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.data.theory.TheoryEntity
 import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
+import com.example.infoquizapp.domain.theory.usecases.MarkTheoryAsReadUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ sealed class TheoryUiState {
 
 class TheoryViewModel(
     private val getTheoryUseCase: GetTheoryUseCase,
+    private val markTheoryAsReadUseCase: MarkTheoryAsReadUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TheoryUiState>(TheoryUiState.Idle)
@@ -31,6 +33,19 @@ class TheoryViewModel(
                 _uiState.value = TheoryUiState.Success(theory)
             } catch (e: Exception) {
                 _uiState.value = TheoryUiState.Error(e.localizedMessage ?: "Ошибка загрузки теории")
+            }
+        }
+    }
+
+    fun markTheoryAsRead(id: Int) {
+        viewModelScope.launch {
+            try {
+                markTheoryAsReadUseCase(id)
+                // после обновления статуса перезагружаем теорию для обновления UI
+                val updatedTheory = getTheoryUseCase(id)
+                _uiState.value = TheoryUiState.Success(updatedTheory)
+            } catch (e: Exception) {
+                _uiState.value = TheoryUiState.Error(e.localizedMessage ?: "Ошибка обновления статуса теории")
             }
         }
     }
