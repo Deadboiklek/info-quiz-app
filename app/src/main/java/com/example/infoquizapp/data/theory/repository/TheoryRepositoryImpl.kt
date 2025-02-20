@@ -8,4 +8,8 @@ class TheoryRepositoryImpl(private val theoryDao: TheoryDao) : TheoryRepository 
     override suspend fun getTheory(id: Int): TheoryEntity? {
         return theoryDao.getTheoryById(id)
     }
+
+    override suspend fun markTheoryAsRead(id: Int) {
+        theoryDao.updateReadStatus(id, true)
+    }
 }
