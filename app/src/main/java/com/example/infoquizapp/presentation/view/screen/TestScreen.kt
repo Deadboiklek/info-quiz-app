@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.TabBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.view.component.testscreencomponent.TestCard
 
 @OptIn(ExperimentalMaterial3Api::class)

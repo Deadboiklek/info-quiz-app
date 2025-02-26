@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation.main.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.AchievementsCard
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.ActivityCard
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.AppBar
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.TabBar
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.TaskCard
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.UserProgressBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.ActivityCard
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TaskCard
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
 
 @Composable
 fun MainScreen(

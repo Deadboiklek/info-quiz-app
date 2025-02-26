@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.example.infoquizapp.presentation.view.component.lessonscreencomponent.LessonCard
 import com.example.infoquizapp.presentation.view.component.lessonscreencomponent.data.Lesson
-import com.example.infoquizapp.presentation.view.component.mainscreencomponent.TabBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults

@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.mainscreencomponent
+package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
