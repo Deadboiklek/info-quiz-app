@@ -1,16 +1,23 @@
 package com.example.infoquizapp.presentation.main.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
@@ -18,45 +25,79 @@ import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
+import com.example.infoquizapp.presentation.main.viewmodel.MainUiState
+import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 
 @Composable
 fun MainScreen(
-    userName: String = "Имя Пользователя",
-    userLevel: Int = 5,
-    progress: Float = 0.7f      //тут надо всё это сделать, а не статичные данные
+    viewModel: MainViewModel,
+    token: String,
+    progress: Float = 0.7f      //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
 ) {
+
+    LaunchedEffect(token) {
+        viewModel.loadProfile(token)
+    }
+
+
     var selectedTab by remember { mutableStateOf(0) } // Для TabBar
+    val uiState by viewModel.uiState.collectAsState()
 
-
-    Scaffold(
-        topBar = {
-            AppBar(userName = userName)
-        },
-        bottomBar = {
-            TabBar(
-                selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
-            )
+    when(uiState) {
+        is MainUiState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            // Прогресс пользователя
-            UserProgressBar(userLevel = userLevel, progressProvider =  { progress })
+        is MainUiState.Success -> {
 
-            Spacer(modifier = Modifier.height(16.dp))
+            val user = (uiState as MainUiState.Success).user
 
-            // Карточка заданий
-            QuestCard()
+            Scaffold(
+                topBar = {
+                    AppBar(user = user)
+                },
+                bottomBar = {
+                    TabBar(
+                        selectedTab = selectedTab,
+                        onTabSelected = { selectedTab = it }
+                    )
+                }
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
+                    // Прогресс пользователя
+                    UserProgressBar(user = user, progressProvider =  { progress })
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            // Карточка достижений
-            AchievementsCard()
-            
+                    // Карточка заданий
+                    QuestCard()
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Карточка достижений
+                    AchievementsCard()
+                }
+            }
         }
+        is MainUiState.Error -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = (uiState as MainUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+        MainUiState.Idle -> {}
     }
 }

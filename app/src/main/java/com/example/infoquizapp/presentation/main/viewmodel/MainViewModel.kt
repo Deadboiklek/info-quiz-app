@@ -20,7 +20,7 @@ sealed class MainUiState {
 class MainViewModel(private val getProfileUseCase: GetProfileUseCase) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Idle)
-    private val uiState: StateFlow<MainUiState> = _uiState
+    val uiState: StateFlow<MainUiState> = _uiState
 
     fun loadProfile(token: String) {
         viewModelScope.launch {
