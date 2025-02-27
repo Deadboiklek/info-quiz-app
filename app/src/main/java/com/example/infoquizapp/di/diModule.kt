@@ -31,6 +31,7 @@ import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
 import com.example.infoquizapp.domain.theory.usecases.MarkTheoryAsReadUseCase
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
+import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
@@ -113,4 +114,6 @@ val appModule = DI.Module("appModule") {
     bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance()) }
     //quiz
     bind<QuizViewModel>() with singleton { QuizViewModel(instance(), instance()) }
+    //main
+    bind<MainViewModel>() with singleton { MainViewModel(instance()) }
 }
