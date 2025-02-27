@@ -32,7 +32,10 @@ import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 fun MainScreen(
     viewModel: MainViewModel,
     token: String,
-    progress: Float = 0.7f      //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
+    progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
+    onProfileClick : () -> Unit,
+    onAchievementClick : () -> Unit,
+    onQuestClick : () -> Unit
 ) {
 
     LaunchedEffect(token) {
@@ -58,7 +61,7 @@ fun MainScreen(
 
             Scaffold(
                 topBar = {
-                    AppBar(user = user)
+                    AppBar(user = user, onProfileClick = onProfileClick)
                 },
                 bottomBar = {
                     TabBar(
@@ -78,12 +81,12 @@ fun MainScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка заданий
-                    QuestCard()
+                    QuestCard(onQuestClick = onQuestClick)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка достижений
-                    AchievementsCard()
+                    AchievementsCard(onAchievementClick = onAchievementClick)
                 }
             }
         }

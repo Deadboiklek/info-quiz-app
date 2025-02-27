@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun QuestCard() {
+fun QuestCard(
+    onQuestClick : () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -26,7 +28,7 @@ fun QuestCard() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { TODO("Сделать логику") }
+        onClick = { onQuestClick() }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

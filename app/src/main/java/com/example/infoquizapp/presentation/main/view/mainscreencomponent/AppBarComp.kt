@@ -29,7 +29,10 @@ import com.example.infoquizapp.data.profile.model.UserOut
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(user: UserOut) {
+fun AppBar(
+    user : UserOut,
+    onProfileClick : () -> Unit
+) {
     TopAppBar(
         title = {
             Row(
@@ -48,15 +51,7 @@ fun AppBar(user: UserOut) {
                 // Имя пользователя
                 Text(text = user.username,
                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.clickable { TODO( "Сделать навигацию на профиль" )}
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { /* TODO: Настройки */ }) {
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_menu_manage), // Тут надо заменить
-                    contentDescription = "Settings"
+                    modifier = Modifier.clickable { onProfileClick() }
                 )
             }
         },

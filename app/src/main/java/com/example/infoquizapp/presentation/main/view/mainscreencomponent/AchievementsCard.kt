@@ -19,7 +19,9 @@ import androidx.compose.ui.unit.sp
 import com.example.infoquizapp.data.achievement.model.AchievementOut
 
 @Composable
-fun AchievementsCard() {
+fun AchievementsCard(
+    onAchievementClick : () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -27,7 +29,7 @@ fun AchievementsCard() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { TODO("Сделать логику") }
+        onClick = { onAchievementClick() }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
