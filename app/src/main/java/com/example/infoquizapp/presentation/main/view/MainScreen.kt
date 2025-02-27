@@ -14,10 +14,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
-import com.example.infoquizapp.presentation.main.view.mainscreencomponent.ActivityCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
-import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TaskCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
 
 @Composable
@@ -51,17 +50,13 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Карточка заданий
-            TaskCard()
+            QuestCard()
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Карточка достижений
             AchievementsCard()
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Карточка активности
-            ActivityCard()
+            
         }
     }
 }

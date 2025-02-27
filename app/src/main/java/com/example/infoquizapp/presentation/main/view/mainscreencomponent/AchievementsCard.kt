@@ -1,6 +1,5 @@
 package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.data.achievement.model.AchievementOut
 
 @Composable
 fun AchievementsCard() {
@@ -38,13 +38,6 @@ fun AchievementsCard() {
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Вы разблокировали 2 новых достижения!",
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }

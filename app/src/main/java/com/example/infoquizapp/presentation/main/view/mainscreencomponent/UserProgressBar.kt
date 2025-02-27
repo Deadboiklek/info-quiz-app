@@ -13,16 +13,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.data.profile.model.UserOut
 
 @Composable
-fun UserProgressBar(userLevel: Int, progressProvider: () -> Float) {
+fun UserProgressBar(user: UserOut, progressProvider: () -> Float) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
         Text(
-            text = "Уровень $userLevel",
+            text = "Уровень ${user.level}",
             style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(bottom = 8.dp)
         )

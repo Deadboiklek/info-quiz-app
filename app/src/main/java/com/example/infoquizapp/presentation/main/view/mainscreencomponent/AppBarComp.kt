@@ -25,10 +25,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.data.profile.model.UserOut
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(userName: String) {
+fun AppBar(user: UserOut) {
     TopAppBar(
         title = {
             Row(
@@ -45,7 +46,7 @@ fun AppBar(userName: String) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 // Имя пользователя
-                Text(text = userName,
+                Text(text = user.username,
                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier.clickable { TODO( "Сделать навигацию на профиль" )}
                 )
