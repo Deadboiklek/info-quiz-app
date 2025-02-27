@@ -1,6 +1,5 @@
-package com.example.infoquizapp.presentation.view.component.mainscreencomponent
+package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TaskCard() {
+fun QuestCard(
+    onQuestClick : () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -27,7 +28,7 @@ fun TaskCard() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { TODO("Сделать логику") }
+        onClick = { onQuestClick() }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -37,11 +38,6 @@ fun TaskCard() {
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Вы выполнили 3 из 5 заданий на сегодня!",
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }

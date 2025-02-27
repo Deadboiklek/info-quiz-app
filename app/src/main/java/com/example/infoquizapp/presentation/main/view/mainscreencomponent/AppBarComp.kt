@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.mainscreencomponent
+package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,10 +25,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.data.profile.model.UserOut
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(userName: String) {
+fun AppBar(
+    user : UserOut,
+    onProfileClick : () -> Unit
+) {
     TopAppBar(
         title = {
             Row(
@@ -45,17 +49,9 @@ fun AppBar(userName: String) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 // Имя пользователя
-                Text(text = userName,
+                Text(text = user.username,
                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.clickable { TODO( "Сделать навигацию на профиль" )}
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { /* TODO: Настройки */ }) {
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_menu_manage), // Тут надо заменить
-                    contentDescription = "Settings"
+                    modifier = Modifier.clickable { onProfileClick() }
                 )
             }
         },

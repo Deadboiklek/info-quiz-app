@@ -35,7 +35,8 @@ import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 fun LoginScreen(
 
     viewModel: AuthViewModel,
-    onLoginSuccess: (token: String) -> Unit
+    onLoginSuccess: (token: String) -> Unit,
+    onSignUpClick: () -> Unit
 
 ){
 
@@ -109,7 +110,7 @@ fun LoginScreen(
         Text(
             text = "Нет аккаунта? Зарегистрируйтесь!",
             modifier = Modifier
-                .clickable { TODO( "пока не сделано, надо подумать" ) },
+                .clickable { onSignUpClick() },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 16.sp,

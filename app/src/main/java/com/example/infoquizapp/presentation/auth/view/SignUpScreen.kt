@@ -36,7 +36,8 @@ import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 fun SignUpScreen (
 
     viewModel: AuthViewModel,
-    onRegisterSuccess: (token: String) -> Unit
+    onRegisterSuccess: (token: String) -> Unit,
+    onLoginClick: () -> Unit
 
 ) {
 
