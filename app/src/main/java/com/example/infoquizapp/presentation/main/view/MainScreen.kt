@@ -33,9 +33,9 @@ fun MainScreen(
     viewModel: MainViewModel,
     token: String,
     progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
-    onProfileClick : () -> Unit,
-    onAchievementClick : () -> Unit,
-    onQuestClick : () -> Unit
+    onProfileClick : (token: String) -> Unit,
+    onAchievementClick : (token: String) -> Unit,
+    onQuestClick : (token: String) -> Unit
 ) {
 
     LaunchedEffect(token) {
