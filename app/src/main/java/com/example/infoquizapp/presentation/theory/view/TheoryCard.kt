@@ -14,14 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.data.theory.TheoryEntity
-import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @Composable
 fun TheoryCard(
 
     theory: TheoryEntity,
-    viewModel: TheoryViewModel,
-    onTheoryContentScreen: (Int, TheoryViewModel) -> Unit
+    onTheoryContentScreen: (Int) -> Unit
 
 ) {
     Card(
@@ -31,7 +29,7 @@ fun TheoryCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { onTheoryContentScreen(theory.id, viewModel) }
+        onClick = { onTheoryContentScreen(theory.id) }
     ) {
         Row (
             modifier = Modifier
