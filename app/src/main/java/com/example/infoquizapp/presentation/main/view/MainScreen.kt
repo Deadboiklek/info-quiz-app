@@ -61,7 +61,7 @@ fun MainScreen(
 
             Scaffold(
                 topBar = {
-                    AppBar(user = user, onProfileClick = onProfileClick)
+                    AppBar(user = user, onProfileClick = onProfileClick, token = token)
                 },
                 bottomBar = {
                     TabBar(
@@ -81,12 +81,12 @@ fun MainScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка заданий
-                    QuestCard(onQuestClick = onQuestClick)
+                    QuestCard(onQuestClick = onQuestClick, token = token)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка достижений
-                    AchievementsCard(onAchievementClick = onAchievementClick)
+                    AchievementsCard(onAchievementClick = onAchievementClick, token = token)
                 }
             }
         }
