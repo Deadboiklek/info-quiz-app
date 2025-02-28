@@ -31,7 +31,7 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 @Composable
 fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.combinedState.collectAsState()
 
     var text by remember { mutableStateOf("") }
     var title by remember { mutableStateOf("") }
@@ -40,12 +40,12 @@ fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
         viewModel.loadTheory(theoryId)
     }
 
-    when(uiState) {
+    when(uiState.theoryState) {
         TheoryUiState.Loading -> CircularProgressIndicator()
 
         is TheoryUiState.Success -> {
 
-            val theory = (uiState as TheoryUiState.Success).theory
+            val theory = (uiState.theoryState as TheoryUiState.Success).theory
 
             if (text.isEmpty() && theory != null) {
                 text = theory.content
@@ -115,7 +115,7 @@ fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
 
         is TheoryUiState.Error -> {
             Text(
-                text = (uiState as TheoryUiState.Error).message,
+                text = (uiState.theoryState as TheoryUiState.Error).message,
                 color = MaterialTheme.colorScheme.error
             )
         }
