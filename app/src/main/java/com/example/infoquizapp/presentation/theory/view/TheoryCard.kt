@@ -1,12 +1,9 @@
-package com.example.infoquizapp.presentation.view.component.classscreencomponent
+package com.example.infoquizapp.presentation.theory.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.data.theory.TheoryEntity
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
-import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.TheoryCardData
 
 @Composable
 fun TheoryCard(

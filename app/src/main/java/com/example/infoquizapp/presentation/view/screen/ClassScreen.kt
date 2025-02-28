@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.view.component.classscreencomponent.PracticeScreen
-import com.example.infoquizapp.presentation.view.component.classscreencomponent.TheoryScreen
+import com.example.infoquizapp.presentation.theory.view.TheoryScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
