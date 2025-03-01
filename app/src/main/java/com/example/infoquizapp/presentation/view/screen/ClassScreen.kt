@@ -19,37 +19,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.view.component.classscreencomponent.PracticeScreen
 import com.example.infoquizapp.presentation.theory.view.TheoryScreen
+import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClassScreen(title: String) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
+fun ClassScreen(
+    viewModel: TheoryViewModel,
+    onTheoryCardClick: (Int) -> Unit
+) {
+
+    var selectedTabIndex by remember { mutableIntStateOf(0) } // для TabRow
+    var selectedTab by remember { mutableIntStateOf(1) } // для TabBarComp
 
     Scaffold (
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = title,
+                        text = "Уроки",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { /* тут сделать навигацию назад */ }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primary)
+            )
+        },
+        bottomBar = {
+            TabBar(
+                selectedTab = selectedTab,
+                onTabSelected = { selectedTab = it }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -69,7 +74,10 @@ fun ClassScreen(title: String) {
             }
 
             when (selectedTabIndex) {
-                0 -> TheoryScreen()
+                0 -> TheoryScreen(
+                    viewModel = viewModel,
+                    onTheoryCardClick = onTheoryCardClick
+                )
                 1 -> PracticeScreen()
             }
         }

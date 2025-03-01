@@ -41,7 +41,7 @@ fun LessonCard(lesson: Lesson) {
         ) {
             // Изображение урока
             Image(
-                painter = painterResource(id = lesson.imageRes), // Замените на ваши ресурсы
+                painter = painterResource(id = lesson.imageRes),
                 contentDescription = lesson.title,
                 modifier = Modifier
                     .size(60.dp)
