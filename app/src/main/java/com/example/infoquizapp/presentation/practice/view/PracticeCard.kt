@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.data.practice.PracticeEntity
-import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.PracticeCardData
 
 @Composable
 fun PracticeCard(

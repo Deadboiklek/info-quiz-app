@@ -17,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.infoquizapp.presentation.practice.viewmodel.AllPracticeUiState
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
-import com.example.infoquizapp.presentation.theory.viewmodel.AllTheoryUiState
-import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.PracticeCardData
 
 @Composable
 fun PracticeScreen(
