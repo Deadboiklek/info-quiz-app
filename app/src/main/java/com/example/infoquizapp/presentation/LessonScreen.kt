@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.screen
+package com.example.infoquizapp.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,8 +26,7 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LessonScreen(
-    theoryViewModel: TheoryViewModel,
+fun LessonScreen(    theoryViewModel: TheoryViewModel,
     practiceViewModel: PracticeViewModel,
     onTheoryCardClick: (Int) -> Unit,
     onPracticeCardClick: (String) -> Unit
