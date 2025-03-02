@@ -20,14 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.practice.view.PracticeScreen
+import com.example.infoquizapp.presentation.practice.viewmodel.AllPracticeUiState
+import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClassScreen(
-    viewModel: TheoryViewModel,
-    onTheoryCardClick: (Int) -> Unit
+    theoryViewModel: TheoryViewModel,
+    practiceViewModel: PracticeViewModel,
+    onTheoryCardClick: (Int) -> Unit,
+    onPracticeCardClick: (String) -> Unit
 ) {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) } // для TabRow
@@ -70,10 +74,13 @@ fun ClassScreen(
 
             when (selectedTabIndex) {
                 0 -> TheoryScreen(
-                    viewModel = viewModel,
+                    viewModel = theoryViewModel,
                     onTheoryCardClick = onTheoryCardClick
                 )
-                1 -> PracticeScreen()
+                1 -> PracticeScreen(
+                    viewModel = practiceViewModel,
+                    onPracticeCardClick = onPracticeCardClick
+                )
             }
         }
     }
