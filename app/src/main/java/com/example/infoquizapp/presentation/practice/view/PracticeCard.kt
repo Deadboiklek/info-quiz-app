@@ -20,7 +20,7 @@ import com.example.infoquizapp.presentation.view.component.classscreencomponent.
 fun PracticeCard(
 
     practice: PracticeEntity,
-    onQuizTestScreen: (type: String) -> Unit
+    onPracticeCardClick: (type: String) -> Unit
 
 ) {
     Card(
@@ -30,7 +30,7 @@ fun PracticeCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { onQuizTestScreen(practice.title) } // Переход на экран с вопросами
+        onClick = { onPracticeCardClick(practice.title) } // Переход на экран с вопросами
     ) {
         Row (
             modifier = Modifier

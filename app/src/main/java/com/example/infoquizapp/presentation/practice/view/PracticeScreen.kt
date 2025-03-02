@@ -1,29 +1,75 @@
 package com.example.infoquizapp.presentation.practice.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.infoquizapp.presentation.practice.viewmodel.AllPracticeUiState
+import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
+import com.example.infoquizapp.presentation.theory.viewmodel.AllTheoryUiState
 import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.PracticeCardData
 
-val practicies = listOf(
-    PracticeCardData("Практика 1", 5),
-    PracticeCardData("Практика 2", 3),
-    PracticeCardData("Практика 3", 10)
-)
-
 @Composable
-fun PracticeScreen() {
+fun PracticeScreen(
+    viewModel: PracticeViewModel,
+    onPracticeCardClick: (String) -> Unit
+) {
+
+    val uiState by viewModel.combinedState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadAllPractices()
+    }
+
     Scaffold { paddingValues ->
-        LazyColumn(
-            contentPadding = paddingValues,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(practicies) { practice ->
-                PracticeCard(practice = practice)
+        when(uiState.allPracticeUiState) {
+            AllPracticeUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
+            is AllPracticeUiState.Success -> {
+                val practices = (uiState.allPracticeUiState as AllPracticeUiState.Success).practices
+
+                LazyColumn(
+                    contentPadding = paddingValues,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(practices) { practice ->
+                        PracticeCard(practice = practice, onPracticeCardClick = onPracticeCardClick)
+                    }
+                }
+            }
+            is AllPracticeUiState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = (uiState.allPracticeUiState as AllPracticeUiState.Error).message,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+            AllPracticeUiState.Idle -> { /* ничего не делаем */ }
         }
     }
 }
