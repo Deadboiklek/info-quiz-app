@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.view.component.classscreencomponent
+package com.example.infoquizapp.presentation.practice.view
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

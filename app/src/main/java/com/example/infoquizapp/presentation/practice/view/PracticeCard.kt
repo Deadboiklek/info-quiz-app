@@ -1,6 +1,5 @@
-package com.example.infoquizapp.presentation.view.component.classscreencomponent
+package com.example.infoquizapp.presentation.practice.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.infoquizapp.data.practice.PracticeEntity
 import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.PracticeCardData
 
 @Composable
-fun PracticeCard(practice: PracticeCardData) {
+fun PracticeCard(
+
+    practice: PracticeEntity,
+    onQuizTestScreen: (type: String) -> Unit
+
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -25,7 +30,7 @@ fun PracticeCard(practice: PracticeCardData) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { TODO("Сделать логику") }
+        onClick = { onQuizTestScreen(practice.title) } // Переход на экран с вопросами
     ) {
         Row (
             modifier = Modifier
@@ -43,9 +48,8 @@ fun PracticeCard(practice: PracticeCardData) {
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
-                // Количество вопросов в задании
                 Text(
-                    text = "${practice.questionsAmount} вопросов",
+                    text = practice.description,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 4.dp),
                     color = MaterialTheme.colorScheme.onPrimaryContainer
