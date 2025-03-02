@@ -1,9 +1,7 @@
 package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,11 +14,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.infoquizapp.data.achievement.model.AchievementOut
 
 @Composable
 fun AchievementsCard(
-    onAchievementClick : () -> Unit
+    onAchievementClick: (token: String) -> Unit,
+    token: String
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -29,7 +27,7 @@ fun AchievementsCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { onAchievementClick() }
+        onClick = { onAchievementClick(token) }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

@@ -1,9 +1,7 @@
 package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -19,7 +17,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun QuestCard(
-    onQuestClick : () -> Unit
+    token: String,
+    onQuestClick: (token: String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -28,7 +27,7 @@ fun QuestCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { onQuestClick() }
+        onClick = { onQuestClick(token) }
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

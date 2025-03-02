@@ -27,9 +27,10 @@ import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TasksScreen(
+fun QuestScreen(
     viewModel: UserQuestsViewModel,
-    token: String
+    token: String,
+    onExit : () -> Unit
 ) {
     LaunchedEffect(token) {
         viewModel.loadUserQuests(token)
@@ -52,7 +53,7 @@ fun TasksScreen(
                     TopAppBar(
                         title = { Text(text = "Задания") },
                         actions = {
-                            TextButton(onClick = TODO()) {
+                            TextButton(onClick = onExit) {
                                 Text(text = "Закрыть", color = MaterialTheme.colorScheme.primary)
                             }
                         }

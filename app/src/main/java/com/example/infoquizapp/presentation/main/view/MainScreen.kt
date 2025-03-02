@@ -33,9 +33,9 @@ fun MainScreen(
     viewModel: MainViewModel,
     token: String,
     progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
-    onProfileClick : () -> Unit,
-    onAchievementClick : () -> Unit,
-    onQuestClick : () -> Unit
+    onProfileClick : (token: String) -> Unit,
+    onAchievementClick : (token: String) -> Unit,
+    onQuestClick : (token: String) -> Unit
 ) {
 
     LaunchedEffect(token) {
@@ -61,7 +61,7 @@ fun MainScreen(
 
             Scaffold(
                 topBar = {
-                    AppBar(user = user, onProfileClick = onProfileClick)
+                    AppBar(user = user, onProfileClick = onProfileClick, token = token)
                 },
                 bottomBar = {
                     TabBar(
@@ -81,12 +81,12 @@ fun MainScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка заданий
-                    QuestCard(onQuestClick = onQuestClick)
+                    QuestCard(onQuestClick = onQuestClick, token = token)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка достижений
-                    AchievementsCard(onAchievementClick = onAchievementClick)
+                    AchievementsCard(onAchievementClick = onAchievementClick, token = token)
                 }
             }
         }

@@ -12,4 +12,8 @@ class TheoryRepositoryImpl(private val theoryDao: TheoryDao) : TheoryRepository 
     override suspend fun markTheoryAsRead(id: Int) {
         theoryDao.updateReadStatus(id, true)
     }
+
+    override suspend fun getAllTheory(): List<TheoryEntity> {
+        return theoryDao.getAllTheory()
+    }
 }

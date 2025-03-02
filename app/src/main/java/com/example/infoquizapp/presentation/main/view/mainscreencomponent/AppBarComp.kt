@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,8 +28,9 @@ import com.example.infoquizapp.data.profile.model.UserOut
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
-    user : UserOut,
-    onProfileClick : () -> Unit
+    user: UserOut,
+    onProfileClick: (token: String) -> Unit,
+    token: String
 ) {
     TopAppBar(
         title = {
@@ -51,7 +50,7 @@ fun AppBar(
                 // Имя пользователя
                 Text(text = user.username,
                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.clickable { onProfileClick() }
+                    modifier = Modifier.clickable { onProfileClick(token) }
                 )
             }
         },
