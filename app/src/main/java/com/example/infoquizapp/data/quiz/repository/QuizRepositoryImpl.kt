@@ -12,6 +12,10 @@ class QuizRepositoryImpl(private val apiService: QuizApiService) : QuizRepositor
         return apiService.getTestQuizzes(quizType, token)
     }
 
+    override suspend fun getTrialTest(token: String): Response<List<QuizOut>> {
+        return apiService.getTrialTest(token)
+    }
+
     override suspend fun submitAnswer(answer: AnswerIn, token: String): Response<AnswerOut> {
         return apiService.submitAnswer(answer, token)
     }
