@@ -64,7 +64,8 @@ fun QuizTestScreen(viewModel: QuizViewModel, quizType: String, token: String) {
                         // отправляем ответы по каждому вопросу
                         userAnswers.forEach { (quizId, answer) ->
                             viewModel.submitAnswer(quizId, answer, token) { result ->
-                                println("Quiz $quizId: ${if (result.response?.isCorrect == true) "Верно" else "Неверно, правильный ответ: ${result.response?.correctAnswer}"}")
+                                println("Quiz $quizId: ${if (result.response?.isCorrect == true) "Верно" 
+                                else "Неверно, правильный ответ: ${result.response?.correctAnswer}"}")
                             }
                         }
                     },
@@ -81,7 +82,7 @@ fun QuizTestScreen(viewModel: QuizViewModel, quizType: String, token: String) {
                     )
                 }
             }
-            else -> Unit
+            TestQuizzesUiState.Idle -> Unit
         }
     }
 }
