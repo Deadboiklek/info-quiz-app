@@ -111,7 +111,7 @@ val appModule = DI.Module("appModule") {
     //quest
     bind<UserQuestsViewModel>() with singleton { UserQuestsViewModel(instance(), instance()) }
     //theory
-    bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance()) }
+    bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance(), instance()) }
     //quiz
     bind<QuizViewModel>() with singleton { QuizViewModel(instance(), instance()) }
     //main
