@@ -36,6 +36,15 @@ class QuizApiService(
         }.getOrElse { Response.Error(QuizError.GetQuizError) }
     }
 
+    suspend fun getTrialTest(token: String): Response<List<QuizOut>> {
+        return kotlin.runCatching {
+            Response.Success(client.get("$baseUrl/quizzes/trial") {
+                header("Authorization", "Bearer $token")
+                contentType(ContentType.Application.Json)
+            }.body<List<QuizOut>>())
+        }.getOrElse { Response.Error(QuizError.GetQuizError) }
+    }
+
     suspend fun submitAnswer(answer: AnswerIn, token: String): Response<AnswerOut> {
 
         return kotlin.runCatching {
