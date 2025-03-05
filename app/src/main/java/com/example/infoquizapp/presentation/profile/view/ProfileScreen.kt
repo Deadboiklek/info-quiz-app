@@ -1,5 +1,6 @@
 package com.example.infoquizapp.presentation.profile.view
 
+import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,8 @@ import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    token: String
+    token: String,
+    onExit : () -> Unit
 ) {
 
     LaunchedEffect(token) {
@@ -60,7 +62,7 @@ fun ProfileScreen(
                     TopAppBar(
                         title = { Text("") },
                         navigationIcon = {
-                            IconButton(onClick = { /* тут сделать навигацию назад */ }) {
+                            IconButton(onClick = { onExit() }) {
                                 Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                                     contentDescription = "Back")
                             }

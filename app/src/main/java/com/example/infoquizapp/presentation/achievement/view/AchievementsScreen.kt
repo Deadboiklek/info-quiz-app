@@ -42,7 +42,6 @@ import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsVi
 fun AchievementsScreen(
     viewModel: AchievementsViewModel,
     token: String,
-    counts: List<Int>,
     onExit: () -> Unit
 ) {
 
@@ -79,42 +78,6 @@ fun AchievementsScreen(
                     .padding(16.dp)
                     .fillMaxSize()
             ) {
-                // Секция значков
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    counts.forEachIndexed { index, count ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                imageVector = when (index) {
-                                    0 -> Icons.Default.Star // Platinum
-                                    1 -> Icons.Default.EmojiEvents // Gold
-                                    2 -> Icons.Default.StarBorder // Silver
-                                    else -> Icons.Default.MilitaryTech // Bronze
-                                },
-                                contentDescription = null,
-                                tint = when (index) {
-                                    0 -> Color(0xFF0099FF) // Blue
-                                    1 -> Color(0xFFFFD700) // Gold
-                                    2 -> Color(0xFFC0C0C0) // Silver
-                                    else -> Color(0xFFCD7F32) // Bronze
-                                },
-                                modifier = Modifier.size(48.dp)
-                            )
-                            Text(
-                                text = count.toString(),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Список достижений
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.fillMaxSize()

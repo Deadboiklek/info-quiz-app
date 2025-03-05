@@ -1,6 +1,5 @@
-package com.example.infoquizapp.presentation.view.component.classscreencomponent
+package com.example.infoquizapp.presentation.theory.view
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.view.component.classscreencomponent.data.PracticeCardData
+import com.example.infoquizapp.data.theory.TheoryEntity
 
 @Composable
-fun PracticeCard(practice: PracticeCardData) {
+fun TheoryCard(
+
+    theory: TheoryEntity,
+    onTheoryContentScreen: (Int) -> Unit
+
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -25,7 +29,7 @@ fun PracticeCard(practice: PracticeCardData) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { TODO("Сделать логику") }
+        onClick = { onTheoryContentScreen(theory.id) }
     ) {
         Row (
             modifier = Modifier
@@ -34,20 +38,13 @@ fun PracticeCard(practice: PracticeCardData) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column (
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Название раздела
                 Text(
-                    text = practice.title,
+                    text = theory.title,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-
-                // Количество вопросов в задании
-                Text(
-                    text = "${practice.questionsAmount} вопросов",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp),
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
