@@ -14,34 +14,36 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.quiz.view.QuizQuestionItem
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialUiState
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TrialTestScreen(viewModel: TrialViewModel, token: String) {
+fun TrialTestScreen(
+    viewModel: TrialViewModel,
+    token: String,
+    onExit: () -> Unit,
+) {
 
     //при старте загружаем пробник, состоит из заданий всех типов(1 тип = 1 задание)
     LaunchedEffect(token) {
         viewModel.loadTrial(token)
     }
 
-    var selectedTab by remember { mutableIntStateOf(2) }
     val trialState by viewModel.trialState.collectAsState()
     // локальное состояние для выбранных ответов: Map(quiz id -> user answer)
     var userAnswers by remember { mutableStateOf(mutableMapOf<Int, String>()) }
@@ -56,13 +58,12 @@ fun TrialTestScreen(viewModel: TrialViewModel, token: String) {
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primary)
-            )
-        },
-        bottomBar = {
-            TabBar(
-                selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primary),
+                actions = {
+                    TextButton(onClick = onExit) {
+                        Text(text = "Закрыть", color = MaterialTheme.colorScheme.primary)
+                    }
+                }
             )
         },
         containerColor = MaterialTheme.colorScheme.background
