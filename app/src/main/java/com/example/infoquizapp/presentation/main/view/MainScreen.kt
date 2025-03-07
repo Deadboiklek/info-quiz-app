@@ -13,17 +13,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
-import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
 import com.example.infoquizapp.presentation.main.viewmodel.MainUiState
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
@@ -35,7 +33,8 @@ fun MainScreen(
     progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
     onProfileClick : (token: String) -> Unit,
     onAchievementClick : (token: String) -> Unit,
-    onQuestClick : (token: String) -> Unit
+    onQuestClick : (token: String) -> Unit,
+    navController: NavController
 ) {
 
     LaunchedEffect(token) {
@@ -43,7 +42,6 @@ fun MainScreen(
     }
 
 
-    var selectedTab by remember { mutableStateOf(0) } // Для TabBar
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -64,9 +62,8 @@ fun MainScreen(
                     AppBar(user = user, onProfileClick = onProfileClick, token = token)
                 },
                 bottomBar = {
-                    TabBar(
-                        selectedTab = selectedTab,
-                        onTabSelected = { selectedTab = it }
+                    TabBarComp(
+                        navController = navController
                     )
                 }
             ) { paddingValues ->
