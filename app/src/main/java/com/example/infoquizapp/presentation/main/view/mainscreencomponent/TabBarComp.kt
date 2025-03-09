@@ -10,36 +10,41 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun TabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
+fun TabBarComp(navController: NavController) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        tonalElevation = 8.dp
+        tonalElevation = 8.dp,
     ) {
-        val tabs = listOf(
-            TabItem("Главная", Icons.Outlined.Home),
-            TabItem("Уроки", Icons.Outlined.CheckCircle),
-            TabItem("Пробник", Icons.Outlined.DateRange)
-        )
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = backStackEntry?.destination?.route
 
-        tabs.forEachIndexed { index, tab ->
+        NavBarItems.BarItems.forEach { navItem ->
             NavigationBarItem(
-                selected = selectedTab == index,
-                onClick = { onTabSelected(index) },
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
                 icon = {
                     Icon(
-                        imageVector = tab.icon,
-                        contentDescription = tab.title,
-                        tint = if (selectedTab == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                        imageVector = navItem.icon,
+                        contentDescription = navItem.title,
                     )
                 },
                 label = {
                     Text(
-                        text = tab.title,
-                        color = if (selectedTab == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                        text = navItem.title,
                     )
                 },
                 alwaysShowLabel = true
@@ -48,4 +53,24 @@ fun TabBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
     }
 }
 
-data class TabItem(val title: String, val icon: ImageVector)
+data class BarItem(val title: String, val icon: ImageVector, val route: String)
+
+object NavBarItems {
+    val BarItems = listOf(
+        BarItem(
+            title = "Главная",
+            icon = Icons.Outlined.Home,
+            route = "main/{token}"
+        ),
+        BarItem(
+            title = "Уроки",
+            icon = Icons.Outlined.CheckCircle,
+            route = "lesson/{token}"
+        ),
+        BarItem(
+            title = "Пробник",
+            icon = Icons.Outlined.DateRange,
+            route = "trial/{token}"
+        )
+    )
+}

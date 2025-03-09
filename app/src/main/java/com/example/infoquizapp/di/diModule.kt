@@ -25,6 +25,7 @@ import com.example.infoquizapp.domain.quest.usecases.GetUserQuestsUseCase
 import com.example.infoquizapp.domain.quiz.repository.QuizRepository
 import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesResult
 import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesUseCase
+import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
@@ -36,6 +37,7 @@ import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
+import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import org.kodein.di.DI
@@ -82,6 +84,7 @@ val appModule = DI.Module("appModule") {
     //quiz
     bind<QuizRepository>() with singleton { QuizRepositoryImpl(instance()) }
 
+
     //usecases
     // auth
     bind<RegisterUseCase>() with singleton { RegisterUseCase(instance()) }
@@ -100,6 +103,7 @@ val appModule = DI.Module("appModule") {
     //quiz
     bind<GetTestQuizzesUseCase>() with singleton { GetTestQuizzesUseCase(instance()) }
     bind<SubmitAnswerUseCase>() with singleton { SubmitAnswerUseCase(instance()) }
+    bind<GetTrialTestUseCase>() with singleton { GetTrialTestUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -111,9 +115,11 @@ val appModule = DI.Module("appModule") {
     //quest
     bind<UserQuestsViewModel>() with singleton { UserQuestsViewModel(instance(), instance()) }
     //theory
-    bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance()) }
+    bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance(), instance()) }
     //quiz
     bind<QuizViewModel>() with singleton { QuizViewModel(instance(), instance()) }
     //main
     bind<MainViewModel>() with singleton { MainViewModel(instance()) }
+    //trial
+    bind<TrialViewModel>() with singleton { TrialViewModel(instance(), instance()) }
 }

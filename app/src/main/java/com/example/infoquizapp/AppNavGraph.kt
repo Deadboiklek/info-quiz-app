@@ -81,7 +81,8 @@ fun AppNavGraph(
                 progress = 0.7f,
                 onProfileClick = { navController.navigate(Routes.Profile.createRoute(token)) },
                 onAchievementClick = { navController.navigate(Routes.Achievements.createRoute(token)) },
-                onQuestClick = { navController.navigate(Routes.Quest.createRoute(token)) }
+                onQuestClick = { navController.navigate(Routes.Quest.createRoute(token)) },
+                navController = navController
             )
         }
 

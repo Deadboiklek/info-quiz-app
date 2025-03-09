@@ -18,7 +18,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
+import androidx.navigation.NavController
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
 import com.example.infoquizapp.presentation.practice.view.PracticeScreen
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryScreen
@@ -26,14 +27,15 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LessonScreen(    theoryViewModel: TheoryViewModel,
+fun LessonScreen(
+    theoryViewModel: TheoryViewModel,
     practiceViewModel: PracticeViewModel,
     onTheoryCardClick: (Int) -> Unit,
-    onPracticeCardClick: (String) -> Unit
+    onPracticeCardClick: (String) -> Unit,
+    navController: NavController
 ) {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) } // для TabRow
-    var selectedTab by remember { mutableIntStateOf(1) } // для TabBarComp
 
     Scaffold (
         topBar = {
@@ -49,9 +51,8 @@ fun LessonScreen(    theoryViewModel: TheoryViewModel,
             )
         },
         bottomBar = {
-            TabBar(
-                selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+            TabBarComp(
+                navController = navController
             )
         },
         containerColor = MaterialTheme.colorScheme.background
