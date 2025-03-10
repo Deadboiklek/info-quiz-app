@@ -15,14 +15,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.theory.viewmodel.AllTheoryUiState
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 
 @Composable
 fun TheoryScreen(
+    token: String,
     viewModel: TheoryViewModel,
-    onTheoryCardClick: (Int) -> Unit
+    navController: NavController
 ) {
 
     val uiState by viewModel.combinedState.collectAsState()
@@ -52,7 +55,13 @@ fun TheoryScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(theories) { theory ->
-                        TheoryCard(theory = theory, onTheoryContentScreen = onTheoryCardClick)
+                        TheoryCard(
+                            token = token,
+                            theory = theory,
+                            onTheoryContentScreen = { theoryId ->
+                                navController.navigate(Routes.TheoryContent.createRoute(theoryId, token))
+                            }
+                        )
                     }
                 }
             }

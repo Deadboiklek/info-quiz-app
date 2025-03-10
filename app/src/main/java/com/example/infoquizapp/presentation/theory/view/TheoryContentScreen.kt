@@ -29,7 +29,12 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
+fun TheoryContentScreen(
+    viewModel: TheoryViewModel,
+    theoryId: Int,
+    token: String,
+    onBackClick: () -> Unit
+) {
 
     val uiState by viewModel.combinedState.collectAsState()
 
@@ -74,7 +79,7 @@ fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
                                 Button(
-                                    onClick = { TODO("здесь должна быть навигация \"назад\"") },
+                                    onClick = { onBackClick() },
                                     modifier = Modifier.padding(8.dp)
                                 ) {
                                     Text(text = "Назад")
@@ -83,9 +88,9 @@ fun TheoryContentScreen(viewModel: TheoryViewModel, theoryId: Int) {
                                     onClick = {
                                         if (theory != null && !theory.isRead) {
                                             viewModel.markTheoryAsRead(theoryId)
-                                            // TODO: здесь должна быть навигация "назад"
+                                            onBackClick()
                                         } else {
-                                            // TODO: здесь должна быть навигация "назад"
+                                            onBackClick()
                                         }
                                     },
                                     modifier = Modifier.padding(8.dp)

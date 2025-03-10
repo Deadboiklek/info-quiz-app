@@ -18,6 +18,7 @@ import com.example.infoquizapp.data.theory.TheoryEntity
 @Composable
 fun TheoryCard(
 
+    token: String,
     theory: TheoryEntity,
     onTheoryContentScreen: (Int) -> Unit
 

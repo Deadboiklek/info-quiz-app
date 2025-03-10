@@ -17,7 +17,7 @@ import com.example.infoquizapp.data.practice.PracticeEntity
 
 @Composable
 fun PracticeCard(
-
+    token: String,
     practice: PracticeEntity,
     onPracticeCardClick: (type: String) -> Unit
 

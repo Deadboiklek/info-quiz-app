@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.infoquizapp.presentation.LessonScreen
 import com.example.infoquizapp.presentation.achievement.view.AchievementsScreen
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
 import com.example.infoquizapp.presentation.auth.view.LoginScreen
@@ -13,10 +14,13 @@ import com.example.infoquizapp.presentation.auth.view.SignUpScreen
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.main.view.MainScreen
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
+import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.view.ProfileScreen
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
+import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import org.kodein.di.DI
 import org.kodein.di.instance
 
@@ -34,6 +38,18 @@ sealed class Routes(val route: String) {
     }
     object Quest : Routes("quest/{token}") {
         fun createRoute(token: String): String = "quest/$token"
+    }
+    object Lesson : Routes("lesson/{token}") {
+        fun createRoute(token: String): String = "lesson/$token"
+    }
+    object Trial : Routes("trial/{token}") {
+        fun createRoute(token: String): String = "trial/$token"
+    }
+    object TheoryContent : Routes("theorycontent/{theoryId}/{token}") {
+        fun createRoute(theoryId: Int, token: String): String = "theorycontent/$theoryId/$token"
+    }
+    object QuizTest : Routes("quiztest/{token}") {
+        fun createRoute(token: String): String = "quiztest/$token"
     }
 }
 
@@ -124,5 +140,40 @@ fun AppNavGraph(
                 onExit = { navController.navigateUp() }
             )
         }
+
+        composable(
+            route = Routes.Lesson.route,
+            arguments = listOf(navArgument("token") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            val theoryViewModel : TheoryViewModel by di.instance()
+            val practiceViewModel: PracticeViewModel by di.instance()
+            LessonScreen(
+                token = token,
+                theoryViewModel = theoryViewModel,
+                practiceViewModel = practiceViewModel,
+                navController = navController,
+                onPracticeCardClick = { navController.navigate(Routes.QuizTest.createRoute(token)) }
+            )
+        }
+
+        composable(
+            route = Routes.TheoryContent.route,
+            arguments = listOf(
+                navArgument("theoryId") { type = NavType.IntType },
+                navArgument("token") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val theoryId = backStackEntry.arguments?.getInt("theoryId") ?: 0
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            val theoryViewModel : TheoryViewModel by di.instance()
+            TheoryContentScreen(
+                viewModel = theoryViewModel,
+                theoryId = theoryId,
+                token = token,
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
     }
 }

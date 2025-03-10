@@ -20,6 +20,7 @@ import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 
 @Composable
 fun PracticeScreen(
+    token: String,
     viewModel: PracticeViewModel,
     onPracticeCardClick: (String) -> Unit
 ) {
@@ -50,7 +51,7 @@ fun PracticeScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(practices) { practice ->
-                        PracticeCard(practice = practice, onPracticeCardClick = onPracticeCardClick)
+                        PracticeCard(practice = practice, onPracticeCardClick = onPracticeCardClick, token = token)
                     }
                 }
             }
