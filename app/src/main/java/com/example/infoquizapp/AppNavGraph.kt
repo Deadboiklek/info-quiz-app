@@ -19,6 +19,8 @@ import com.example.infoquizapp.presentation.profile.view.ProfileScreen
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
+import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import org.kodein.di.DI
@@ -48,8 +50,8 @@ sealed class Routes(val route: String) {
     object TheoryContent : Routes("theorycontent/{theoryId}/{token}") {
         fun createRoute(theoryId: Int, token: String): String = "theorycontent/$theoryId/$token"
     }
-    object QuizTest : Routes("quiztest/{token}") {
-        fun createRoute(token: String): String = "quiztest/$token"
+    object QuizTest : Routes("quiztest/{quizType}/{token}") {
+        fun createRoute(quizType: String, token: String): String = "quiztest/$quizType/$token"
     }
 }
 
@@ -153,7 +155,6 @@ fun AppNavGraph(
                 theoryViewModel = theoryViewModel,
                 practiceViewModel = practiceViewModel,
                 navController = navController,
-                onPracticeCardClick = { navController.navigate(Routes.QuizTest.createRoute(token)) }
             )
         }
 
@@ -175,5 +176,21 @@ fun AppNavGraph(
             )
         }
 
+        composable(
+            route = Routes.QuizTest.route,
+            arguments = listOf(
+                navArgument("quizType") { type = NavType.StringType },
+                navArgument("token") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val quizType = backStackEntry.arguments?.getString("quizType") ?: ""
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            val quizViewModel : QuizViewModel by di.instance()
+            QuizTestScreen(
+                viewModel = quizViewModel,
+                quizType = quizType,
+                token = token
+            )
+        }
     }
 }

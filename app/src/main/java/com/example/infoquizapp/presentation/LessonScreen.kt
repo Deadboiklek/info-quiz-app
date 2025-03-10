@@ -31,7 +31,6 @@ fun LessonScreen(
     token: String,
     theoryViewModel: TheoryViewModel,
     practiceViewModel: PracticeViewModel,
-    onPracticeCardClick: (String) -> Unit,
     navController: NavController
 ) {
 
@@ -79,8 +78,8 @@ fun LessonScreen(
                 )
                 1 -> PracticeScreen(
                     viewModel = practiceViewModel,
-                    onPracticeCardClick = onPracticeCardClick,
-                    token = token
+                    token = token,
+                    navController = navController
                 )
             }
         }
