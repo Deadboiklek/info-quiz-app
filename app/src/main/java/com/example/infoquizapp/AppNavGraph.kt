@@ -23,6 +23,9 @@ import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
+import com.example.infoquizapp.presentation.trial.view.TrialScreen
+import com.example.infoquizapp.presentation.trial.view.TrialTestScreen
+import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
 import org.kodein.di.DI
 import org.kodein.di.instance
 
@@ -44,14 +47,17 @@ sealed class Routes(val route: String) {
     object Lesson : Routes("lesson/{token}") {
         fun createRoute(token: String): String = "lesson/$token"
     }
-    object Trial : Routes("trial/{token}") {
-        fun createRoute(token: String): String = "trial/$token"
-    }
     object TheoryContent : Routes("theorycontent/{theoryId}/{token}") {
         fun createRoute(theoryId: Int, token: String): String = "theorycontent/$theoryId/$token"
     }
     object QuizTest : Routes("quiztest/{quizType}/{token}") {
         fun createRoute(quizType: String, token: String): String = "quiztest/$quizType/$token"
+    }
+    object Trial : Routes("trial/{token}") {
+        fun createRoute(token: String): String = "trial/$token"
+    }
+    object TrialTest : Routes("trialtest/{token}") {
+        fun createRoute(token: String): String = "trialtest/$token"
     }
 }
 
@@ -190,6 +196,30 @@ fun AppNavGraph(
                 viewModel = quizViewModel,
                 quizType = quizType,
                 token = token
+            )
+        }
+
+        composable(
+            route = Routes.Trial.route,
+            arguments = listOf(navArgument("token") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            TrialScreen(
+                navController = navController,
+                token = token
+            )
+        }
+
+        composable(
+            route = Routes.TrialTest.route,
+            arguments = listOf(navArgument("token") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            val trialViewModel: TrialViewModel by di.instance()
+            TrialTestScreen(
+                token = token,
+                viewModel = trialViewModel,
+                onExit = { navController.navigateUp() }
             )
         }
     }

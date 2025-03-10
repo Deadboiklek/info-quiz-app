@@ -12,14 +12,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrialScreen(
     navController: NavController,
-    token: String,
-    onTrialTestScreen: (String) -> Unit
+    token: String
 ) {
     Scaffold(
         topBar = {
@@ -46,7 +46,12 @@ fun TrialScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            TrialTestCard(onTrialTestScreen, token)
+            TrialTestCard(
+                token = token,
+                onTrialTestScreen = {
+                    navController.navigate(Routes.TrialTest.createRoute(token))
+                }
+            )
         }
     }
 }
