@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.3"
-kodeinDi = "7.22.0"
+kodeinDi = "7.25.0"
+kodeinDiFrameworkAndroidXViewmodelSavedstate = "7.25.0"
 kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -35,6 +36,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 
 kodein-di = { module = "org.kodein.di:kodein-di", version.ref = "kodeinDi" }
+kodein-di-framework-android-x-viewmodel-savedstate = { module = "org.kodein.di:kodein-di-framework-android-x-viewmodel-savedstate", version.ref = "kodeinDiFrameworkAndroidXViewmodelSavedstate" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }

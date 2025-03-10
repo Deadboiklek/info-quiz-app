@@ -62,6 +62,8 @@ dependencies {
 
     implementation (libs.androidx.material.icons.extended)
     implementation(libs.kodein.di)
+    implementation(libs.kodein.di.framework.android.x.viewmodel.savedstate)
+
 
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
