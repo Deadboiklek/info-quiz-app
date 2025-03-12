@@ -15,13 +15,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.practice.viewmodel.AllPracticeUiState
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 
 @Composable
 fun PracticeScreen(
+    token: String,
     viewModel: PracticeViewModel,
-    onPracticeCardClick: (String) -> Unit
+    navController: NavController
 ) {
 
     val uiState by viewModel.combinedState.collectAsState()
@@ -50,7 +53,13 @@ fun PracticeScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(practices) { practice ->
-                        PracticeCard(practice = practice, onPracticeCardClick = onPracticeCardClick)
+                        PracticeCard(
+                            token = token,
+                            practice = practice,
+                            onPracticeCardClick = { quizType ->
+                                navController.navigate(Routes.QuizTest.createRoute(quizType, token))
+                            },
+                        )
                     }
                 }
             }

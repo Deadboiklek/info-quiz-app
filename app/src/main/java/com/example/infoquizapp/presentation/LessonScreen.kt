@@ -28,10 +28,9 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(
+    token: String,
     theoryViewModel: TheoryViewModel,
     practiceViewModel: PracticeViewModel,
-    onTheoryCardClick: (Int) -> Unit,
-    onPracticeCardClick: (String) -> Unit,
     navController: NavController
 ) {
 
@@ -74,11 +73,13 @@ fun LessonScreen(
             when (selectedTabIndex) {
                 0 -> TheoryScreen(
                     viewModel = theoryViewModel,
-                    onTheoryCardClick = onTheoryCardClick
+                    token = token,
+                    navController = navController
                 )
                 1 -> PracticeScreen(
                     viewModel = practiceViewModel,
-                    onPracticeCardClick = onPracticeCardClick
+                    token = token,
+                    navController = navController
                 )
             }
         }

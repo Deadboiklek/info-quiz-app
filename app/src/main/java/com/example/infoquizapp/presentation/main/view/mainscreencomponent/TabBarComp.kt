@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.infoquizapp.Routes
 
 @Composable
 fun TabBarComp(navController: NavController) {
@@ -60,17 +61,17 @@ object NavBarItems {
         BarItem(
             title = "Главная",
             icon = Icons.Outlined.Home,
-            route = "main/{token}"
+            route = Routes.Main.route
         ),
         BarItem(
             title = "Уроки",
             icon = Icons.Outlined.CheckCircle,
-            route = "lesson/{token}"
+            route = Routes.Lesson.route
         ),
         BarItem(
             title = "Пробник",
             icon = Icons.Outlined.DateRange,
-            route = "trial/{token}"
+            route = Routes.Trial.route
         )
     )
 }

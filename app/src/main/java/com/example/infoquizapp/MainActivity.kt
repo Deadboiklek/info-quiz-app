@@ -4,52 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
+import androidx.compose.material3.Surface
 import com.example.compose.AppTheme
-import com.example.infoquizapp.view.component.questsscreencomponent.data.Quest
-import com.example.infoquizapp.view.screen.TasksScreen
+import com.example.infoquizapp.di.appModule
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
 
-
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), DIAware {
+    override val di by closestDI()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme() {
-                TasksApp()
+                Surface {
+                    AppNavGraph(di = di)
+                }
             }
         }
     }
-}
-
-@Composable
-fun TasksApp() {
-    val quests = listOf(
-        Quest(
-            id = 1,
-            title = "Пройти тест",
-            description = "Пройдите тест на тему 'Основы информатики'.",
-            image = painterResource(id = R.drawable.ic_launcher_background), // Убедитесь, что ресурс существует
-            counter = 5
-        ),
-        Quest(
-            id = 2,
-            title = "Решить задачу",
-            description = "Решите задачу по алгоритмам.",
-            image = painterResource(id = R.drawable.ic_launcher_background) // Убедитесь, что ресурс существует
-        ),
-        Quest(
-            id = 3,
-            title = "Прочитать материал",
-            description = "Изучите материал по структурам данных.",
-            image = painterResource(id = R.drawable.ic_launcher_background) // Убедитесь, что ресурс существует
-        )
-    )
-
-    TasksScreen(
-        quests = quests,
-        onClose = { println("Закрыть экран") }
-    )
 }
