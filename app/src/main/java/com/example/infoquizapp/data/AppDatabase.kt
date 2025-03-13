@@ -2,9 +2,7 @@ package com.example.infoquizapp.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.infoquizapp.data.practice.PracticeDao
 import com.example.infoquizapp.data.practice.PracticeEntity
-import com.example.infoquizapp.data.theory.TheoryDao
 import com.example.infoquizapp.data.theory.TheoryEntity
 
 @Database(
