@@ -24,30 +24,30 @@ fun TabBarComp(navController: NavController) {
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         tonalElevation = 8.dp,
     ) {
+
+
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
+        val token = backStackEntry?.arguments?.getString("token") ?: ""
 
         NavBarItems.BarItems.forEach { navItem ->
             NavigationBarItem(
-                selected = currentRoute == navItem.route,
+                selected = currentRoute?.startsWith(navItem.route.substringBefore("/{")) == true,
                 onClick = {
-                    navController.navigate(navItem.route) {
+                    val routeWithToken = when (navItem.route) {
+                        Routes.Main.route -> Routes.Main.createRoute(token)
+                        Routes.Lesson.route -> Routes.Lesson.createRoute(token)
+                        Routes.Trial.route -> Routes.Trial.createRoute(token)
+                        else -> navItem.route
+                    }
+                    navController.navigate(routeWithToken) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
                     }
                 },
-                icon = {
-                    Icon(
-                        imageVector = navItem.icon,
-                        contentDescription = navItem.title,
-                    )
-                },
-                label = {
-                    Text(
-                        text = navItem.title,
-                    )
-                },
+                icon = { Icon(imageVector = navItem.icon, contentDescription = navItem.title) },
+                label = { Text(text = navItem.title) },
                 alwaysShowLabel = true
             )
         }
