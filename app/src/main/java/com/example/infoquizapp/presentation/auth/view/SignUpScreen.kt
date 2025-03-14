@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthUiState
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @Composable
 fun SignUpScreen (
@@ -40,7 +42,7 @@ fun SignUpScreen (
     onLoginClick: () -> Unit
 
 ) {
-
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
     var username by remember { mutableStateOf("") }
@@ -49,7 +51,9 @@ fun SignUpScreen (
 
     LaunchedEffect(uiState) {
         if (uiState is AuthUiState.Success) {
-            onRegisterSuccess((uiState as AuthUiState.Success).token)
+            val token = (uiState as AuthUiState.Success).token
+            TokenManager.saveToken(context, token)
+            onRegisterSuccess(token)
         }
     }
 

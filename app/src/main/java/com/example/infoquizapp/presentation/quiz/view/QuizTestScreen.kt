@@ -21,12 +21,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.TestQuizzesUiState
+import com.example.infoquizapp.utils.TokenManager
 
 @Composable
-fun QuizTestScreen(viewModel: QuizViewModel, quizType: String, token: String) {
+fun QuizTestScreen(viewModel: QuizViewModel, quizType: String) {
+
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
+
     // при старте экрана загружаем тест (10 случайных вопросов заданного типа)
     LaunchedEffect(quizType, token) {
         viewModel.loadTest(quizType, token)

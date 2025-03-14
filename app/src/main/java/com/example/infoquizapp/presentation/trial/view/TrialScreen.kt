@@ -11,16 +11,20 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrialScreen(
     navController: NavController,
-    token: String
 ) {
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
+
     Scaffold(
         topBar = {
             TopAppBar(

@@ -24,19 +24,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.TrophiesSection
 import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.UserProfileSection
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileUiState
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    token: String,
     onExit : () -> Unit
 ) {
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
 
     LaunchedEffect(token) {
         viewModel.loadProfile(token)
