@@ -1,8 +1,11 @@
 package com.example.infoquizapp.data.practice.repository
 
-import com.example.infoquizapp.data.practice.PracticeDao
+import com.example.infoquizapp.data.PracticeDao
 import com.example.infoquizapp.data.practice.PracticeEntity
 import com.example.infoquizapp.domain.practice.repository.PracticeRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PracticeRepositoryImpl(private val practiceDao: PracticeDao) : PracticeRepository {
 
@@ -16,5 +19,25 @@ class PracticeRepositoryImpl(private val practiceDao: PracticeDao) : PracticeRep
 
     override suspend fun getAllPractice(): List<PracticeEntity> {
         return practiceDao.getAllPractice()
+    }
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (practiceDao.getPracticeCount() == 0) {
+                val initialData = listOf(
+                    PracticeEntity(
+                        title = "Введение в программирование",
+                        description = "Введение в программирование",
+                        isDone = false
+                    ),
+                    PracticeEntity(
+                        title = "Основы Kotlin",
+                        description = "Основы Kotlin",
+                        isDone = false
+                    )
+                )
+                practiceDao.insertAllPractice(initialData)
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.infoquizapp.data.auth.network
 
 
+import android.util.Log
 import com.example.infoquizapp.data.auth.model.TokenResponse
 import com.example.infoquizapp.data.auth.model.UserCreate
 import com.example.infoquizapp.data.auth.model.UserLogin
@@ -34,8 +35,13 @@ class ApiAuthService(private val client: HttpClient, private val baseUrl: String
                 contentType(ContentType.Application.Json)
                 setBody(userCreate)
             }.body<TokenResponse>())
-        }.getOrDefault(Response.Error(ServerError.ErrorRegister))
-
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiAuthService", "Ошибка запроса авторизации: ${ex.localizedMessage}", ex)
+                Response.Error(ServerError.ErrorRegister)
+            }
+        )
     }
 
     suspend fun login(userLogin: UserLogin): Response<TokenResponse> {
@@ -44,6 +50,12 @@ class ApiAuthService(private val client: HttpClient, private val baseUrl: String
                 contentType(ContentType.Application.Json)
                 setBody(userLogin)
             }.body<TokenResponse>())
-        }.getOrDefault(Response.Error(ServerError.ErrorLogin))
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiAuthService", "Ошибка запроса авторизации: ${ex.localizedMessage}", ex)
+                Response.Error(ServerError.ErrorLogin)
+            }
+        )
     }
 }

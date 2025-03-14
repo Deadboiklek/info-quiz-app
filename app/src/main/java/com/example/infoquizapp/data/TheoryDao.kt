@@ -1,9 +1,10 @@
-package com.example.infoquizapp.data.theory
+package com.example.infoquizapp.data
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.infoquizapp.data.theory.TheoryEntity
 
 @Dao
 interface TheoryDao {
@@ -16,6 +17,12 @@ interface TheoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTheory(theory: TheoryEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllTheory(theory: List<TheoryEntity>)
+
     @Query("UPDATE theory SET isRead = :read WHERE id = :id")
     suspend fun updateReadStatus(id: Int, read: Boolean)
+
+    @Query("SELECT COUNT(*) FROM theory")
+    suspend fun getTheoryCount(): Int
 }
