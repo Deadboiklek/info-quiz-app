@@ -32,7 +32,6 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 fun TheoryContentScreen(
     viewModel: TheoryViewModel,
     theoryId: Int,
-    token: String,
     onBackClick: () -> Unit
 ) {
 

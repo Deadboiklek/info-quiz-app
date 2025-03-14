@@ -48,7 +48,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
 
     LaunchedEffect(uiState) {
-        if (uiState is AuthUiState.Success) {
+        if (uiState is AuthUiState.Success && (uiState as AuthUiState.Success).token.isNotBlank()) {
             val token = (uiState as AuthUiState.Success).token
             TokenManager.saveToken(context, token)
             onLoginSuccess(token)

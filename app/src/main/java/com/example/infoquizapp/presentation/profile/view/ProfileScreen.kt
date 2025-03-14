@@ -26,6 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
+import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.TrophiesSection
 import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.UserProfileSection
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileUiState
@@ -36,7 +39,9 @@ import com.example.infoquizapp.utils.TokenManager
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    onExit : () -> Unit
+    authViewModel: AuthViewModel,
+    onExit : () -> Unit,
+    navController: NavController
 ) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
@@ -71,8 +76,14 @@ fun ProfileScreen(
                             }
                         },
                         actions = {
-                            TextButton(onClick = { /* Handle edit action */ }) {
-                                Text("Изменить", color = MaterialTheme.colorScheme.primary)
+                            TextButton(onClick = {
+                                authViewModel.logout()
+                                TokenManager.clearToken(context)
+                                navController.navigate(Routes.Login.route) {
+                                    popUpTo(Routes.Main.route) { inclusive = true }
+                                }
+                            }) {
+                                Text("Выйти из аккаунта", color = MaterialTheme.colorScheme.error)
                             }
                         },
                     )

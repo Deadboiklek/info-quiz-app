@@ -71,8 +71,8 @@ fun AppNavGraph(
             val authViewModel: AuthViewModel by di.instance()
             LoginScreen(
                 viewModel = authViewModel,
-                onLoginSuccess = { token ->
-                    navController.navigate(Routes.Main.createRoute(token)) {
+                onLoginSuccess = {
+                    navController.navigate(Routes.Main.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 },
@@ -84,8 +84,8 @@ fun AppNavGraph(
             val authViewModel: AuthViewModel by di.instance()
             SignUpScreen(
                 viewModel = authViewModel,
-                onRegisterSuccess = { token ->
-                    navController.navigate(Routes.Main.createRoute(token)) {
+                onRegisterSuccess = {
+                    navController.navigate(Routes.Main.route) {
                         popUpTo(Routes.SignUp.route) { inclusive = true }
                     }
                 },
@@ -95,69 +95,57 @@ fun AppNavGraph(
 
         composable(
             route = Routes.Main.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val mainViewModel: MainViewModel by di.instance()
             MainScreen(
                 viewModel = mainViewModel,
-                token = token,
                 progress = 0.7f,
-                onProfileClick = { navController.navigate(Routes.Profile.createRoute(token)) },
-                onAchievementClick = { navController.navigate(Routes.Achievements.createRoute(token)) },
-                onQuestClick = { navController.navigate(Routes.Quest.createRoute(token)) },
+                onProfileClick = { navController.navigate(Routes.Profile.route) },
+                onAchievementClick = { navController.navigate(Routes.Achievements.route) },
+                onQuestClick = { navController.navigate(Routes.Quest.route) },
                 navController = navController
             )
         }
 
         composable(
             route = Routes.Profile.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val profileViewModel: ProfileViewModel by di.instance()
+            val authViewModel:AuthViewModel by di.instance()
             ProfileScreen(
                 viewModel = profileViewModel,
-                token = token,
-                onExit = { navController.navigateUp() }
+                onExit = { navController.navigateUp() },
+                navController = navController,
+                authViewModel = authViewModel
             )
         }
 
         composable(
             route = Routes.Achievements.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val achievementsViewModel: AchievementsViewModel by di.instance()
             AchievementsScreen(
                 viewModel = achievementsViewModel,
-                token = token,
                 onExit = { navController.navigateUp() }
             )
         }
 
         composable(
             route = Routes.Quest.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val questViewModel : UserQuestsViewModel by di.instance()
             QuestScreen(
                 viewModel = questViewModel,
-                token = token,
                 onExit = { navController.navigateUp() }
             )
         }
 
         composable(
             route = Routes.Lesson.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val theoryViewModel : TheoryViewModel by di.instance()
             val practiceViewModel: PracticeViewModel by di.instance()
             LessonScreen(
-                token = token,
                 theoryViewModel = theoryViewModel,
                 practiceViewModel = practiceViewModel,
                 navController = navController,
@@ -168,16 +156,13 @@ fun AppNavGraph(
             route = Routes.TheoryContent.route,
             arguments = listOf(
                 navArgument("theoryId") { type = NavType.IntType },
-                navArgument("token") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val theoryId = backStackEntry.arguments?.getInt("theoryId") ?: 0
-            val token = backStackEntry.arguments?.getString("token") ?: ""
             val theoryViewModel : TheoryViewModel by di.instance()
             TheoryContentScreen(
                 viewModel = theoryViewModel,
                 theoryId = theoryId,
-                token = token,
                 onBackClick = { navController.navigateUp() }
             )
         }
@@ -186,38 +171,29 @@ fun AppNavGraph(
             route = Routes.QuizTest.route,
             arguments = listOf(
                 navArgument("quizType") { type = NavType.StringType },
-                navArgument("token") { type = NavType.StringType }
             )
         ) { backStackEntry ->
             val quizType = backStackEntry.arguments?.getString("quizType") ?: ""
-            val token = backStackEntry.arguments?.getString("token") ?: ""
             val quizViewModel : QuizViewModel by di.instance()
             QuizTestScreen(
                 viewModel = quizViewModel,
                 quizType = quizType,
-                token = token
             )
         }
 
         composable(
             route = Routes.Trial.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             TrialScreen(
                 navController = navController,
-                token = token
             )
         }
 
         composable(
             route = Routes.TrialTest.route,
-            arguments = listOf(navArgument("token") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val token = backStackEntry.arguments?.getString("token") ?: ""
+        ) {
             val trialViewModel: TrialViewModel by di.instance()
             TrialTestScreen(
-                token = token,
                 viewModel = trialViewModel,
                 onExit = { navController.navigateUp() }
             )
