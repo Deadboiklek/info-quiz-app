@@ -1,4 +1,4 @@
-package com.example.infoquizapp.data.util
+package com.example.infoquizapp.utils
 
 import android.content.Context
 
