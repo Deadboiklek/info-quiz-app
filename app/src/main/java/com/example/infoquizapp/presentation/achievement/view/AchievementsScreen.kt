@@ -33,17 +33,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.achievement.view.achievementsscreencomponent.AchievementCard
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AchievementsScreen(
     viewModel: AchievementsViewModel,
-    token: String,
     onExit: () -> Unit
 ) {
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
 
     LaunchedEffect(token) {
         viewModel.loadUserAchievements(token)

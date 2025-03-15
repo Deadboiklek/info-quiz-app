@@ -19,19 +19,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.QuestionCard
 import com.example.infoquizapp.presentation.quest.view.questsscreencomponent.data.Quest
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsUiState
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestScreen(
     viewModel: UserQuestsViewModel,
-    token: String,
     onExit : () -> Unit
 ) {
+
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
+
     LaunchedEffect(token) {
         viewModel.loadUserQuests(token)
     }

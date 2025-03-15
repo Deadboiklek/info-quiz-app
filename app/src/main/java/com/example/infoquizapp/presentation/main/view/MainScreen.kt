@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
@@ -25,17 +26,20 @@ import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
 import com.example.infoquizapp.presentation.main.viewmodel.MainUiState
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    token: String,
     progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
     onProfileClick : (token: String) -> Unit,
     onAchievementClick : (token: String) -> Unit,
     onQuestClick : (token: String) -> Unit,
     navController: NavController
 ) {
+
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
 
     LaunchedEffect(token) {
         viewModel.loadProfile(token)

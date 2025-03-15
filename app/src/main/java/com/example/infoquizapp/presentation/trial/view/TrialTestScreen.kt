@@ -26,19 +26,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.presentation.quiz.view.QuizQuestionItem
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialUiState
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrialTestScreen(
     viewModel: TrialViewModel,
-    token: String,
     onExit: () -> Unit,
 ) {
-
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
     //при старте загружаем пробник, состоит из заданий всех типов(1 тип = 1 задание)
     LaunchedEffect(token) {
         viewModel.loadTrial(token)

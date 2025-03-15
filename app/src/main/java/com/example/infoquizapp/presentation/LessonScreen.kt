@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
@@ -24,17 +25,20 @@ import com.example.infoquizapp.presentation.practice.view.PracticeScreen
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
+import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(
-    token: String,
     theoryViewModel: TheoryViewModel,
     practiceViewModel: PracticeViewModel,
     navController: NavController
 ) {
 
     var selectedTabIndex by remember { mutableIntStateOf(0) } // для TabRow
+
+    val context = LocalContext.current
+    val token = TokenManager.getToken(context) ?: ""
 
     Scaffold (
         topBar = {
