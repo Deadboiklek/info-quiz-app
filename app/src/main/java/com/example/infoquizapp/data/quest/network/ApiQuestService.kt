@@ -1,5 +1,6 @@
 package com.example.infoquizapp.data.quest.network
 
+import android.util.Log
 import com.example.infoquizapp.data.quest.model.CompleteQuestResponse
 import com.example.infoquizapp.data.quest.model.QuestOut
 import io.ktor.client.HttpClient
@@ -28,7 +29,14 @@ class ApiQuestService(
             Response.Success(client.get("$baseUrl/quests/user") {
                 header("Authorization", "Bearer $token")
             }.body<List<QuestOut>>())
-        }.getOrElse { Response.Error(QuestError.GetQuestError) }
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiQuestService",
+                    "Ошибка запроса квеста: ${ex.localizedMessage}", ex)
+                Response.Error(QuestError.GetQuestError)
+            }
+        )
     }
 
     // Завершение квеста (POST /quests/complete/{questId})
@@ -37,6 +45,13 @@ class ApiQuestService(
             Response.Success(client.post("$baseUrl/quests/complete/$questId") {
                 header("Authorization", "Bearer $token")
             }.body<CompleteQuestResponse>())
-        }.getOrElse { Response.Error(QuestError.PostQuestError) }
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiQuestService",
+                    "Ошибка запроса квеста: ${ex.localizedMessage}", ex)
+                Response.Error(QuestError.GetQuestError)
+            }
+        )
     }
 }
