@@ -102,7 +102,6 @@ fun AppNavGraph(
                 progress = 0.7f,
                 onProfileClick = { navController.navigate(Routes.Profile.route) },
                 onAchievementClick = { navController.navigate(Routes.Achievements.route) },
-                onQuestClick = { navController.navigate(Routes.Quest.route) },
                 navController = navController
             )
         }

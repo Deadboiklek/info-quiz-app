@@ -49,8 +49,8 @@ class ApiQuestService(
             onSuccess = { it },
             onFailure = { ex ->
                 Log.e("ApiQuestService",
-                    "Ошибка запроса квеста: ${ex.localizedMessage}", ex)
-                Response.Error(QuestError.GetQuestError)
+                    "Ошибка завершения квеста: ${ex.localizedMessage}", ex)
+                Response.Error(QuestError.PostQuestError)
             }
         )
     }
