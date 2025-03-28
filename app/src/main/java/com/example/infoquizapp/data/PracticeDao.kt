@@ -26,4 +26,10 @@ interface PracticeDao {
 
     @Query("SELECT COUNT(*) FROM practice")
     suspend fun getPracticeCount(): Int
+
+    @Query("DELETE FROM practice")
+    suspend fun clearTable()
+
+    @Query("DELETE FROM practice WHERE id = :id")
+    suspend fun deletePracticeById(id: Int)
 }

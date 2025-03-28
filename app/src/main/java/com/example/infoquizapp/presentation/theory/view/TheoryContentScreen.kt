@@ -22,10 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryUiState
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,10 +110,12 @@ fun TheoryContentScreen(
                         .padding(innerPadding)
                 ) {
                     item {
-                        Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onBackground
+                        MarkdownText(
+                            markdown = text,
+                            style = TextStyle(
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontSize = 14.sp
+                            )
                         )
                     }
                 }
