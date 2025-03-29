@@ -64,7 +64,7 @@ class QuizApiService(
     suspend fun submitAnswer(answer: AnswerIn, token: String): Response<AnswerOut> {
 
         return kotlin.runCatching {
-            Response.Success(client.post("$baseUrl/answer") {
+            Response.Success(client.post("$baseUrl/quizzes/answer") {
                 header("Authorization", "Bearer $token")
                 contentType(ContentType.Application.Json)
                 setBody(answer)

@@ -19,6 +19,13 @@ sealed class TestQuizzesUiState {
     data class Error(val message: String) : TestQuizzesUiState()
 }
 
+sealed class TestResultUiState {
+    object Idle : TestResultUiState()
+    object Loading : TestResultUiState()
+    data class Success(val correctAnswers: Int, val totalQuestions: Int) : TestResultUiState()
+    data class Error(val message: String) : TestResultUiState()
+}
+
 class QuizViewModel(
     private val getTestQuizzesUseCase: GetTestQuizzesUseCase,
     private val submitAnswerUseCase: SubmitAnswerUseCase
@@ -26,6 +33,12 @@ class QuizViewModel(
 
     private val _testQuizzesState = MutableStateFlow<TestQuizzesUiState>(TestQuizzesUiState.Idle)
     val testQuizzesState: StateFlow<TestQuizzesUiState> = _testQuizzesState
+
+    private val _testResultState = MutableStateFlow<TestResultUiState>(TestResultUiState.Idle)
+    val testResultState: StateFlow<TestResultUiState> = _testResultState
+
+    private var _userAnswers = mutableMapOf<Int, String>()
+    val userAnswers: Map<Int, String> get() = _userAnswers
 
     fun loadTest(quizType: String, token: String) {
         viewModelScope.launch {
@@ -41,11 +54,28 @@ class QuizViewModel(
 
     fun submitAnswer(quizId: Int, answer: String, token: String, onComplete: (SubmitAnswerResult) -> Unit) {
         viewModelScope.launch {
-
             val answerIn = AnswerIn(quizId = quizId, userAnswer = answer)
             val result = submitAnswerUseCase(answerIn, token)
             onComplete(result)
-
         }
+    }
+
+    // Новый метод для отправки всех ответов и подсчета правильных
+    fun submitTest(userAnswers: Map<Int, String>, token: String) {
+        viewModelScope.launch {
+            var correctAnswers = 0
+            userAnswers.forEach { (quizId, answer) ->
+                val result = submitAnswerUseCase(AnswerIn(quizId, answer), token)
+                if (result.response?.isCorrect == true) correctAnswers++
+            }
+            _testResultState.value = TestResultUiState.Success(correctAnswers, userAnswers.size)
+        }
+    }
+
+    // Новый метод для сброса состояния
+    fun resetTest() {
+        _userAnswers.clear()  // Очистить ответы
+        _testResultState.value = TestResultUiState.Idle
+        _testQuizzesState.value = TestQuizzesUiState.Idle
     }
 }

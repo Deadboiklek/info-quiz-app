@@ -20,6 +20,7 @@ import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
+import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
@@ -58,6 +59,9 @@ sealed class Routes(val route: String) {
     }
     object TrialTest : Routes("trialtest/{token}") {
         fun createRoute(token: String): String = "trialtest/$token"
+    }
+    object TestResult : Routes("testresult/{token}") {
+        fun createRoute(token: String): String = "testresult/$token"
     }
 }
 
@@ -177,6 +181,7 @@ fun AppNavGraph(
             QuizTestScreen(
                 viewModel = quizViewModel,
                 quizType = quizType,
+                navController = navController
             )
         }
 
@@ -195,6 +200,16 @@ fun AppNavGraph(
             TrialTestScreen(
                 viewModel = trialViewModel,
                 onExit = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Routes.TestResult.route
+        ) {
+            val quizViewModel: QuizViewModel by di.instance()
+            TestResultScreen(
+                navController = navController,
+                viewModel = quizViewModel
             )
         }
     }
