@@ -10,7 +10,7 @@ import com.example.infoquizapp.data.theory.TheoryEntity
         TheoryEntity::class,
         PracticeEntity::class
                ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

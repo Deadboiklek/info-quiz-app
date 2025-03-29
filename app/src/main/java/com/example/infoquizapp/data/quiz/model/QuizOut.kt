@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class QuizOut(
     val id: Int,
     val question: String,
-    val options: List<String>,
+    val options: List<String>? = null,
     @SerialName("experience_reward") val experienceReward: Int,
     val type: String
 )

@@ -28,7 +28,8 @@ class PracticeRepositoryImpl(private val practiceDao: PracticeDao) : PracticeRep
                     PracticeEntity(
                         title = "Задание 1",
                         description = "В этом задании проверяется умение работать с объёмом информации, кодировкой символов и переводом между единицами измерения.",
-                        isDone = false
+                        isDone = false,
+                        type = "type1"
                     ),
                 )
                 practiceDao.insertAllPractice(initialData)

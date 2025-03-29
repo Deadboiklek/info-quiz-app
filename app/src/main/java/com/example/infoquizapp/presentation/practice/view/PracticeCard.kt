@@ -29,7 +29,7 @@ fun PracticeCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        onClick = { onPracticeCardClick(practice.title) } // Переход на экран с вопросами
+        onClick = { onPracticeCardClick(practice.type) } // Переход на экран с вопросами
     ) {
         Row (
             modifier = Modifier
