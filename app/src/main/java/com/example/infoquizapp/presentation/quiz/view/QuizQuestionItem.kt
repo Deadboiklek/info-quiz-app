@@ -29,9 +29,9 @@ fun QuizQuestionItem(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = quiz.question, style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         //  если options пустой, отображаем текстовое поле
-        if (quiz.options.isEmpty()) {
+        if (quiz.options.isNullOrEmpty()) {
             var textFieldValue by remember { mutableStateOf(selectedAnswer) }
             OutlinedTextField(
                 value = textFieldValue,
@@ -45,7 +45,7 @@ fun QuizQuestionItem(
         } else {
             // иначе отображаем варианты ответа как радио-кнопки
             var currentSelection by remember { mutableStateOf(selectedAnswer) }
-            quiz.options.forEach { option ->
+            quiz.options?.forEach { option ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)

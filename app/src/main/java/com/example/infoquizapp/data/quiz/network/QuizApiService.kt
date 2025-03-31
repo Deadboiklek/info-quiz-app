@@ -1,5 +1,6 @@
 package com.example.infoquizapp.data.quiz.network
 
+import android.util.Log
 import com.example.infoquizapp.data.quiz.model.AnswerIn
 import com.example.infoquizapp.data.quiz.model.AnswerOut
 import com.example.infoquizapp.data.quiz.model.QuizOut
@@ -11,6 +12,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import java.net.URLEncoder
 
 sealed class Response<T> {
     data class Success<T>(val result: T) : Response<T>()
@@ -33,7 +35,14 @@ class QuizApiService(
                 header("Authorization", "Bearer $token")
                 contentType(ContentType.Application.Json)
             }.body<List<QuizOut>>())
-        }.getOrElse { Response.Error(QuizError.GetQuizError) }
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("QuizApiService",
+                    "Ошибка запроса теста: ${ex.localizedMessage}", ex)
+                Response.Error(QuizError.GetQuizError)
+            }
+        )
     }
 
     suspend fun getTrialTest(token: String): Response<List<QuizOut>> {
@@ -42,17 +51,31 @@ class QuizApiService(
                 header("Authorization", "Bearer $token")
                 contentType(ContentType.Application.Json)
             }.body<List<QuizOut>>())
-        }.getOrElse { Response.Error(QuizError.GetQuizError) }
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("QuizApiService",
+                    "Ошибка запроса теста: ${ex.localizedMessage}", ex)
+                Response.Error(QuizError.GetQuizError)
+            }
+        )
     }
 
     suspend fun submitAnswer(answer: AnswerIn, token: String): Response<AnswerOut> {
 
         return kotlin.runCatching {
-            Response.Success(client.post("$baseUrl/answer") {
+            Response.Success(client.post("$baseUrl/quizzes/answer") {
                 header("Authorization", "Bearer $token")
                 contentType(ContentType.Application.Json)
                 setBody(answer)
             }.body<AnswerOut>())
-        }.getOrElse { Response.Error(QuizError.PostQuizError) }
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("QuizApiService",
+                    "Ошибка отправки теста: ${ex.localizedMessage}", ex)
+                Response.Error(QuizError.PostQuizError)
+            }
+        )
     }
 }

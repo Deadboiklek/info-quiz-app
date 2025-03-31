@@ -30,6 +30,7 @@ import com.example.infoquizapp.domain.profile.repository.ProfileRepository
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
+import com.example.infoquizapp.domain.quest.usecases.CompleteQuestUseCase
 import com.example.infoquizapp.domain.quest.usecases.GetUserQuestsUseCase
 import com.example.infoquizapp.domain.quiz.repository.QuizRepository
 import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesUseCase
@@ -138,6 +139,7 @@ val appModule = DI.Module("appModule") {
     //quest
     bind<GetUserQuestsUseCase>() with singleton { GetUserQuestsUseCase(instance()) }
     bind<CompleteQuestResult>() with singleton { CompleteQuestResult(instance(), instance()) }
+    bind<CompleteQuestUseCase>() with singleton { CompleteQuestUseCase(instance()) }
     //theory
     bind<GetTheoryUseCase>() with singleton { GetTheoryUseCase(instance()) }
     bind<MarkTheoryAsReadUseCase>() with singleton { MarkTheoryAsReadUseCase(instance()) }

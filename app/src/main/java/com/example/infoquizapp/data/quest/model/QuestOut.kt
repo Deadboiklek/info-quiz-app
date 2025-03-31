@@ -1,9 +1,13 @@
 package com.example.infoquizapp.data.quest.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class QuestOut(
     val id: Int,
     val title: String,
     val description: String,
-    val experienceReward: Int,
-    val isActive: Boolean
+    @SerialName("experience_reward") val experienceReward: Int,
+    @SerialName("is_active") val isActive: Boolean
 )

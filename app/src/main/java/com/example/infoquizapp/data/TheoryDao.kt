@@ -25,4 +25,12 @@ interface TheoryDao {
 
     @Query("SELECT COUNT(*) FROM theory")
     suspend fun getTheoryCount(): Int
+
+    // Удалить все записи
+    @Query("DELETE FROM theory")
+    suspend fun clearTable()
+
+    // Удалить конкретную запись по id
+    @Query("DELETE FROM theory WHERE id = :id")
+    suspend fun deleteTheoryById(id: Int)
 }

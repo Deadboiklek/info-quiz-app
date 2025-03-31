@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
@@ -31,10 +32,9 @@ import com.example.infoquizapp.utils.TokenManager
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    progress: Float = 0.7f,  //тут ебучая хуйня блять пиздос, чтобы её сделать надо пол сервака менять нахуй........
+    progress: Float = 0.7f,
     onProfileClick : (token: String) -> Unit,
     onAchievementClick : (token: String) -> Unit,
-    onQuestClick : (token: String) -> Unit,
     navController: NavController
 ) {
 
@@ -82,7 +82,8 @@ fun MainScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Карточка заданий
-                    QuestCard(onQuestClick = onQuestClick, token = token)
+                    QuestCard(onQuestClick = { navController.navigate(Routes.Quest.createRoute(token)) },
+                        token = token)
 
                     Spacer(modifier = Modifier.height(16.dp))
 

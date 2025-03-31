@@ -26,15 +26,11 @@ class PracticeRepositoryImpl(private val practiceDao: PracticeDao) : PracticeRep
             if (practiceDao.getPracticeCount() == 0) {
                 val initialData = listOf(
                     PracticeEntity(
-                        title = "Введение в программирование",
-                        description = "Введение в программирование",
-                        isDone = false
+                        title = "Задание 1",
+                        description = "В этом задании проверяется умение работать с объёмом информации, кодировкой символов и переводом между единицами измерения.",
+                        isDone = false,
+                        type = "type1"
                     ),
-                    PracticeEntity(
-                        title = "Основы Kotlin",
-                        description = "Основы Kotlin",
-                        isDone = false
-                    )
                 )
                 practiceDao.insertAllPractice(initialData)
             }

@@ -1,5 +1,6 @@
 package com.example.infoquizapp.data.achievement.network
 
+import android.util.Log
 import com.example.infoquizapp.data.achievement.model.AchievementOut
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -24,7 +25,14 @@ class ApiAchievementsService(
         return kotlin.runCatching {
             Response.Success(client.get("$baseUrl/achievements/") {
             }.body<List<AchievementOut>>())
-        }.getOrElse { Response.Error(AchievementError.GetAchievementsError) }
+        }.fold(
+            onSuccess = {it},
+            onFailure = { ex ->
+                Log.e("AchievementAuthService",
+                    "Ошибка запроса достижений: ${ex.localizedMessage}", ex)
+                Response.Error(AchievementError.GetAchievementsError)
+            }
+        )
     }
 
     //получение достижений текущего пользователя
@@ -33,6 +41,13 @@ class ApiAchievementsService(
             Response.Success(client.get("$baseUrl/achievements/my") {
                 header("Authorization", "Bearer $token")
             }.body<List<AchievementOut>>())
-        }.getOrDefault(Response.Error(AchievementError.GetAchievementsError))
+        }.fold(
+            onSuccess = {it},
+            onFailure = { ex ->
+                Log.e("AchievementAuthService",
+                    "Ошибка запроса достижений: ${ex.localizedMessage}", ex)
+                Response.Error(AchievementError.GetAchievementsError)
+            }
+        )
     }
 }

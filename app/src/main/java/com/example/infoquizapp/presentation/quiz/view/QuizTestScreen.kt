@@ -23,26 +23,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.TestQuizzesUiState
+import com.example.infoquizapp.presentation.quiz.viewmodel.TestResultUiState
 import com.example.infoquizapp.utils.TokenManager
 
 @Composable
-fun QuizTestScreen(viewModel: QuizViewModel, quizType: String) {
-
+fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizType: String) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
 
-    // при старте экрана загружаем тест (10 случайных вопросов заданного типа)
+    // Загружаем тест при старте экрана
     LaunchedEffect(quizType, token) {
         viewModel.loadTest(quizType, token)
+        viewModel.resetTest()
     }
 
-    // подписываемся на состояние теста
     val testState by viewModel.testQuizzesState.collectAsState()
+    val testResultState by viewModel.testResultState.collectAsState()
 
-    // локальное состояние для выбранных ответов: Map(quiz id -> user answer)
     var userAnswers by remember { mutableStateOf(mutableMapOf<Int, String>()) }
+
+    // Переход на экран завершения, если тест отправлен
+    LaunchedEffect(testResultState) {
+        if (testResultState is TestResultUiState.Success) {
+            navController.navigate(Routes.TestResult.route) {
+                popUpTo(Routes.TestResult.route) { inclusive = true }
+            }
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         when (testState) {
@@ -67,13 +78,8 @@ fun QuizTestScreen(viewModel: QuizViewModel, quizType: String) {
                 }
                 Button(
                     onClick = {
-                        // отправляем ответы по каждому вопросу
-                        userAnswers.forEach { (quizId, answer) ->
-                            viewModel.submitAnswer(quizId, answer, token) { result ->
-                                println("Quiz $quizId: ${if (result.response?.isCorrect == true) "Верно" 
-                                else "Неверно, правильный ответ: ${result.response?.correctAnswer}"}")
-                            }
-                        }
+                        // Отправляем все ответы
+                        viewModel.submitTest(userAnswers, token)
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
