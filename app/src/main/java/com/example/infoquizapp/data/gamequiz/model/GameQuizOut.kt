@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GameQuizUserOut(
+data class GameQuizOut(
     val id: Int,
     val question: String,
     val option1: String,
