@@ -12,6 +12,9 @@ import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsVi
 import com.example.infoquizapp.presentation.auth.view.LoginScreen
 import com.example.infoquizapp.presentation.auth.view.SignUpScreen
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
+import com.example.infoquizapp.presentation.game.view.GameMainScreen
+import com.example.infoquizapp.presentation.game.view.GameScreen
+import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.view.MainScreen
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
@@ -62,6 +65,12 @@ sealed class Routes(val route: String) {
     }
     object TestResult : Routes("testresult/{token}") {
         fun createRoute(token: String): String = "testresult/$token"
+    }
+    object GameMainScreen : Routes("GameMainScreen/{token}") {
+        fun createRoute(token: String): String = "GameMainScreen/$token"
+    }
+    object Game : Routes("game/{token}") {
+        fun createRoute(token: String): String = "game/$token"
     }
 }
 
@@ -210,6 +219,23 @@ fun AppNavGraph(
             TestResultScreen(
                 navController = navController,
                 viewModel = quizViewModel
+            )
+        }
+
+        composable(
+            route = Routes.GameMainScreen.route,
+        ) {
+            GameMainScreen(
+                navController = navController,
+            )
+        }
+
+        composable(
+            route = Routes.Game.route
+        ) {
+            val gameViewModel: GameViewModel by di.instance()
+            GameScreen(
+                viewModel = gameViewModel
             )
         }
     }

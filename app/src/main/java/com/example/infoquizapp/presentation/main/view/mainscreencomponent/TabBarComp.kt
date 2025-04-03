@@ -3,6 +3,7 @@ package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Gamepad
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +39,7 @@ fun TabBarComp(navController: NavController) {
                         Routes.Main.route -> Routes.Main.createRoute(token)
                         Routes.Lesson.route -> Routes.Lesson.createRoute(token)
                         Routes.Trial.route -> Routes.Trial.createRoute(token)
+                        Routes.Game.route -> Routes.GameMainScreen.createRoute(token)
                         else -> navItem.route
                     }
                     navController.navigate(routeWithToken) {
@@ -72,6 +74,11 @@ object NavBarItems {
             title = "Пробник",
             icon = Icons.Outlined.DateRange,
             route = Routes.Trial.route
+        ),
+        BarItem(
+            title = "Играть",
+            icon = Icons.Outlined.Gamepad,
+            route = Routes.GameMainScreen.route
         )
     )
 }
