@@ -235,7 +235,8 @@ fun AppNavGraph(
         ) {
             val gameViewModel: GameViewModel by di.instance()
             GameScreen(
-                viewModel = gameViewModel
+                viewModel = gameViewModel,
+                onExit = { navController.navigateUp() },
             )
         }
     }

@@ -26,13 +26,13 @@ data class GameState(
     val isPausedForQuestion: Boolean = false,
     val gameQuiz: GameQuizOut? = null,
     val lives: Int = 3,
-    val score: Int = 0
+    val score: Int = 0,
+    val isGameOver: Boolean = false
 )
 
 class GameViewModel(
     private val getGameQuizUseCase: GetGameQuizUseCase,
-    private val completeGameQuizUseCase: CompleteGameQuizUseCase,
-    private val token: String
+    private val completeGameQuizUseCase: CompleteGameQuizUseCase
 ) : ViewModel() {
 
     private val _gameState = MutableStateFlow(GameState())
@@ -41,63 +41,100 @@ class GameViewModel(
     private var gameIsRunning = true
     private var quizRequested = false
 
-    init {
-        startGameLoop()
+    // Запуск игры с передачей token, ширины и высоты экрана
+    fun startGame(token: String, screenWidth: Float, screenHeight: Float) {
+        // Сбрасываем состояние, если игра была завершена ранее
+        _gameState.value = GameState()
+        gameIsRunning = true
+        quizRequested = false
+        startGameLoop(token, screenWidth, screenHeight)
     }
 
-    private fun startGameLoop() {
+    private fun startGameLoop(token: String, screenWidth: Float, screenHeight: Float) {
         viewModelScope.launch {
             while (gameIsRunning) {
                 delay(16L) // ~60 FPS
-                if (!_gameState.value.isPausedForQuestion) {
-                    updateGameState()
+                // Если игра не приостановлена и не окончена
+                if (!_gameState.value.isPausedForQuestion && !_gameState.value.isGameOver) {
+                    updateGameState(token, screenWidth, screenHeight)
                 }
             }
         }
     }
 
-    private fun updateGameState() {
+    private fun updateGameState(token: String, screenWidth: Float, screenHeight: Float) {
         val currentState = _gameState.value
 
-        // Обновляем астероиды
-        val updatedAsteroids = currentState.asteroids.map { asteroid ->
+        // Обновляем положение астероидов: сдвигаем вниз
+        val movedAsteroids = currentState.asteroids.map { asteroid ->
             asteroid.copy(position = asteroid.position.copy(y = asteroid.position.y + asteroid.speed))
-        }.filter { it.position.y < 800f }
-
-        val newAsteroids = if (updatedAsteroids.size < 5) {
-            val randomX = Random.nextFloat() * 300f
-            updatedAsteroids + Asteroid(position = Offset(randomX, 0f))
-        } else {
-            updatedAsteroids
         }
+        // Оставляем астероиды, которые еще на экране (y меньше screenHeight)
+        val onScreenAsteroids = movedAsteroids.filter { it.position.y < screenHeight }
 
-        // Проверка столкновения с астероидами
         val spaceshipPos = currentState.spaceshipPosition
-        val asteroidCollision = newAsteroids.any { asteroid ->
-            (asteroid.position - spaceshipPos).distance() < (asteroid.size / 2 + 20f)
-        }
+        val spaceshipRadius = 20f
 
+        // Если астероид сталкивается с кораблем, он уничтожается
         var lives = currentState.lives
         var score = currentState.score
-        var isPausedForQuestion = currentState.isPausedForQuestion
-        var monster: Monster? = currentState.monster
-
-        if (asteroidCollision) {
-            lives = (lives - 1).coerceAtLeast(0)
-            score -= 10
+        val remainingAsteroids = onScreenAsteroids.filter { asteroid ->
+            val distance = (asteroid.position - spaceshipPos).distance()
+            val collisionDistance = (asteroid.size / 2 + spaceshipRadius)
+            if (distance < collisionDistance) {
+                // Столкновение: уменьшаем жизни и очки, метеор уничтожается
+                lives = (lives - 1).coerceAtLeast(0)
+                score -= 10
+                false
+            } else {
+                true
+            }
         }
 
-        // Логика появления монстра
+        // Если жизни достигли 0, завершаем игру
+        if (lives == 0) {
+            gameIsRunning = false
+            _gameState.value = currentState.copy(
+                asteroids = remainingAsteroids,
+                lives = lives,
+                score = score,
+                isGameOver = true
+            )
+            return
+        }
+
+        // Добавляем новый астероид, если их меньше 5, при условии, что он не накладывается на существующие
+        val newAsteroids = if (remainingAsteroids.size < 5) {
+            val maxAttempts = 10
+            var newAsteroid: Asteroid? = null
+            for (i in 0 until maxAttempts) {
+                val randomX = Random.nextFloat() * screenWidth
+                val candidate = Asteroid(position = Offset(randomX, 0f))
+                if (remainingAsteroids.all { existing ->
+                        (existing.position - candidate.position).distance() > (existing.size / 2 + candidate.size / 2)
+                    }) {
+                    newAsteroid = candidate
+                    break
+                }
+            }
+            if (newAsteroid != null) remainingAsteroids + newAsteroid else remainingAsteroids
+        } else {
+            remainingAsteroids
+        }
+
+        // Логика появления и движения монстра
+        var isPausedForQuestion = currentState.isPausedForQuestion
+        var monster: Monster? = currentState.monster
         if (monster == null && Random.nextInt(1000) < 5) {
-            monster = Monster(position = Offset(Random.nextFloat() * 300f, 0f))
+            monster = Monster(position = Offset(Random.nextFloat() * screenWidth, 0f))
         } else if (monster != null) {
             monster = monster.copy(position = monster.position.copy(y = monster.position.y + monster.speed))
             val dist = (monster.position - spaceshipPos).distance()
-            if (dist < (monster.size / 2 + 20f)) {
+            if (dist < (monster.size / 2 + spaceshipRadius)) {
                 if (!quizRequested) {
                     isPausedForQuestion = true
                     quizRequested = true
-                    fetchGameQuiz()
+                    fetchGameQuiz(token)
                 }
             }
         }
@@ -111,7 +148,7 @@ class GameViewModel(
         )
     }
 
-    private fun fetchGameQuiz() {
+    private fun fetchGameQuiz(token: String) {
         viewModelScope.launch {
             val result = getGameQuizUseCase("default", token)
             result.gameQuiz?.let { quiz ->
@@ -120,7 +157,7 @@ class GameViewModel(
         }
     }
 
-    fun onAnswerSelected(option: Int) {
+    fun onAnswerSelected(option: Int, token: String) {
         val currentState = _gameState.value
         var lives = currentState.lives
         var score = currentState.score
@@ -148,10 +185,19 @@ class GameViewModel(
         quizRequested = false
     }
 
-    fun moveSpaceship(offset: Offset) {
+    fun moveSpaceship(offset: Offset, screenWidth: Float, screenHeight: Float) {
         val currentState = _gameState.value
-        _gameState.value = currentState.copy(
-            spaceshipPosition = currentState.spaceshipPosition + offset
-        )
+        val spaceshipRadius = 20f
+        val newX = (currentState.spaceshipPosition.x + offset.x)
+            .coerceIn(spaceshipRadius, screenWidth - spaceshipRadius)
+        val newY = (currentState.spaceshipPosition.y + offset.y)
+            .coerceIn(spaceshipRadius, screenHeight - spaceshipRadius)
+        _gameState.value = currentState.copy(spaceshipPosition = Offset(newX, newY))
+    }
+
+    fun resetGame() {
+        _gameState.value = GameState()
+        gameIsRunning = false
+        quizRequested = false
     }
 }

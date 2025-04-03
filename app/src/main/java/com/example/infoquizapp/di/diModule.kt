@@ -187,5 +187,5 @@ val appModule = DI.Module("appModule") {
     //practice
     bind<PracticeViewModel>() with singleton { PracticeViewModel(instance(), instance(), instance()) }
     //game
-    bind<GameViewModel>() with singleton { GameViewModel(instance(), instance(), instance()) }
+    bind<GameViewModel>() with singleton { GameViewModel(instance(), instance()) }
 }
