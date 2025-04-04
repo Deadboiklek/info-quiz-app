@@ -8,6 +8,9 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
 sealed class Response<T>{
     data class Success<T>(
@@ -42,7 +45,7 @@ class ApiGameQuizService(private val client: HttpClient, private val baseUrl: St
 
     suspend fun completeGameQuiz(experience: Int, token: String): Response<CompleteGameQuizResponse> {
         return kotlin.runCatching {
-            Response.Success(client.post("$baseUrl/game_quizzes/experience") {
+            Response.Success(client.post("$baseUrl/game_quizzes/experience?experience=$experience") {
                 header("Authorization", "Bearer $token")
             }.body<CompleteGameQuizResponse>())
         }.fold(
