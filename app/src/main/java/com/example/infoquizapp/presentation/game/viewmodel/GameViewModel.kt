@@ -8,6 +8,7 @@ import com.example.infoquizapp.domain.gamequiz.usecases.CompleteGameQuizUseCase
 import com.example.infoquizapp.domain.gamequiz.usecases.GetGameQuizUseCase
 import com.example.infoquizapp.presentation.game.model.Asteroid
 import com.example.infoquizapp.presentation.game.model.Monster
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,20 +42,27 @@ class GameViewModel(
     private var gameIsRunning = true
     private var quizRequested = false
 
-    // Запуск игры с передачей token, ширины и высоты экрана
+    // Новый множитель скорости, который увеличивается после каждого верного ответа
+    private var gameSpeedMultiplier = 1f
+
     fun startGame(token: String, screenWidth: Float, screenHeight: Float) {
-        // Сбрасываем состояние, если игра была завершена ранее
-        _gameState.value = GameState()
+        // Устанавливаем позицию корабля чуть ниже центра экрана
+        _gameState.value = GameState(
+            spaceshipPosition = Offset(screenWidth / 2, screenHeight / 2 + 40f)
+        )
         gameIsRunning = true
         quizRequested = false
+        gameSpeedMultiplier = 1f
         startGameLoop(token, screenWidth, screenHeight)
     }
 
+    private var gameJob: Job? = null
+
     private fun startGameLoop(token: String, screenWidth: Float, screenHeight: Float) {
-        viewModelScope.launch {
+        gameJob?.cancel()
+        gameJob = viewModelScope.launch {
             while (gameIsRunning) {
                 delay(16L) // ~60 FPS
-                // Если игра не приостановлена и не окончена
                 if (!_gameState.value.isPausedForQuestion && !_gameState.value.isGameOver) {
                     updateGameState(token, screenWidth, screenHeight)
                 }
@@ -65,24 +73,23 @@ class GameViewModel(
     private fun updateGameState(token: String, screenWidth: Float, screenHeight: Float) {
         val currentState = _gameState.value
 
-        // Обновляем положение астероидов: сдвигаем вниз
+        // Обновляем астероиды с учетом gameSpeedMultiplier
         val movedAsteroids = currentState.asteroids.map { asteroid ->
-            asteroid.copy(position = asteroid.position.copy(y = asteroid.position.y + asteroid.speed))
+            asteroid.copy(position = asteroid.position.copy(y = asteroid.position.y + asteroid.speed * gameSpeedMultiplier))
         }
-        // Оставляем астероиды, которые еще на экране (y меньше screenHeight)
         val onScreenAsteroids = movedAsteroids.filter { it.position.y < screenHeight }
 
         val spaceshipPos = currentState.spaceshipPosition
         val spaceshipRadius = 20f
 
-        // Если астероид сталкивается с кораблем, он уничтожается
         var lives = currentState.lives
         var score = currentState.score
+
+        // Проверяем столкновения корабля с астероидами
         val remainingAsteroids = onScreenAsteroids.filter { asteroid ->
             val distance = (asteroid.position - spaceshipPos).distance()
             val collisionDistance = (asteroid.size / 2 + spaceshipRadius)
             if (distance < collisionDistance) {
-                // Столкновение: уменьшаем жизни и очки, метеор уничтожается
                 lives = (lives - 1).coerceAtLeast(0)
                 score -= 10
                 false
@@ -91,7 +98,6 @@ class GameViewModel(
             }
         }
 
-        // Если жизни достигли 0, завершаем игру
         if (lives == 0) {
             gameIsRunning = false
             _gameState.value = currentState.copy(
@@ -103,15 +109,20 @@ class GameViewModel(
             return
         }
 
-        // Добавляем новый астероид, если их меньше 5, при условии, что он не накладывается на существующие
+        // Генерация нового астероида с учётом gameSpeedMultiplier не влияет на генерацию, только на движение
         val newAsteroids = if (remainingAsteroids.size < 5) {
             val maxAttempts = 10
             var newAsteroid: Asteroid? = null
             for (i in 0 until maxAttempts) {
                 val randomX = Random.nextFloat() * screenWidth
-                val candidate = Asteroid(position = Offset(randomX, 0f))
+                val candidate = Asteroid(
+                    position = Offset(randomX, -Random.nextFloat() * 50f),
+                    size = (30f + Random.nextFloat() * 20f) * 2,  // если нужно увеличить размер, но здесь можно оставить прежним
+                    speed = (3f + Random.nextFloat() * 4f) * 4     // если нужно увеличить базовую скорость, но уже умножается на multiplier
+                )
                 if (remainingAsteroids.all { existing ->
-                        (existing.position - candidate.position).distance() > (existing.size / 2 + candidate.size / 2)
+                        (existing.position - candidate.position).distance() >
+                                (existing.size / 2 + candidate.size / 2)
                     }) {
                     newAsteroid = candidate
                     break
@@ -122,20 +133,34 @@ class GameViewModel(
             remainingAsteroids
         }
 
-        // Логика появления и движения монстра
+        // Логика появления и движения монстра (без горизонтального движения)
         var isPausedForQuestion = currentState.isPausedForQuestion
         var monster: Monster? = currentState.monster
         if (monster == null && Random.nextInt(1000) < 5) {
-            monster = Monster(position = Offset(Random.nextFloat() * screenWidth, 0f))
+            // Создаем монстра, который занимает всю ширину экрана, появляется чуть выше экрана
+            monster = Monster(
+                position = Offset(0f, -60f),
+                width = screenWidth,  // ширина монстра равна ширине экрана
+                height = 60f,
+                speed = 3f * gameSpeedMultiplier  // скорость с учетом множителя
+            )
         } else if (monster != null) {
+            // Двигаем монстра только вертикально вниз
             monster = monster.copy(position = monster.position.copy(y = monster.position.y + monster.speed))
-            val dist = (monster.position - spaceshipPos).distance()
-            if (dist < (monster.size / 2 + spaceshipRadius)) {
+
+            // Проверяем столкновение с кораблём: если корабль пересекает вертикальную область монстра
+            if (spaceshipPos.y + spaceshipRadius > monster.position.y &&
+                spaceshipPos.y - spaceshipRadius < monster.position.y + monster.height
+            ) {
                 if (!quizRequested) {
                     isPausedForQuestion = true
                     quizRequested = true
                     fetchGameQuiz(token)
                 }
+            }
+            // Если монстр ушел за нижнюю границу экрана, сбрасываем его
+            if (monster.position.y > screenHeight) {
+                monster = null
             }
         }
 
@@ -144,6 +169,7 @@ class GameViewModel(
             monster = monster,
             lives = lives,
             score = score,
+            isGameOver = false,
             isPausedForQuestion = isPausedForQuestion
         )
     }
@@ -157,6 +183,7 @@ class GameViewModel(
         }
     }
 
+    // При ответе на вопрос: если ответ правильный, увеличиваем multiplier
     fun onAnswerSelected(option: Int, token: String) {
         val currentState = _gameState.value
         var lives = currentState.lives
@@ -166,6 +193,8 @@ class GameViewModel(
             val selectedAnswer = if (option == 1) quiz.option1 else quiz.option2
             if (selectedAnswer == quiz.correctAnswer) {
                 score += quiz.experienceReward
+                // Увеличиваем множитель скорости
+                gameSpeedMultiplier *= 1.1f
                 viewModelScope.launch {
                     completeGameQuizUseCase(quiz.experienceReward, token)
                 }
@@ -196,6 +225,8 @@ class GameViewModel(
     }
 
     fun resetGame() {
+        // Отмена игрового цикла и сброс состояния
+        gameJob?.cancel()
         _gameState.value = GameState()
         gameIsRunning = false
         quizRequested = false

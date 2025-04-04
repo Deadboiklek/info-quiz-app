@@ -19,10 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.infoquizapp.R
 import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.utils.TokenManager
 
@@ -46,7 +50,10 @@ fun GameScreen(
                 screenWidth = size.width.toFloat()
                 screenHeight = size.height.toFloat()
             }
-            .background(Color.Black)
+            .paint(
+                painter = painterResource(id = R.drawable.game_background),
+                contentScale = ContentScale.FillBounds
+            )
     ) {
         // Игровой Canvas
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -63,10 +70,10 @@ fun GameScreen(
                 )
             }
             gameState.monster?.let { monster ->
-                drawCircle(
+                drawRect(
                     color = Color.Red,
-                    radius = monster.size / 2,
-                    center = monster.position
+                    topLeft = monster.position,
+                    size = androidx.compose.ui.geometry.Size(monster.width, monster.height)
                 )
             }
         }
@@ -119,7 +126,6 @@ fun GameScreen(
                 text = { Text("Ваш результат: ${gameState.score} очков") },
                 confirmButton = {
                     Button(onClick = {
-                        // При выборе "Начать заново" перезапускаем игру
                         viewModel.startGame(token, screenWidth, screenHeight)
                     }) {
                         Text("Начать заново")
@@ -127,9 +133,8 @@ fun GameScreen(
                 },
                 dismissButton = {
                     Button(onClick = {
-                        // При выборе "Выйти" останавливаем игру и вызываем onExit для навигации назад
-                        onExit()
                         viewModel.resetGame()
+                        onExit()
                     }) {
                         Text("Выйти")
                     }
