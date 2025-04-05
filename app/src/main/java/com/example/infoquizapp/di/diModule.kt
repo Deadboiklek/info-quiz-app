@@ -100,6 +100,8 @@ val appModule = DI.Module("appModule") {
     //базовый юрл
     bind<String>("baseUrl") with singleton { "http://10.0.2.2:8000" }
 
+    //http://10.0.2.2:8000
+
     //работа с сетью
     bind<ApiAuthService>() with singleton {
         ApiAuthService(instance(), instance("baseUrl"))

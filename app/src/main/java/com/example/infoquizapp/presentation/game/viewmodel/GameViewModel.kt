@@ -141,7 +141,7 @@ class GameViewModel(
             monster = Monster(
                 position = Offset(0f, -60f),
                 width = screenWidth,  // ширина монстра равна ширине экрана
-                height = 60f,
+                height = 500f,
                 speed = 3f * gameSpeedMultiplier  // скорость с учетом множителя
             )
         } else if (monster != null) {

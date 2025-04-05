@@ -51,6 +51,7 @@ fun GameScreen(
 
     val spaceshipImage = ImageBitmap.imageResource(id = R.drawable.tarelka)
     val meteorImage = ImageBitmap.imageResource(id = R.drawable.meteor)
+    val monsterImage: ImageBitmap = ImageBitmap.imageResource(id = R.drawable.octopus2)
 
 
     Box(
@@ -80,11 +81,17 @@ fun GameScreen(
             }
 
             gameState.monster?.let { monster ->
-                drawRect(
-                    color = Color.Red,
-                    topLeft = monster.position,
-                    size = androidx.compose.ui.geometry.Size(monster.width, monster.height)
-                )
+                drawIntoCanvas { canvas ->
+                    // Если позиция монстра считается верхним левым углом,
+                    // масштабируем изображение так, чтобы его размеры были равны monster.width и monster.height.
+                    val scaleX = monster.width / monsterImage.width.toFloat()
+                    val scaleY = monster.height / monsterImage.height.toFloat()
+                    canvas.save()
+                    canvas.translate(monster.position.x, monster.position.y)
+                    canvas.scale(scaleX, scaleY)
+                    canvas.drawImage(monsterImage, Offset.Zero, Paint())
+                    canvas.restore()
+                }
             }
         }
 
