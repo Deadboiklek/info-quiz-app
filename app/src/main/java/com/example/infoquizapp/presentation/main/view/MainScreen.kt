@@ -78,7 +78,7 @@ fun MainScreen(
                         .padding(paddingValues)
                 ) {
                     // Прогресс пользователя
-                    UserProgressBar(user = user, progressProvider =  { progress })
+                    UserProgressBar(user = user)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
