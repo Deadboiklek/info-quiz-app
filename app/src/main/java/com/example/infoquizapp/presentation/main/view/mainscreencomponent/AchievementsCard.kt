@@ -18,10 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.R
 
 @Composable
 fun AchievementsCard(
@@ -41,10 +43,10 @@ fun AchievementsCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                painter = ColorPainter(Color.DarkGray),
+                painter = painterResource(R.drawable.cosmonavtachievement),
                 contentDescription = "Quest",
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(128.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
 

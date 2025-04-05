@@ -1,6 +1,7 @@
 package com.example.infoquizapp.presentation.main.view.mainscreencomponent
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,10 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.R
 
 @Composable
 fun QuestCard(
@@ -42,10 +46,10 @@ fun QuestCard(
             modifier = Modifier.padding(16.dp),
         ) {
             Image(
-                painter = ColorPainter(Color.DarkGray),
+                painter = painterResource(R.drawable.cosmonavtquest),
                 contentDescription = "Quest",
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(128.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
 
@@ -58,7 +62,7 @@ fun QuestCard(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     ),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
