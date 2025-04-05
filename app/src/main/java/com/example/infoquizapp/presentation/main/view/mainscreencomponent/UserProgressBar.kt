@@ -25,7 +25,8 @@ fun UserProgressBar(user: UserOut, progressProvider: () -> Float) {
         Text(
             text = "Уровень ${user.level}",
             style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
+            color = MaterialTheme.colorScheme.onPrimary
         )
         LinearProgressIndicator(
             modifier = Modifier

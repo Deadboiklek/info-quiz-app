@@ -69,7 +69,8 @@ fun MainScreen(
                     TabBarComp(
                         navController = navController
                     )
-                }
+                },
+                contentColor = MaterialTheme.colorScheme.background
             ) { paddingValues ->
                 Column(
                     modifier = Modifier

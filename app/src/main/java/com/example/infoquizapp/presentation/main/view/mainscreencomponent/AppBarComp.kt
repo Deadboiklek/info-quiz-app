@@ -25,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.R
 import com.example.infoquizapp.data.profile.model.UserOut
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,11 +42,12 @@ fun AppBar(
             ) {
                 // Аватар пользователя
                 Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_camera), // Тут надо заменить
+                    painter = painterResource(id = R.drawable.avatar),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
-                        .size(40.dp)
-                        .background(Color.Gray, CircleShape),
+                        .size(50.dp)
+                        .clip(CircleShape)
+                    ,
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
