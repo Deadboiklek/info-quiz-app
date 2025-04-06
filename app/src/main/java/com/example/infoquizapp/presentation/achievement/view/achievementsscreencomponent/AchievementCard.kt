@@ -30,16 +30,17 @@ import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsUi
 @Composable
 fun AchievementCard(uiModel: AchievementsUiModel) {
 
-    val textColor = if (uiModel.isObtained) {
-        MaterialTheme.colorScheme.onBackground
+    val cardColor = if (uiModel.isObtained) {
+        CardDefaults.cardColors(Color(0xFFE0FEBD))
     } else {
-        MaterialTheme.colorScheme.secondary
+        CardDefaults.cardColors(Color.Unspecified)
     }
 
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        colors = cardColor
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -58,17 +59,17 @@ fun AchievementCard(uiModel: AchievementsUiModel) {
                     text = uiModel.achievement.name,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = textColor,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = uiModel.achievement.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = textColor,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = "Bonus XP: ${uiModel.achievement.experienceBonus}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = textColor,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }
