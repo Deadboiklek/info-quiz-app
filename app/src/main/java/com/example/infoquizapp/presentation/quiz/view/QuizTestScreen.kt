@@ -37,16 +37,19 @@ fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizT
 
     // Загружаем тест при старте экрана
     LaunchedEffect(quizType, token) {
-        viewModel.loadTest(quizType, token)
         viewModel.resetTest()
+        viewModel.loadTest(quizType, token)
     }
 
     val testState by viewModel.testQuizzesState.collectAsState()
     val testResultState by viewModel.testResultState.collectAsState()
 
+    // Локальное состояние для отслеживания текущего вопроса
+    var currentQuestionIndex by remember { mutableStateOf(0) }
+    // Локальное состояние для ответов пользователя (можно синхронизировать с ViewModel.userAnswers)
     var userAnswers by remember { mutableStateOf(mutableMapOf<Int, String>()) }
 
-    // Переход на экран завершения, если тест отправлен
+    // Если тест успешно отправлен, переходим к экрану результата
     LaunchedEffect(testResultState) {
         if (testResultState is TestResultUiState.Success) {
             navController.navigate(Routes.TestResult.route) {
@@ -55,46 +58,52 @@ fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizT
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        when (testState) {
-            is TestQuizzesUiState.Loading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
+    when (testState) {
+        is TestQuizzesUiState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-            is TestQuizzesUiState.Success -> {
-                val quizzes = (testState as TestQuizzesUiState.Success).quizzes
-                LazyColumn(modifier = Modifier.weight(1f)) {
-                    items(quizzes) { quiz ->
-                        QuizQuestionItem(
-                            quiz = quiz,
-                            selectedAnswer = userAnswers[quiz.id] ?: "",
-                            onAnswerSelected = { answer ->
-                                userAnswers[quiz.id] = answer
-                            }
-                        )
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    }
-                }
-                Button(
-                    onClick = {
-                        // Отправляем все ответы
-                        viewModel.submitTest(userAnswers, token)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Отправить тест")
-                }
-            }
-            is TestQuizzesUiState.Error -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = (testState as TestQuizzesUiState.Error).message,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
-            TestQuizzesUiState.Idle -> Unit
         }
+        is TestQuizzesUiState.Success -> {
+            val quizzes = (testState as TestQuizzesUiState.Success).quizzes
+            // Защита от некорректного индекса
+            if (quizzes.isNotEmpty() && currentQuestionIndex in quizzes.indices) {
+                QuizPlanetQuestionScreen(
+                    quiz = quizzes[currentQuestionIndex],
+                    totalQuestions = quizzes.size,
+                    currentIndex = currentQuestionIndex,
+                    userAnswer = userAnswers[quizzes[currentQuestionIndex].id] ?: "",
+                    onAnswerChanged = { answer ->
+                        userAnswers = userAnswers.toMutableMap().apply {
+                            this[quizzes[currentQuestionIndex].id] = answer
+                        }
+                    },
+                    onNext = {
+                        // Переход к следующему вопросу
+                        if (currentQuestionIndex < quizzes.lastIndex) {
+                            currentQuestionIndex++
+                        }
+                    },
+                    onBack = {
+                        if (currentQuestionIndex > 0) {
+                            currentQuestionIndex--
+                        }
+                    },
+                    onSubmit = {
+                        // Отправляем тест – перебираем все ответы и отправляем их на сервер
+                        viewModel.submitTest(userAnswers, token)
+                    }
+                )
+            }
+        }
+        is TestQuizzesUiState.Error -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    text = (testState as TestQuizzesUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+        TestQuizzesUiState.Idle -> Unit
     }
 }

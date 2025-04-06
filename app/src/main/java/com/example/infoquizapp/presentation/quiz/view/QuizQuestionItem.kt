@@ -13,8 +13,10 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,30 +32,27 @@ fun QuizQuestionItem(
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = quiz.question, style = MaterialTheme.typography.bodyLarge)
         Spacer(modifier = Modifier.height(16.dp))
-        //  если options пустой, отображаем текстовое поле
+
         if (quiz.options.isNullOrEmpty()) {
-            var textFieldValue by remember { mutableStateOf(selectedAnswer) }
             OutlinedTextField(
-                value = textFieldValue,
+                value = selectedAnswer,
                 onValueChange = { newValue ->
-                    textFieldValue = newValue
                     onAnswerSelected(newValue)
                 },
                 label = { Text("Введите ваш ответ") },
                 modifier = Modifier.fillMaxWidth()
             )
         } else {
-            // иначе отображаем варианты ответа как радио-кнопки
-            var currentSelection by remember { mutableStateOf(selectedAnswer) }
             quiz.options?.forEach { option ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
                 ) {
                     RadioButton(
-                        selected = (currentSelection == option),
+                        selected = (selectedAnswer == option),
                         onClick = {
-                            currentSelection = option
                             onAnswerSelected(option)
                         }
                     )
