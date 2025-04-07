@@ -9,8 +9,8 @@ import com.example.infoquizapp.domain.gamequiz.repository.GameQuizRepository
 class GameQuizRepositoryImpl(private val apiGameQuizService: ApiGameQuizService) :
     GameQuizRepository {
 
-    override suspend fun getGameQuiz(token: String): Response<GameQuizOut> {
-        return apiGameQuizService.getGameQuiz(token)
+    override suspend fun getGameQuiz(difficulty: String, token: String): Response<GameQuizOut> {
+        return apiGameQuizService.getGameQuiz(difficulty ,token)
     }
     override suspend fun completeGameQuiz(experience: Int, token: String): Response<CompleteGameQuizResponse> {
         return apiGameQuizService.completeGameQuiz(experience, token)
