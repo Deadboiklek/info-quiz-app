@@ -133,29 +133,31 @@ class GameViewModel(
             remainingAsteroids
         }
 
-        // Логика появления и движения монстра (без горизонтального движения)
+        // Логика появления и движения монстра
         var isPausedForQuestion = currentState.isPausedForQuestion
         var monster: Monster? = currentState.monster
         if (monster == null && Random.nextInt(1000) < 5) {
-            // Создаем монстра, который занимает всю ширину экрана, появляется чуть выше экрана
+            // С небольшим шансом создать сложного монстра (10% шанс)
+            val difficulty = if (Random.nextFloat() < 0.1f) "hard" else "normal"
             monster = Monster(
                 position = Offset(0f, -60f),
-                width = screenWidth,  // ширина монстра равна ширине экрана
-                height = 500f,
-                speed = 3f * gameSpeedMultiplier  // скорость с учетом множителя
+                width = screenWidth,  // монстр занимает всю ширину экрана
+                height = 60f,
+                speed = 3f * gameSpeedMultiplier,  // скорость с учетом множителя
+                difficulty = difficulty
             )
         } else if (monster != null) {
-            // Двигаем монстра только вертикально вниз
+            // Двигаем монстра вертикально вниз
             monster = monster.copy(position = monster.position.copy(y = monster.position.y + monster.speed))
-
-            // Проверяем столкновение с кораблём: если корабль пересекает вертикальную область монстра
+            // Проверка столкновения: если корабль входит в вертикальную область монстра
             if (spaceshipPos.y + spaceshipRadius > monster.position.y &&
                 spaceshipPos.y - spaceshipRadius < monster.position.y + monster.height
             ) {
                 if (!quizRequested) {
                     isPausedForQuestion = true
                     quizRequested = true
-                    fetchGameQuiz(token)
+                    // Вызываем запрос вопроса с учетом сложности монстра
+                    fetchGameQuiz(token, monster.difficulty)
                 }
             }
             // Если монстр ушел за нижнюю границу экрана, сбрасываем его
@@ -174,9 +176,9 @@ class GameViewModel(
         )
     }
 
-    private fun fetchGameQuiz(token: String) {
+    private fun fetchGameQuiz(token: String, difficulty: String) {
         viewModelScope.launch {
-            val result = getGameQuizUseCase("default", token)
+            val result = getGameQuizUseCase(difficulty, token)
             result.gameQuiz?.let { quiz ->
                 _gameState.value = _gameState.value.copy(gameQuiz = quiz)
             }
