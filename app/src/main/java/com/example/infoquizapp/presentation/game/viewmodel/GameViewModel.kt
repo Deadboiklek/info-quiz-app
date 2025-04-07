@@ -138,11 +138,11 @@ class GameViewModel(
         var monster: Monster? = currentState.monster
         if (monster == null && Random.nextInt(1000) < 5) {
             // С небольшим шансом создать сложного монстра (10% шанс)
-            val difficulty = if (Random.nextFloat() < 0.1f) "hard" else "normal"
+            val difficulty = if (Random.nextFloat() < 0.3f) "hard" else "normal"
             monster = Monster(
                 position = Offset(0f, -60f),
                 width = screenWidth,  // монстр занимает всю ширину экрана
-                height = 60f,
+                height = 540f,
                 speed = 3f * gameSpeedMultiplier,  // скорость с учетом множителя
                 difficulty = difficulty
             )
