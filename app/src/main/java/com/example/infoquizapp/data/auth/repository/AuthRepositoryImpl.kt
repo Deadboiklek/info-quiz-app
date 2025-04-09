@@ -1,5 +1,6 @@
 package com.example.infoquizapp.data.auth.repository
 
+import com.example.infoquizapp.data.auth.model.TeacherLogin
 import com.example.infoquizapp.data.auth.model.TokenResponse
 import com.example.infoquizapp.data.auth.model.UserCreate
 import com.example.infoquizapp.data.auth.model.UserLogin
@@ -19,7 +20,7 @@ class AuthRepositoryImpl(private val apiAuthService: ApiAuthService) : AuthRepos
     }
 
     override suspend fun teacherLogin(email: String, password: String): Response<TokenResponse> {
-        val tokenResponse = apiAuthService.teacherLogin(UserLogin(email, password))
+        val tokenResponse = apiAuthService.teacherLogin(TeacherLogin(email, password))
         return tokenResponse
     }
 }

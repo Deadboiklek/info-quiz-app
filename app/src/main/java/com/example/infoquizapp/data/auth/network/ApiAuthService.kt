@@ -2,6 +2,7 @@ package com.example.infoquizapp.data.auth.network
 
 
 import android.util.Log
+import com.example.infoquizapp.data.auth.model.TeacherLogin
 import com.example.infoquizapp.data.auth.model.TokenResponse
 import com.example.infoquizapp.data.auth.model.UserCreate
 import com.example.infoquizapp.data.auth.model.UserLogin
@@ -59,11 +60,11 @@ class ApiAuthService(private val client: HttpClient, private val baseUrl: String
         )
     }
 
-    suspend fun teacherLogin(userLogin: UserLogin): Response<TokenResponse> {
+    suspend fun teacherLogin(teacherLogin: TeacherLogin): Response<TokenResponse> {
         return kotlin.runCatching {
             Response.Succes(client.post("$baseUrl/auth/teacherlogin") {
                 contentType(ContentType.Application.Json)
-                setBody(userLogin)
+                setBody(teacherLogin)
             }.body<TokenResponse>())
         }.fold(
             onSuccess = { it },

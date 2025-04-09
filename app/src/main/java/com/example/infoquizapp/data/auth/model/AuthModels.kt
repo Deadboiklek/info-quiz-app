@@ -19,4 +19,7 @@ data class UserCreate(
 @Serializable
 data class UserLogin(val email: String, val password: String)
 
+@Serializable
+data class TeacherLogin(val email: String, val password: String)
+
 

@@ -11,6 +11,7 @@ import com.example.infoquizapp.presentation.achievement.view.AchievementsScreen
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
 import com.example.infoquizapp.presentation.auth.view.LoginScreen
 import com.example.infoquizapp.presentation.auth.view.SignUpScreen
+import com.example.infoquizapp.presentation.auth.view.TeacherLoginScreen
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.game.view.GameMainScreen
 import com.example.infoquizapp.presentation.game.view.GameScreen
@@ -36,9 +37,14 @@ import org.kodein.di.instance
 sealed class Routes(val route: String) {
     object Login : Routes("login")
     object SignUp : Routes("signup")
+    object TeacherLogin : Routes("teacherlogin")
+
     object Main : Routes("main/{token}") {
         fun createRoute(token: String): String = "main/$token"
     }
+
+    object TeacherMain : Routes("teachermain")
+
     object Profile : Routes("profile/{token}") {
         fun createRoute(token: String): String = "profile/$token"
     }
@@ -89,7 +95,7 @@ fun AppNavGraph(
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 },
-                onSignUpClick = { navController.navigate(Routes.SignUp.route) }
+                navController = navController
             )
         }
 
@@ -103,6 +109,19 @@ fun AppNavGraph(
                     }
                 },
                 onLoginClick = { navController.navigate(Routes.Login.route) }
+            )
+        }
+
+        composable(Routes.TeacherLogin.route) {
+            val authViewModel: AuthViewModel by di.instance()
+            TeacherLoginScreen(
+                viewModel = authViewModel,
+                navController = navController,
+                onLoginSuccess = {
+                    navController.navigate(Routes.TeacherMain.route) {
+                        popUpTo(Routes.TeacherLogin.route) { inclusive = true }
+                    }
+                }
             )
         }
 

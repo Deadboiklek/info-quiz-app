@@ -36,11 +36,12 @@ import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.utils.TokenManager
 
 @Composable
-fun LoginScreen(
+fun TeacherLoginScreen(
 
     viewModel: AuthViewModel,
     onLoginSuccess: (token: String) -> Unit,
     navController: NavController
+
 ){
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -64,7 +65,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Авторизация",
+            text = "Авторизация преподавателя",
             style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp),
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -96,7 +97,7 @@ fun LoginScreen(
 
         //Log in button
         Button(
-            onClick = { viewModel.login(email, password) },
+            onClick = { viewModel.teacherLogin(email, password) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -111,24 +112,10 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sign up Text
         Text(
-            text = "Нет аккаунта? Зарегистрируйтесь!",
+            text = "Войти как ученик",
             modifier = Modifier
-                .clickable { navController.navigate(Routes.SignUp.route) },
-            style = TextStyle(
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Войти как преподаватель",
-            modifier = Modifier
-                .clickable { navController.navigate(Routes.TeacherLogin.route) },
+                .clickable { navController.navigate(Routes.Login.route) },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 16.sp,
