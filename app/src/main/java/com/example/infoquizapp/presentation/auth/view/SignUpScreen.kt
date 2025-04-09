@@ -35,12 +35,10 @@ import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.utils.TokenManager
 
 @Composable
-fun SignUpScreen (
-
+fun SignUpScreen(
     viewModel: AuthViewModel,
     onRegisterSuccess: (token: String) -> Unit,
     onLoginClick: () -> Unit
-
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -48,6 +46,7 @@ fun SignUpScreen (
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var teacherCode by remember { mutableStateOf("") }
 
     LaunchedEffect(uiState) {
         if (uiState is AuthUiState.Success) {
@@ -57,7 +56,7 @@ fun SignUpScreen (
         }
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -76,18 +75,16 @@ fun SignUpScreen (
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // Name TextField
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Name") },
+            label = { Text("Имя") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             singleLine = true
         )
 
-        // Email TextField
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -98,11 +95,10 @@ fun SignUpScreen (
             singleLine = true
         )
 
-        //Password textfield
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Пароль") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
@@ -110,11 +106,35 @@ fun SignUpScreen (
             singleLine = true
         )
 
+        OutlinedTextField(
+            value = teacherCode,
+            onValueChange = { teacherCode = it },
+            label = { Text("Код учителя (необязательно)") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            singleLine = true
+        )
+
+        Text(
+            text = "Если у вас нет кода учителя, оставьте это поле пустым",
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                fontSize = 14.sp
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        //Sign up button
         Button(
-            onClick = { viewModel.register(username, email, password) },
+            onClick = {
+                // Если код пустой, передаём null
+                val code = teacherCode.takeIf { it.isNotBlank() }
+                viewModel.register(username, email, password, code)
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -129,11 +149,10 @@ fun SignUpScreen (
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Sign up Text
         Text(
             text = "Войти по email",
             modifier = Modifier
-                .clickable { TODO( "пока не сделано, надо подумать" ) },
+                .clickable { onLoginClick() },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 16.sp,
@@ -145,6 +164,7 @@ fun SignUpScreen (
             is AuthUiState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))
             }
+
             is AuthUiState.Error -> {
                 Text(
                     text = (uiState as AuthUiState.Error).message,
@@ -152,6 +172,7 @@ fun SignUpScreen (
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }
+
             else -> {}
         }
     }

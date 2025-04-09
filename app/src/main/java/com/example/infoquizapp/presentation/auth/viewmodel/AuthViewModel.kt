@@ -25,10 +25,12 @@ class AuthViewModel(
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState
 
-    fun register(username: String, email: String, password: String) {
+    fun register(username: String, email: String, password: String, teacherCode: String?) {
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
-            val result = registerUseCase(username, email, password)
+            // Если teacherCode пустой, передаём null
+            val code = if (teacherCode.isNullOrBlank()) null else teacherCode
+            val result = registerUseCase(username, email, password, code)
             _uiState.value = if (result.token != null) {
                 AuthUiState.Success(result.token)
             } else {

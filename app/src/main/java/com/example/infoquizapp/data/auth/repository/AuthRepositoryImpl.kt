@@ -8,8 +8,8 @@ import com.example.infoquizapp.data.auth.network.Response
 import com.example.infoquizapp.domain.auth.repository.AuthRepository
 
 class AuthRepositoryImpl(private val apiAuthService: ApiAuthService) : AuthRepository {
-    override suspend fun register(username: String, email: String, password: String): Response<TokenResponse> {
-        val tokenResponse = apiAuthService.register(UserCreate(username, email, password))
+    override suspend fun register(username: String, email: String, password: String, teacherCode: String?): Response<TokenResponse> {
+        val tokenResponse = apiAuthService.register(UserCreate(username, email, password, teacherCode))
         return tokenResponse
     }
 
