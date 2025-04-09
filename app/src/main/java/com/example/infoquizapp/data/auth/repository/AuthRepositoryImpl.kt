@@ -17,4 +17,9 @@ class AuthRepositoryImpl(private val apiAuthService: ApiAuthService) : AuthRepos
         val tokenResponse = apiAuthService.login(UserLogin(email, password))
         return tokenResponse
     }
+
+    override suspend fun teacherLogin(email: String, password: String): Response<TokenResponse> {
+        val tokenResponse = apiAuthService.teacherLogin(UserLogin(email, password))
+        return tokenResponse
+    }
 }

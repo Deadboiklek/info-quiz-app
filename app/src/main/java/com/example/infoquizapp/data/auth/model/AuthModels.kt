@@ -9,7 +9,14 @@ data class TokenResponse(
 )
 
 @Serializable
-data class UserCreate(val username: String, val email: String, val password: String)
+data class UserCreate(
+    val username: String,
+    val email: String,
+    val password: String,
+    @SerialName("teacher_code") val teacherCode: String? = null
+)
 
 @Serializable
 data class UserLogin(val email: String, val password: String)
+
+

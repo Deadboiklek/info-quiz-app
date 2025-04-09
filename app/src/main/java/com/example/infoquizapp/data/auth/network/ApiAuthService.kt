@@ -58,4 +58,19 @@ class ApiAuthService(private val client: HttpClient, private val baseUrl: String
             }
         )
     }
+
+    suspend fun teacherLogin(userLogin: UserLogin): Response<TokenResponse> {
+        return kotlin.runCatching {
+            Response.Succes(client.post("$baseUrl/auth/teacherlogin") {
+                contentType(ContentType.Application.Json)
+                setBody(userLogin)
+            }.body<TokenResponse>())
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiAuthService", "Ошибка запроса авторизации: ${ex.localizedMessage}", ex)
+                Response.Error(ServerError.ErrorLogin)
+            }
+        )
+    }
 }
