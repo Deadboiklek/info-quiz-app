@@ -51,7 +51,9 @@ fun GameScreen(
 
     val spaceshipImage = ImageBitmap.imageResource(id = R.drawable.tarelka)
     val meteorImage = ImageBitmap.imageResource(id = R.drawable.meteor)
-    val monsterImage: ImageBitmap = ImageBitmap.imageResource(id = R.drawable.octopus2)
+
+    val normalMonsterImage = ImageBitmap.imageResource(id = R.drawable.monster_normal)
+    val hardMonsterImage = ImageBitmap.imageResource(id = R.drawable.monster_hard)
 
 
     Box(
@@ -81,9 +83,8 @@ fun GameScreen(
             }
 
             gameState.monster?.let { monster ->
+                val monsterImage = if (monster.difficulty == "hard") hardMonsterImage else normalMonsterImage
                 drawIntoCanvas { canvas ->
-                    // Если позиция монстра считается верхним левым углом,
-                    // масштабируем изображение так, чтобы его размеры были равны monster.width и monster.height.
                     val scaleX = monster.width / monsterImage.width.toFloat()
                     val scaleY = monster.height / monsterImage.height.toFloat()
                     canvas.save()
