@@ -2,6 +2,7 @@ package com.example.infoquizapp.data.auth.network
 
 
 import android.util.Log
+import com.example.infoquizapp.data.auth.model.TeacherLogin
 import com.example.infoquizapp.data.auth.model.TokenResponse
 import com.example.infoquizapp.data.auth.model.UserCreate
 import com.example.infoquizapp.data.auth.model.UserLogin
@@ -49,6 +50,21 @@ class ApiAuthService(private val client: HttpClient, private val baseUrl: String
             Response.Succes(client.post("$baseUrl/auth/login") {
                 contentType(ContentType.Application.Json)
                 setBody(userLogin)
+            }.body<TokenResponse>())
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("ApiAuthService", "Ошибка запроса авторизации: ${ex.localizedMessage}", ex)
+                Response.Error(ServerError.ErrorLogin)
+            }
+        )
+    }
+
+    suspend fun teacherLogin(teacherLogin: TeacherLogin): Response<TokenResponse> {
+        return kotlin.runCatching {
+            Response.Succes(client.post("$baseUrl/auth/teacherlogin") {
+                contentType(ContentType.Application.Json)
+                setBody(teacherLogin)
             }.body<TokenResponse>())
         }.fold(
             onSuccess = { it },

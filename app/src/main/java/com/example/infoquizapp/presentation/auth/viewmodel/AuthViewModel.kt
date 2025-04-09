@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.domain.auth.usecases.LoginUseCase
 import com.example.infoquizapp.domain.auth.usecases.RegisterUseCase
+import com.example.infoquizapp.domain.auth.usecases.TeacherLoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,16 +18,19 @@ sealed class AuthUiState {
 
 class AuthViewModel(
     private val registerUseCase: RegisterUseCase,
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val teacherLoginUseCase: TeacherLoginUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState
 
-    fun register(username: String, email: String, password: String) {
+    fun register(username: String, email: String, password: String, teacherCode: String?) {
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
-            val result = registerUseCase(username, email, password)
+            // Если teacherCode пустой, передаём null
+            val code = if (teacherCode.isNullOrBlank()) null else teacherCode
+            val result = registerUseCase(username, email, password, code)
             _uiState.value = if (result.token != null) {
                 AuthUiState.Success(result.token)
             } else {
@@ -39,6 +43,18 @@ class AuthViewModel(
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
             val result = loginUseCase(email, password)
+            _uiState.value = if (result.token != null) {
+                AuthUiState.Success(result.token)
+            } else {
+                AuthUiState.Error(result.error ?: "Неизвестная ошибка")
+            }
+        }
+    }
+
+    fun teacherLogin(email: String, password: String) {
+        viewModelScope.launch {
+            _uiState.value = AuthUiState.Loading
+            val result = teacherLoginUseCase(email, password)
             _uiState.value = if (result.token != null) {
                 AuthUiState.Success(result.token)
             } else {

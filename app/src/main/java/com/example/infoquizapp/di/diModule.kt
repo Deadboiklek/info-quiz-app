@@ -24,6 +24,7 @@ import com.example.infoquizapp.domain.achievement.usecases.GetUserAchievementsUs
 import com.example.infoquizapp.domain.auth.repository.AuthRepository
 import com.example.infoquizapp.domain.auth.usecases.LoginUseCase
 import com.example.infoquizapp.domain.auth.usecases.RegisterUseCase
+import com.example.infoquizapp.domain.auth.usecases.TeacherLoginUseCase
 import com.example.infoquizapp.domain.gamequiz.repository.GameQuizRepository
 import com.example.infoquizapp.domain.gamequiz.usecases.CompleteGameQuizUseCase
 import com.example.infoquizapp.domain.gamequiz.usecases.GetGameQuizUseCase
@@ -144,6 +145,7 @@ val appModule = DI.Module("appModule") {
     // auth
     bind<RegisterUseCase>() with singleton { RegisterUseCase(instance()) }
     bind<LoginUseCase>() with singleton { LoginUseCase(instance()) }
+    bind<TeacherLoginUseCase>() with singleton { TeacherLoginUseCase(instance()) }
     //profile
     bind<GetProfileUseCase>() with singleton { GetProfileUseCase(instance()) }
     //achievement
@@ -171,7 +173,7 @@ val appModule = DI.Module("appModule") {
 
     //viewmodels
     // auth
-    bind<AuthViewModel>() with singleton { AuthViewModel(instance(), instance()) }
+    bind<AuthViewModel>() with singleton { AuthViewModel(instance(), instance(), instance()) }
     //profile
     bind<ProfileViewModel>() with singleton { ProfileViewModel(instance()) }
     //achievement

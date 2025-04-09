@@ -29,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthUiState
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.utils.TokenManager
@@ -38,8 +40,7 @@ fun LoginScreen(
 
     viewModel: AuthViewModel,
     onLoginSuccess: (token: String) -> Unit,
-    onSignUpClick: () -> Unit
-
+    navController: NavController
 ){
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
@@ -83,7 +84,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Пароль") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
@@ -114,7 +115,20 @@ fun LoginScreen(
         Text(
             text = "Нет аккаунта? Зарегистрируйтесь!",
             modifier = Modifier
-                .clickable { onSignUpClick() },
+                .clickable { navController.navigate(Routes.SignUp.route) },
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Войти как преподаватель",
+            modifier = Modifier
+                .clickable { navController.navigate(Routes.TeacherLogin.route) },
             style = TextStyle(
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 16.sp,
