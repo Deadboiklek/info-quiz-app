@@ -82,9 +82,10 @@ fun TeacherMainScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = "Здравствуйте ${teacher.firstname} ${teacher.patronymic}",
+                        text = "Здравствуйте, ${teacher.firstname} ${teacher.patronymic}",
                         style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
 
                     Card(
@@ -105,7 +106,8 @@ fun TeacherMainScreen(
                         ) {
                             Text(
                                 text = "Добавить задание",
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
@@ -130,7 +132,8 @@ fun TeacherMainScreen(
                         ) {
                             Text(
                                 text = "Просмотреть и удалить задания",
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
@@ -155,7 +158,8 @@ fun TeacherMainScreen(
                         ) {
                             Text(
                                 text = "Просмотреть статистику",
-                                style = MaterialTheme.typography.bodyLarge
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
