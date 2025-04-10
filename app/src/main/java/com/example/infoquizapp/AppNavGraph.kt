@@ -26,6 +26,8 @@ import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
 import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
+import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.view.TrialScreen
@@ -256,6 +258,16 @@ fun AppNavGraph(
             GameScreen(
                 viewModel = gameViewModel,
                 onExit = { navController.navigateUp() },
+            )
+        }
+
+        composable(
+            route = Routes.TeacherMain.route
+        ) {
+            val teacherProfileViewModel: TeacherProfileViewModel by di.instance()
+            TeacherMainScreen(
+                viewModel = teacherProfileViewModel,
+                navController = navController
             )
         }
     }
