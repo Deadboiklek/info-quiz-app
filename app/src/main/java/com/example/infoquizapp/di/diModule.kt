@@ -17,6 +17,8 @@ import com.example.infoquizapp.data.TheoryDao
 import com.example.infoquizapp.data.gamequiz.network.ApiGameQuizService
 import com.example.infoquizapp.data.gamequiz.repository.GameQuizRepositoryImpl
 import com.example.infoquizapp.data.practice.repository.PracticeRepositoryImpl
+import com.example.infoquizapp.data.teacher.network.TeacherApiService
+import com.example.infoquizapp.data.teacher.repository.TeacherRepositoryImpl
 import com.example.infoquizapp.data.theory.repository.TheoryRepositoryImpl
 import com.example.infoquizapp.domain.achievement.repository.AchievementRepository
 import com.example.infoquizapp.domain.achievement.usecases.GetAllAchievementsUseCase
@@ -42,6 +44,9 @@ import com.example.infoquizapp.domain.quiz.repository.QuizRepository
 import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesUseCase
 import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
+import com.example.infoquizapp.domain.teacher.repository.TeacherRepository
+import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
+import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
 import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
@@ -54,6 +59,8 @@ import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
 import io.ktor.client.HttpClient
@@ -122,6 +129,9 @@ val appModule = DI.Module("appModule") {
     bind<ApiGameQuizService>() with singleton {
         ApiGameQuizService(instance(), instance("baseUrl"))
     }
+    bind<TeacherApiService>() with singleton {
+        TeacherApiService(instance(), instance("baseUrl"))
+    }
 
     // репозитории
     // auth
@@ -140,6 +150,8 @@ val appModule = DI.Module("appModule") {
     bind<PracticeRepository>() with singleton { PracticeRepositoryImpl(instance()) }
     //game
     bind<GameQuizRepository>() with singleton { GameQuizRepositoryImpl(instance()) }
+    //teacher
+    bind<TeacherRepository>() with singleton { TeacherRepositoryImpl(instance()) }
 
     //usecases
     // auth
@@ -170,6 +182,9 @@ val appModule = DI.Module("appModule") {
     //game
     bind<GetGameQuizUseCase>() with singleton { GetGameQuizUseCase(instance()) }
     bind<CompleteGameQuizUseCase>() with singleton { CompleteGameQuizUseCase(instance()) }
+    //teacher
+    bind<GetTeacherProfileUseCase>() with singleton{ GetTeacherProfileUseCase(instance()) }
+    bind<PostTeacherQuizUseCase>() with singleton { PostTeacherQuizUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -192,4 +207,8 @@ val appModule = DI.Module("appModule") {
     bind<PracticeViewModel>() with singleton { PracticeViewModel(instance(), instance(), instance()) }
     //game
     bind<GameViewModel>() with singleton { GameViewModel(instance(), instance()) }
+    //teacherprofile
+    bind<TeacherProfileViewModel>() with singleton { TeacherProfileViewModel(instance()) }
+    //postteqcherquest
+    bind<PostTeacherQuizViewModel>() with singleton { PostTeacherQuizViewModel(instance()) }
 }

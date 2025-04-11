@@ -26,6 +26,10 @@ import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
 import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.view.AddQuizScreen
+import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
+import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.view.TrialScreen
@@ -44,6 +48,7 @@ sealed class Routes(val route: String) {
     }
 
     object TeacherMain : Routes("teachermain")
+    object AddQuizScreen : Routes("addquizscreen")
 
     object Profile : Routes("profile/{token}") {
         fun createRoute(token: String): String = "profile/$token"
@@ -256,6 +261,26 @@ fun AppNavGraph(
             GameScreen(
                 viewModel = gameViewModel,
                 onExit = { navController.navigateUp() },
+            )
+        }
+
+        composable(
+            route = Routes.TeacherMain.route
+        ) {
+            val teacherProfileViewModel: TeacherProfileViewModel by di.instance()
+            TeacherMainScreen(
+                viewModel = teacherProfileViewModel,
+                navController = navController
+            )
+        }
+
+        composable(
+            route = Routes.AddQuizScreen.route
+        ) {
+            val postTeacherQuizViewModel: PostTeacherQuizViewModel by di.instance()
+            AddQuizScreen(
+                viewModel = postTeacherQuizViewModel,
+                onQuizAdded = { navController.navigateUp() }
             )
         }
     }
