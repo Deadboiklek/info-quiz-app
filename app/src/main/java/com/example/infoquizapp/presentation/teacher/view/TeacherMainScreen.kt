@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileUiState
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.utils.TokenManager
@@ -92,7 +93,7 @@ fun TeacherMainScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                TODO()
+                                navController.navigate(Routes.AddQuizScreen.route)
                             },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                         colors = CardDefaults.cardColors(

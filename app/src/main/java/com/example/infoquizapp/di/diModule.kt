@@ -46,6 +46,7 @@ import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
 import com.example.infoquizapp.domain.teacher.repository.TeacherRepository
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
+import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
 import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
@@ -58,6 +59,7 @@ import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
@@ -182,6 +184,7 @@ val appModule = DI.Module("appModule") {
     bind<CompleteGameQuizUseCase>() with singleton { CompleteGameQuizUseCase(instance()) }
     //teacher
     bind<GetTeacherProfileUseCase>() with singleton{ GetTeacherProfileUseCase(instance()) }
+    bind<PostTeacherQuizUseCase>() with singleton { PostTeacherQuizUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -206,4 +209,6 @@ val appModule = DI.Module("appModule") {
     bind<GameViewModel>() with singleton { GameViewModel(instance(), instance()) }
     //teacherprofile
     bind<TeacherProfileViewModel>() with singleton { TeacherProfileViewModel(instance()) }
+    //postteqcherquest
+    bind<PostTeacherQuizViewModel>() with singleton { PostTeacherQuizViewModel(instance()) }
 }
