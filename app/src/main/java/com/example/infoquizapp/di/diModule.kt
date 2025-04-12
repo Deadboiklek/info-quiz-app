@@ -45,7 +45,9 @@ import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesUseCase
 import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
 import com.example.infoquizapp.domain.teacher.repository.TeacherRepository
+import com.example.infoquizapp.domain.teacher.usecases.DeleteTeacherQuizUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
+import com.example.infoquizapp.domain.teacher.usecases.GetTeacherQuizzesUseCase
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
@@ -59,6 +61,7 @@ import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
@@ -185,6 +188,8 @@ val appModule = DI.Module("appModule") {
     //teacher
     bind<GetTeacherProfileUseCase>() with singleton{ GetTeacherProfileUseCase(instance()) }
     bind<PostTeacherQuizUseCase>() with singleton { PostTeacherQuizUseCase(instance()) }
+    bind<GetTeacherQuizzesUseCase>() with singleton { GetTeacherQuizzesUseCase(instance()) }
+    bind<DeleteTeacherQuizUseCase>() with singleton { DeleteTeacherQuizUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -211,4 +216,6 @@ val appModule = DI.Module("appModule") {
     bind<TeacherProfileViewModel>() with singleton { TeacherProfileViewModel(instance()) }
     //postteqcherquest
     bind<PostTeacherQuizViewModel>() with singleton { PostTeacherQuizViewModel(instance()) }
+    //getanddeletequiz
+    bind<GetAndDeleteQuizViewModel>() with singleton { GetAndDeleteQuizViewModel(instance(), instance()) }
 }
