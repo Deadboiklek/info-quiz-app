@@ -26,7 +26,7 @@ import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
 import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
-import com.example.infoquizapp.presentation.teacher.view.AddQuizScreen
+import com.example.infoquizapp.presentation.teacher.view.addquiz.AddQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
