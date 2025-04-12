@@ -25,13 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TeacherQuizzesScreen(
+fun GetAndDeleteQuizzesScreen(
     viewModel: GetAndDeleteQuizViewModel,
     onBack: () -> Unit              // Или кнопка "назад"
 ) {

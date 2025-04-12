@@ -119,7 +119,7 @@ fun TeacherMainScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                TODO()
+                                navController.navigate(Routes.GetAndDeleteQuizScreen.route)
                             },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
                         colors = CardDefaults.cardColors(

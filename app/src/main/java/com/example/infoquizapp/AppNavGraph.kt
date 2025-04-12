@@ -28,6 +28,8 @@ import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.view.addquiz.AddQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
+import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.GetAndDeleteQuizzesScreen
+import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
@@ -49,6 +51,7 @@ sealed class Routes(val route: String) {
 
     object TeacherMain : Routes("teachermain")
     object AddQuizScreen : Routes("addquizscreen")
+    object GetAndDeleteQuizScreen : Routes("getanddeletequizscreen")
 
     object Profile : Routes("profile/{token}") {
         fun createRoute(token: String): String = "profile/$token"
@@ -281,6 +284,16 @@ fun AppNavGraph(
             AddQuizScreen(
                 viewModel = postTeacherQuizViewModel,
                 onQuizAdded = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Routes.GetAndDeleteQuizScreen.route
+        ) {
+            val getAndDeleteQuizViewModel : GetAndDeleteQuizViewModel by di.instance()
+            GetAndDeleteQuizzesScreen(
+                viewModel = getAndDeleteQuizViewModel,
+                onBack = { navController.navigateUp() }
             )
         }
     }
