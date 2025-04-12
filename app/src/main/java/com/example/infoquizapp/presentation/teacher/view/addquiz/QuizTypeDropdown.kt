@@ -1,4 +1,4 @@
-package com.example.infoquizapp.presentation.teacher.view
+package com.example.infoquizapp.presentation.teacher.view.addquiz
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu

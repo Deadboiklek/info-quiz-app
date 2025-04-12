@@ -6,6 +6,7 @@ import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.model.TeacherProfile
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -26,6 +27,8 @@ sealed class Response<T>{
 sealed class TeacherError (val message: String?) {
     data object GetTeacherProfileError: TeacherError("Ошибка получения профиля")
     data object PostTeacherQuizError: TeacherError("Ошибка создания квиза")
+    data object GetTeacherQuizzesError: TeacherError("Ошибка получения квизов")
+    data object DeleteTeacherQuizError: TeacherError("Ошибка удаления квиза")
 }
 
 class TeacherApiService(private val client: HttpClient, private val baseUrl: String) {
@@ -56,6 +59,38 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
             onFailure = { ex ->
                 Log.e("TeacherApiService", "Ошибка создания квиза: ${ex.localizedMessage}", ex)
                 Response.Error(TeacherError.PostTeacherQuizError)
+            }
+        )
+    }
+
+    suspend fun getTeacherQuizzes(token: String): Response<List<QuizOut>> {
+        return runCatching {
+            Response.Succes(
+                client.get("$baseUrl/teacher/getquizzes") {
+                    header("Authorization", "Bearer $token")
+                }.body<List<QuizOut>>()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("TeacherApiService", "Ошибка запроса квизов: ${ex.localizedMessage}", ex)
+                Response.Error(TeacherError.GetTeacherQuizzesError)
+            }
+        )
+    }
+
+    suspend fun deleteTeacherQuiz(token: String, quizId: Int): Response<QuizOut> {
+        return runCatching {
+            Response.Succes(
+                client.delete("$baseUrl/teacher/deletequizzes/$quizId") {
+                    header("Authorization", "Bearer $token")
+                }.body<QuizOut>()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("TeacherApiService", "Ошибка удаления квиза: ${ex.localizedMessage}", ex)
+                Response.Error(TeacherError.DeleteTeacherQuizError)
             }
         )
     }
