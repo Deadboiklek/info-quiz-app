@@ -102,7 +102,7 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
     suspend fun getTeacherStudents(token: String): Response<List<StudentInfo>> {
         return runCatching {
             Response.Succes(
-                client.get("$baseUrl/students") {
+                client.get("$baseUrl/teacher/students") {
                     header("Authorization", "Bearer $token")
                 }.body<List<StudentInfo>>()
             )
@@ -118,7 +118,7 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
     suspend fun getStudentStatistics(token: String, studentId: Int): Response<StudentStatistics> {
         return runCatching {
             Response.Succes(
-                client.get("$baseUrl/studentstats/$studentId") {
+                client.get("$baseUrl/teacher/studentstats/$studentId") {
                     header("Authorization", "Bearer $token")
                 }.body<StudentStatistics>()
             )

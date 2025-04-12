@@ -82,7 +82,7 @@ fun StudentListScreen(
                         items(students) { student ->
                             StudentListItem(student = student, onItemClick = {
                                 // Переход на экран статистики ученика с передачей student.id
-                                navController.navigate("studentStats/${student.id}")
+                                navController.navigate("studentstatistics/${student.id}")
                             })
                         }
                     }
