@@ -49,4 +49,8 @@ class PostTeacherQuizViewModel(private val postTeacherQuizUseCase: PostTeacherQu
             }
         }
     }
+
+    fun resetState() {
+        _uiState.value = PostTeacherQuizUiState.Idle
+    }
 }
