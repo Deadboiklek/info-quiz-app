@@ -46,8 +46,10 @@ import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
 import com.example.infoquizapp.domain.teacher.repository.TeacherRepository
 import com.example.infoquizapp.domain.teacher.usecases.DeleteTeacherQuizUseCase
+import com.example.infoquizapp.domain.teacher.usecases.GetStudentStatisticsUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherQuizzesUseCase
+import com.example.infoquizapp.domain.teacher.usecases.GetTeacherStudentsUseCase
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
@@ -63,6 +65,8 @@ import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.StudentListViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.StudentStatisticsViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
@@ -190,6 +194,8 @@ val appModule = DI.Module("appModule") {
     bind<PostTeacherQuizUseCase>() with singleton { PostTeacherQuizUseCase(instance()) }
     bind<GetTeacherQuizzesUseCase>() with singleton { GetTeacherQuizzesUseCase(instance()) }
     bind<DeleteTeacherQuizUseCase>() with singleton { DeleteTeacherQuizUseCase(instance()) }
+    bind<GetTeacherStudentsUseCase>() with singleton { GetTeacherStudentsUseCase(instance()) }
+    bind<GetStudentStatisticsUseCase>() with singleton { GetStudentStatisticsUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -218,4 +224,8 @@ val appModule = DI.Module("appModule") {
     bind<PostTeacherQuizViewModel>() with singleton { PostTeacherQuizViewModel(instance()) }
     //getanddeletequiz
     bind<GetAndDeleteQuizViewModel>() with singleton { GetAndDeleteQuizViewModel(instance(), instance()) }
+    //getteacherstudents
+    bind<StudentListViewModel>() with singleton { StudentListViewModel(instance()) }
+    //getstudentstatistics
+    bind<StudentStatisticsViewModel>() with singleton { StudentStatisticsViewModel(instance()) }
 }

@@ -60,9 +60,17 @@ fun AddQuizScreen(
 
     // Если добавление прошло успешно, показать сообщение и выполнить навигацию
     LaunchedEffect(uiState) {
-        if (uiState is PostTeacherQuizUiState.Success) {
-            Toast.makeText(context, "Квест добавлен", Toast.LENGTH_SHORT).show()
-            onQuizAdded()
+        when (uiState) {
+            is PostTeacherQuizUiState.Success -> {
+                Toast.makeText(context, "Квест добавлен", Toast.LENGTH_SHORT).show()
+                onQuizAdded()
+                viewModel.resetState() // Сбрасываем состояние после навигации
+            }
+            is PostTeacherQuizUiState.Error -> {
+                Toast.makeText(context, (uiState as PostTeacherQuizUiState.Error).message, Toast.LENGTH_SHORT).show()
+                viewModel.resetState()
+            }
+            else -> {}
         }
     }
 

@@ -2,6 +2,8 @@ package com.example.infoquizapp.data.teacher.network
 
 import android.util.Log
 import com.example.infoquizapp.data.quiz.model.QuizOut
+import com.example.infoquizapp.data.teacher.model.StudentInfo
+import com.example.infoquizapp.data.teacher.model.StudentStatistics
 import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.model.TeacherProfile
 import io.ktor.client.HttpClient
@@ -29,6 +31,8 @@ sealed class TeacherError (val message: String?) {
     data object PostTeacherQuizError: TeacherError("Ошибка создания квиза")
     data object GetTeacherQuizzesError: TeacherError("Ошибка получения квизов")
     data object DeleteTeacherQuizError: TeacherError("Ошибка удаления квиза")
+    data object GetTeacherStudentsError: TeacherError("Ошибка получения студентов")
+    data object GetStudentsStatisticsError: TeacherError("Ошибка получения статистики студентов")
 }
 
 class TeacherApiService(private val client: HttpClient, private val baseUrl: String) {
@@ -91,6 +95,38 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
             onFailure = { ex ->
                 Log.e("TeacherApiService", "Ошибка удаления квиза: ${ex.localizedMessage}", ex)
                 Response.Error(TeacherError.DeleteTeacherQuizError)
+            }
+        )
+    }
+
+    suspend fun getTeacherStudents(token: String): Response<List<StudentInfo>> {
+        return runCatching {
+            Response.Succes(
+                client.get("$baseUrl/teacher/students") {
+                    header("Authorization", "Bearer $token")
+                }.body<List<StudentInfo>>()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("TeacherApiService", "Ошибка получения списка учеников: ${ex.localizedMessage}", ex)
+                Response.Error(TeacherError.GetTeacherStudentsError)
+            }
+        )
+    }
+
+    suspend fun getStudentStatistics(token: String, studentId: Int): Response<StudentStatistics> {
+        return runCatching {
+            Response.Succes(
+                client.get("$baseUrl/teacher/studentstats/$studentId") {
+                    header("Authorization", "Bearer $token")
+                }.body<StudentStatistics>()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = { ex ->
+                Log.e("TeacherApiService", "Ошибка получения статистики ученика: ${ex.localizedMessage}", ex)
+                Response.Error(TeacherError.GetStudentsStatisticsError)
             }
         )
     }
