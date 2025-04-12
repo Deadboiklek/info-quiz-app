@@ -283,7 +283,8 @@ fun AppNavGraph(
             val postTeacherQuizViewModel: PostTeacherQuizViewModel by di.instance()
             AddQuizScreen(
                 viewModel = postTeacherQuizViewModel,
-                onQuizAdded = { navController.navigateUp() }
+                onQuizAdded = { navController.navigateUp() },
+                onBack = { navController.navigateUp() }
             )
         }
 
