@@ -29,8 +29,12 @@ import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.view.addquiz.AddQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
 import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.GetAndDeleteQuizzesScreen
+import com.example.infoquizapp.presentation.teacher.view.checkstatistics.StudentListScreen
+import com.example.infoquizapp.presentation.teacher.view.checkstatistics.StudentStatisticsScreen
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.StudentListViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.StudentStatisticsViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.presentation.theory.view.TheoryContentScreen
 import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
@@ -52,6 +56,8 @@ sealed class Routes(val route: String) {
     object TeacherMain : Routes("teachermain")
     object AddQuizScreen : Routes("addquizscreen")
     object GetAndDeleteQuizScreen : Routes("getanddeletequizscreen")
+    object StudentsListScreen : Routes("studentslistscreen")
+    object StudentStatisticsScreen : Routes("studentstatistics/{studentId}")
 
     object Profile : Routes("profile/{token}") {
         fun createRoute(token: String): String = "profile/$token"
@@ -294,6 +300,35 @@ fun AppNavGraph(
             val getAndDeleteQuizViewModel : GetAndDeleteQuizViewModel by di.instance()
             GetAndDeleteQuizzesScreen(
                 viewModel = getAndDeleteQuizViewModel,
+                onBack = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = "studentstatistics/{studentId}",
+            arguments = listOf(navArgument("studentId") {
+                type = NavType.IntType
+            })
+        ) { backStackEntry ->
+            val studentId = backStackEntry.arguments?.getInt("studentId") ?: 0
+
+            val studentStatisticsViewModel: StudentStatisticsViewModel by di.instance()
+
+            StudentStatisticsScreen(
+                studentId = studentId,
+                navController = navController,
+                viewModel = studentStatisticsViewModel
+            )
+        }
+
+        composable(
+            route = Routes.StudentsListScreen.route
+        ) {
+            val studentListViewModel : StudentListViewModel by di.instance()
+
+            StudentListScreen(
+                viewModel = studentListViewModel,
+                navController = navController,
                 onBack = { navController.navigateUp() }
             )
         }
