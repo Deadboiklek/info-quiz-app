@@ -9,16 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +40,7 @@ import com.example.infoquizapp.utils.TokenManager
 fun TeacherMainScreen(
     viewModel: TeacherProfileViewModel,
     navController: NavController
-){
+) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
 
@@ -44,8 +49,9 @@ fun TeacherMainScreen(
     }
 
     val uiState by viewModel.uiState.collectAsState()
+    var showDialog by remember { mutableStateOf(false) }
 
-    when(uiState){
+    when (uiState) {
         is TeacherProfileUiState.Error -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -57,6 +63,7 @@ fun TeacherMainScreen(
                 )
             }
         }
+
         TeacherProfileUiState.Idle -> {}
         TeacherProfileUiState.Loading -> {
             Box(
@@ -66,9 +73,23 @@ fun TeacherMainScreen(
                 CircularProgressIndicator()
             }
         }
+
         is TeacherProfileUiState.Success -> {
             val teacher = (uiState as TeacherProfileUiState.Success).teacher
-            
+
+            if (showDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    confirmButton = {
+                        TextButton(onClick = { showDialog = false }) {
+                            Text("Закрыть")
+                        }
+                    },
+                    title = { Text("Код учителя") },
+                    text = { Text("Ваш код: ${teacher.teacherCode}") }
+                )
+            }
+
             Scaffold(
                 contentColor = MaterialTheme.colorScheme.background
             ) { paddingValues ->
@@ -89,19 +110,11 @@ fun TeacherMainScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(Routes.AddQuizScreen.route)
-                            },
+                            .clickable { navController.navigate(Routes.AddQuizScreen.route) },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
+                        Box(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = "Добавить задание",
                                 style = MaterialTheme.typography.bodyLarge,
@@ -110,24 +123,14 @@ fun TeacherMainScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(Routes.GetAndDeleteQuizScreen.route)
-                            },
+                            .clickable { navController.navigate(Routes.GetAndDeleteQuizScreen.route) },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer
-                        )
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
+                        Box(modifier = Modifier.padding(16.dp)) {
                             Text(
                                 text = "Просмотреть и удалить задания",
                                 style = MaterialTheme.typography.bodyLarge,
@@ -136,26 +139,32 @@ fun TeacherMainScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { navController.navigate(Routes.StudentsListScreen.route) },
+                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0FEBD))
+                    ) {
+                        Box(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Просмотреть статистику",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
 
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(Routes.StudentsListScreen.route)
-                            },
+                            .clickable { showDialog = true },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFE0FEBD)
-                        )
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD0E8FF))
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
+                        Box(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "Просмотреть статистику",
+                                text = "Посмотреть код учителя",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onBackground
                             )
