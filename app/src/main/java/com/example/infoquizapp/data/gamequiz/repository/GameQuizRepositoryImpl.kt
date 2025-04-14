@@ -12,7 +12,7 @@ class GameQuizRepositoryImpl(private val apiGameQuizService: ApiGameQuizService)
     override suspend fun getGameQuiz(difficulty: String, token: String): Response<GameQuizOut> {
         return apiGameQuizService.getGameQuiz(difficulty ,token)
     }
-    override suspend fun completeGameQuiz(experience: Int, token: String): Response<CompleteGameQuizResponse> {
-        return apiGameQuizService.completeGameQuiz(experience, token)
+    override suspend fun completeGameQuiz(experience: Int, gameQuizId: Int, token: String): Response<CompleteGameQuizResponse> {
+        return apiGameQuizService.completeGameQuiz(experience, gameQuizId, token)
     }
 }

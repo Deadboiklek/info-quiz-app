@@ -6,5 +6,5 @@ import com.example.infoquizapp.data.gamequiz.network.Response
 
 interface GameQuizRepository {
     suspend fun getGameQuiz(difficulty: String, token: String): Response<GameQuizOut>
-    suspend fun completeGameQuiz(experience: Int, token: String): Response<CompleteGameQuizResponse>
+    suspend fun completeGameQuiz(experience: Int,gameQuizId: Int , token: String): Response<CompleteGameQuizResponse>
 }

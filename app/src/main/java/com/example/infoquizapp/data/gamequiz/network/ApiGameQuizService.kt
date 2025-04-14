@@ -44,9 +44,9 @@ class ApiGameQuizService(private val client: HttpClient, private val baseUrl: St
         )
     }
 
-    suspend fun completeGameQuiz(experience: Int, token: String): Response<CompleteGameQuizResponse> {
+    suspend fun completeGameQuiz(experience: Int, gameQuizId: Int, token: String): Response<CompleteGameQuizResponse> {
         return kotlin.runCatching {
-            Response.Success(client.post("$baseUrl/game_quizzes/experience?experience=$experience") {
+            Response.Success(client.post("$baseUrl/game_quizzes/experience?experience=$experience&game_quiz_id=$gameQuizId") {
                 header("Authorization", "Bearer $token")
             }.body<CompleteGameQuizResponse>())
         }.fold(

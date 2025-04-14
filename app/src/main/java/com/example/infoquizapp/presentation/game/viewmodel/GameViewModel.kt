@@ -198,7 +198,7 @@ class GameViewModel(
                 // Увеличиваем множитель скорости
                 gameSpeedMultiplier *= 1.1f
                 viewModelScope.launch {
-                    completeGameQuizUseCase(quiz.experienceReward, token)
+                    completeGameQuizUseCase(quiz.experienceReward, quiz.id, token)
                 }
             } else {
                 score -= 10
