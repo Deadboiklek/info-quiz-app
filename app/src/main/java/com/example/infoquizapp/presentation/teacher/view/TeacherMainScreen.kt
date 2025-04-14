@@ -160,7 +160,7 @@ fun TeacherMainScreen(
                             .fillMaxWidth()
                             .clickable { showDialog = true },
                         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFD0E8FF))
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFEBDE0))
                     ) {
                         Box(modifier = Modifier.padding(16.dp)) {
                             Text(
