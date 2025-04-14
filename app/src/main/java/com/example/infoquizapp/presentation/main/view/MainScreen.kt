@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,8 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.infoquizapp.Routes
+import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsViewModel
+import com.example.infoquizapp.presentation.achievementnotifier.GlobalAchievementNotifier
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
@@ -31,8 +35,8 @@ import com.example.infoquizapp.utils.TokenManager
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel,
-    progress: Float = 0.7f,
+    mainViewModel: MainViewModel,
+    achievementsViewModel: AchievementsViewModel,
     onProfileClick : (token: String) -> Unit,
     onAchievementClick : (token: String) -> Unit,
     navController: NavController
@@ -42,11 +46,13 @@ fun MainScreen(
     val token = TokenManager.getToken(context) ?: ""
 
     LaunchedEffect(token) {
-        viewModel.loadProfile(token)
+        mainViewModel.loadProfile(token)
+        achievementsViewModel.loadAllAchievements()
+        achievementsViewModel.loadUserAchievements(token)
     }
 
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by mainViewModel.uiState.collectAsState()
 
     when(uiState) {
         is MainUiState.Loading -> {
@@ -66,30 +72,47 @@ fun MainScreen(
                     AppBar(user = user, onProfileClick = onProfileClick, token = token)
                 },
                 bottomBar = {
-                    TabBarComp(
-                        navController = navController
-                    )
+                    TabBarComp(navController = navController)
                 },
                 contentColor = MaterialTheme.colorScheme.background
             ) { paddingValues ->
-                Column(
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
+                        .padding(paddingValues) // Отступы от top/bottom bars
                 ) {
-                    // Прогресс пользователя
-                    UserProgressBar(user = user)
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    // Основной контент
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        UserProgressBar(user = user)
 
-                    // Карточка заданий
-                    QuestCard(onQuestClick = { navController.navigate(Routes.Quest.createRoute(token)) },
-                        token = token)
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        QuestCard(
+                            onQuestClick = {
+                                navController.navigate(Routes.Quest.createRoute(token))
+                            },
+                            token = token
+                        )
 
-                    // Карточка достижений
-                    AchievementsCard(onAchievementClick = onAchievementClick, token = token)
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        AchievementsCard(
+                            onAchievementClick = onAchievementClick,
+                            token = token
+                        )
+                    }
+
+                    // Уведомление — поверх, но с отступом сверху, чтобы не перекрыть TopAppBar
+                    GlobalAchievementNotifier(
+                        viewModel = achievementsViewModel,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .zIndex(1f)
+                    )
                 }
             }
         }

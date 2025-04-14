@@ -143,9 +143,10 @@ fun AppNavGraph(
             route = Routes.Main.route,
         ) {
             val mainViewModel: MainViewModel by di.instance()
+            val achievementsViewModel: AchievementsViewModel by di.instance()
             MainScreen(
-                viewModel = mainViewModel,
-                progress = 0.7f,
+                mainViewModel = mainViewModel,
+                achievementsViewModel = achievementsViewModel,
                 onProfileClick = { navController.navigate(Routes.Profile.route) },
                 onAchievementClick = { navController.navigate(Routes.Achievements.route) },
                 navController = navController
