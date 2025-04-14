@@ -9,11 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.R
+import com.example.infoquizapp.presentation.achievement.util.getAchievementImageRes
 import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsUiModel
 
 @Composable
@@ -34,6 +32,12 @@ fun AchievementCard(uiModel: AchievementsUiModel) {
         CardDefaults.cardColors(Color(0xFFE0FEBD))
     } else {
         CardDefaults.cardColors(Color.Unspecified)
+    }
+
+    val imageResId = if (uiModel.isObtained) {
+        getAchievementImageRes(uiModel.achievement.imageName)
+    } else {
+        R.drawable.question_mark
     }
 
     Card(
@@ -47,7 +51,7 @@ fun AchievementCard(uiModel: AchievementsUiModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.achievement1),
+                painter = painterResource(id = imageResId),
                 contentDescription = "Achievement",
                 modifier = Modifier
                     .size(80.dp)

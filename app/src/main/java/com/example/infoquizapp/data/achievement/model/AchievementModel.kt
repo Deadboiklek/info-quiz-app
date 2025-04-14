@@ -8,5 +8,6 @@ data class AchievementOut(
     val id: Int,
     val name: String,
     val description: String,
-    @SerialName("experience_bonus") val experienceBonus: Int
+    @SerialName("experience_bonus") val experienceBonus: Int,
+    @SerialName("image_name") val imageName: String
 )
