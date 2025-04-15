@@ -22,11 +22,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.data.quest.model.QuestOut
-import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.quest.viewmodel.QuestsUiModel
+import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 
 @Composable
-fun QuestionCard(quest: QuestOut, token: String, viewModel: UserQuestsViewModel) {
+fun QuestCard(
+    questUiModel: QuestsUiModel,
+    token: String,
+    viewModel: QuestsViewModel
+) {
+    val quest = questUiModel.quest
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -46,28 +51,30 @@ fun QuestionCard(quest: QuestOut, token: String, viewModel: UserQuestsViewModel)
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = quest.title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
-
                 Text(
                     text = quest.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )
-
                 Text(
                     text = "Награда: ${quest.experienceReward} XP",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.tertiary
                 )
-
-                if (quest.isActive) {
+                if (questUiModel.isCompleted) {
+                    Text(
+                        text = "Квест выполнен",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                } else if (quest.isActive) {
                     Button(
                         onClick = {
                             viewModel.completeQuest(quest.id, token) { result ->
@@ -80,13 +87,13 @@ fun QuestionCard(quest: QuestOut, token: String, viewModel: UserQuestsViewModel)
                         },
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Text("Завершить квест")
+                        Text(text = "Завершить квест")
                     }
                 } else {
                     Text(
                         text = "Квест не активен",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }

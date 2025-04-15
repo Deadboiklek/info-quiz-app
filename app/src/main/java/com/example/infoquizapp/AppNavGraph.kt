@@ -22,7 +22,7 @@ import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.view.ProfileScreen
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
-import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
 import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
@@ -179,7 +179,7 @@ fun AppNavGraph(
         composable(
             route = Routes.Quest.route,
         ) {
-            val questViewModel : UserQuestsViewModel by di.instance()
+            val questViewModel : QuestsViewModel by di.instance()
             QuestScreen(
                 viewModel = questViewModel,
                 onExit = { navController.navigateUp() }

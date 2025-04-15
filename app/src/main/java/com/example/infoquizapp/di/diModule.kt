@@ -9,7 +9,6 @@ import com.example.infoquizapp.data.auth.repository.AuthRepositoryImpl
 import com.example.infoquizapp.data.PracticeDao
 import com.example.infoquizapp.data.profile.network.ApiProfileService
 import com.example.infoquizapp.data.profile.repository.ProfileRepositoryImpl
-import com.example.infoquizapp.data.quest.network.ApiQuestService
 import com.example.infoquizapp.data.quest.repository.QuestRepositoryImpl
 import com.example.infoquizapp.data.quiz.network.QuizApiService
 import com.example.infoquizapp.data.quiz.repository.QuizRepositoryImpl
@@ -17,6 +16,7 @@ import com.example.infoquizapp.data.TheoryDao
 import com.example.infoquizapp.data.gamequiz.network.ApiGameQuizService
 import com.example.infoquizapp.data.gamequiz.repository.GameQuizRepositoryImpl
 import com.example.infoquizapp.data.practice.repository.PracticeRepositoryImpl
+import com.example.infoquizapp.data.quest.network.ApiQuestsService
 import com.example.infoquizapp.data.teacher.network.TeacherApiService
 import com.example.infoquizapp.data.teacher.repository.TeacherRepositoryImpl
 import com.example.infoquizapp.data.theory.repository.TheoryRepositoryImpl
@@ -39,6 +39,7 @@ import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestUseCase
+import com.example.infoquizapp.domain.quest.usecases.GetAllQuestsUseCase
 import com.example.infoquizapp.domain.quest.usecases.GetUserQuestsUseCase
 import com.example.infoquizapp.domain.quiz.repository.QuizRepository
 import com.example.infoquizapp.domain.quiz.usecases.GetTestQuizzesUseCase
@@ -61,7 +62,7 @@ import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
-import com.example.infoquizapp.presentation.quest.viewmodel.UserQuestsViewModel
+import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
@@ -127,8 +128,8 @@ val appModule = DI.Module("appModule") {
     bind<ApiAchievementsService>() with singleton {
         ApiAchievementsService(instance(), instance("baseUrl"))
     }
-    bind<ApiQuestService>() with singleton {
-        ApiQuestService(instance(), instance("baseUrl"))
+    bind<ApiQuestsService>() with singleton {
+        ApiQuestsService(instance(), instance("baseUrl"))
     }
     bind<QuizApiService>() with singleton {
         QuizApiService(instance(), instance("baseUrl"))
@@ -172,8 +173,8 @@ val appModule = DI.Module("appModule") {
     bind<GetUserAchievementsUseCase>() with singleton { GetUserAchievementsUseCase(instance()) }
     //quest
     bind<GetUserQuestsUseCase>() with singleton { GetUserQuestsUseCase(instance()) }
-    bind<CompleteQuestResult>() with singleton { CompleteQuestResult(instance(), instance()) }
     bind<CompleteQuestUseCase>() with singleton { CompleteQuestUseCase(instance()) }
+    bind<GetAllQuestsUseCase>() with singleton { GetAllQuestsUseCase(instance()) }
     //theory
     bind<GetTheoryUseCase>() with singleton { GetTheoryUseCase(instance()) }
     bind<MarkTheoryAsReadUseCase>() with singleton { MarkTheoryAsReadUseCase(instance()) }
@@ -205,7 +206,7 @@ val appModule = DI.Module("appModule") {
     //achievement
     bind<AchievementsViewModel>() with singleton { AchievementsViewModel(instance(), instance()) }
     //quest
-    bind<UserQuestsViewModel>() with singleton { UserQuestsViewModel(instance(), instance()) }
+    bind<QuestsViewModel>() with singleton { QuestsViewModel(instance(), instance(), instance()) }
     //theory
     bind<TheoryViewModel>() with singleton { TheoryViewModel(instance(), instance(), instance()) }
     //quiz
