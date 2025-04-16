@@ -12,7 +12,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import java.net.URLEncoder
 
 sealed class Response<T> {
     data class Success<T>(val result: T) : Response<T>()

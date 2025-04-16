@@ -1,10 +1,10 @@
 package com.example.infoquizapp.presentation.profile.view
 
-import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -29,92 +29,131 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.infoquizapp.Routes
 import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
-import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.TrophiesSection
 import com.example.infoquizapp.presentation.profile.view.profilescreencomponent.UserProfileSection
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileUiState
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
+import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsUiState
+import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.utils.TokenManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    viewModel: ProfileViewModel,
+    profileViewModel: ProfileViewModel,
+    statisticsViewModel: StatisticsViewModel,
     authViewModel: AuthViewModel,
-    onExit : () -> Unit,
+    onExit: () -> Unit,
     navController: NavController
 ) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
 
+    // Загружаем профиль и статистику пользователя
     LaunchedEffect(token) {
-        viewModel.loadProfile(token)
+        profileViewModel.loadProfile(token)
+        statisticsViewModel.getStatistics(token)
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val profileUiState by profileViewModel.uiState.collectAsState()
+    val statsUiState by statisticsViewModel.uiState.collectAsState()
 
-    when (uiState) {
-        is ProfileUiState.Loading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Профиль") },
+                navigationIcon = {
+                    IconButton(onClick = { onExit() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            contentDescription = "Назад"
+                        )
+                    }
+                },
+                actions = {
+                    TextButton(onClick = {
+                        authViewModel.logout()
+                        TokenManager.clearToken(context)
+                        navController.navigate(Routes.Login.route) {
+                            popUpTo(Routes.Main.route) { inclusive = true }
+                        }
+                    }) {
+                        Text("Выйти из аккаунта", color = MaterialTheme.colorScheme.error)
+                    }
+                },
+            )
         }
-        is ProfileUiState.Success -> {
-
-            val user = (uiState as ProfileUiState.Success).user
-
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text("") },
-                        navigationIcon = {
-                            IconButton(onClick = { onExit() }) {
-                                Icon(imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                                    contentDescription = "Back")
-                            }
-                        },
-                        actions = {
-                            TextButton(onClick = {
-                                authViewModel.logout()
-                                TokenManager.clearToken(context)
-                                navController.navigate(Routes.Login.route) {
-                                    popUpTo(Routes.Main.route) { inclusive = true }
-                                }
-                            }) {
-                                Text("Выйти из аккаунта", color = MaterialTheme.colorScheme.error)
-                            }
-                        },
-                    )
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
+        ) {
+            // Обработка состояния профиля
+            when (profileUiState) {
+                is ProfileUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
-            ) { paddingValues ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(horizontal = 16.dp)
-                ) {
+                is ProfileUiState.Success -> {
+                    val user = (profileUiState as ProfileUiState.Success).user
                     UserProfileSection(user.username)
 
                     Spacer(modifier = Modifier.height(16.dp))
-
-                    TrophiesSection()
                 }
+                is ProfileUiState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = (profileUiState as ProfileUiState.Error).message,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+                ProfileUiState.Idle -> {}
             }
-        }
 
-        is ProfileUiState.Error -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = (uiState as ProfileUiState.Error).message,
-                    color = MaterialTheme.colorScheme.error
-                )
+            // Добавляем секцию статистики
+            when (statsUiState) {
+                is StatisticsUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                is StatisticsUiState.Success -> {
+                    val stats = (statsUiState as StatisticsUiState.Success).user
+                    UserStatisticsSection(stats)
+                }
+                is StatisticsUiState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = (statsUiState as StatisticsUiState.Error).message,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+                StatisticsUiState.Idle -> { /* ничего не показываем */ }
             }
         }
-        ProfileUiState.Idle -> {}
     }
 }

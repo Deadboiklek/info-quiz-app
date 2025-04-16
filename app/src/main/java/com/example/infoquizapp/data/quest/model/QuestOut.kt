@@ -9,5 +9,6 @@ data class QuestOut(
     val title: String,
     val description: String,
     @SerialName("experience_reward") val experienceReward: Int,
-    @SerialName("is_active") val isActive: Boolean
+    @SerialName("is_active") val isActive: Boolean,
+    @SerialName("image_name") val imageName: String
 )

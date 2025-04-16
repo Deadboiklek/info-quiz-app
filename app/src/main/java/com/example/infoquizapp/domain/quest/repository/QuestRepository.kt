@@ -5,6 +5,9 @@ import com.example.infoquizapp.data.quest.model.QuestOut
 import com.example.infoquizapp.data.quest.network.Response
 
 interface QuestRepository {
+    suspend fun getAllQuests(): Response<List<QuestOut>>
+
     suspend fun getUserQuests(token: String): Response<List<QuestOut>>
+
     suspend fun completeQuest(questId: Int, token: String): Response<CompleteQuestResponse>
 }
