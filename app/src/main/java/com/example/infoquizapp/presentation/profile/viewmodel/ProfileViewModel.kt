@@ -17,7 +17,9 @@ sealed class ProfileUiState {
     data class Error(val message: String) : ProfileUiState()
 }
 
-class ProfileViewModel(private val getProfileUseCase: GetProfileUseCase) : ViewModel() {
+class ProfileViewModel(
+    private val getProfileUseCase: GetProfileUseCase,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
     val uiState: StateFlow<ProfileUiState> = _uiState

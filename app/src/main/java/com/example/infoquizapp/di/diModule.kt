@@ -36,6 +36,7 @@ import com.example.infoquizapp.domain.practice.usecases.GetPracticeUseCase
 import com.example.infoquizapp.domain.practice.usecases.MarkPracticeAsDoneUseCase
 import com.example.infoquizapp.domain.profile.repository.ProfileRepository
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
+import com.example.infoquizapp.domain.profile.usecases.GetStatisticsUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestUseCase
@@ -62,6 +63,7 @@ import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
+import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
@@ -168,6 +170,7 @@ val appModule = DI.Module("appModule") {
     bind<TeacherLoginUseCase>() with singleton { TeacherLoginUseCase(instance()) }
     //profile
     bind<GetProfileUseCase>() with singleton { GetProfileUseCase(instance()) }
+    bind<GetStatisticsUseCase>() with singleton { GetStatisticsUseCase(instance()) }
     //achievement
     bind<GetAllAchievementsUseCase>() with singleton { GetAllAchievementsUseCase(instance()) }
     bind<GetUserAchievementsUseCase>() with singleton { GetUserAchievementsUseCase(instance()) }
@@ -203,6 +206,7 @@ val appModule = DI.Module("appModule") {
     bind<AuthViewModel>() with singleton { AuthViewModel(instance(), instance(), instance()) }
     //profile
     bind<ProfileViewModel>() with singleton { ProfileViewModel(instance()) }
+    bind<StatisticsViewModel>() with singleton { StatisticsViewModel(instance()) }
     //achievement
     bind<AchievementsViewModel>() with singleton { AchievementsViewModel(instance(), instance()) }
     //quest

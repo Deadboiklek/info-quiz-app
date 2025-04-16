@@ -21,6 +21,7 @@ import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
 import com.example.infoquizapp.presentation.profile.view.ProfileScreen
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
+import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 import com.example.infoquizapp.presentation.quiz.view.QuizTestScreen
@@ -158,8 +159,10 @@ fun AppNavGraph(
         ) {
             val profileViewModel: ProfileViewModel by di.instance()
             val authViewModel:AuthViewModel by di.instance()
+            val statisticsViewModel: StatisticsViewModel by di.instance()
             ProfileScreen(
-                viewModel = profileViewModel,
+                statisticsViewModel = statisticsViewModel,
+                profileViewModel = profileViewModel,
                 onExit = { navController.navigateUp() },
                 navController = navController,
                 authViewModel = authViewModel
