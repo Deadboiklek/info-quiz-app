@@ -40,6 +40,12 @@ fun AchievementCard(uiModel: AchievementsUiModel) {
         R.drawable.question_mark
     }
 
+    val description = if (uiModel.isObtained) {
+        uiModel.achievement.description
+    } else {
+        ""
+    }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -66,7 +72,7 @@ fun AchievementCard(uiModel: AchievementsUiModel) {
                     color = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
-                    text = uiModel.achievement.description,
+                    text = description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                 )

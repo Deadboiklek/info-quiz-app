@@ -99,7 +99,6 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TrophiesSection()
                 }
             }
         }

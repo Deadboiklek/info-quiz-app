@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.infoquizapp.presentation.quest.util.getQuestImageRes
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsUiModel
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 
@@ -32,17 +34,27 @@ fun QuestCard(
     viewModel: QuestsViewModel
 ) {
     val quest = questUiModel.quest
+
+    val cardColor = if (questUiModel.isCompleted) {
+        CardDefaults.cardColors(Color(0xFFE0FEBD))
+    } else {
+        CardDefaults.cardColors(Color.Unspecified)
+    }
+
+    val imageResId = getQuestImageRes(questUiModel.quest.imageName)
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        colors = cardColor
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = ColorPainter(Color.DarkGray),
+                painter = painterResource(imageResId),
                 contentDescription = quest.title,
                 modifier = Modifier
                     .size(64.dp)
@@ -72,28 +84,6 @@ fun QuestCard(
                         text = "Квест выполнен",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                } else if (quest.isActive) {
-                    Button(
-                        onClick = {
-                            viewModel.completeQuest(quest.id, token) { result ->
-                                if (result.error == null) {
-                                    println("Квест завершён: ${result.response?.message}")
-                                } else {
-                                    println("Ошибка: ${result.error}")
-                                }
-                            }
-                        },
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Text(text = "Завершить квест")
-                    }
-                } else {
-                    Text(
-                        text = "Квест не активен",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
