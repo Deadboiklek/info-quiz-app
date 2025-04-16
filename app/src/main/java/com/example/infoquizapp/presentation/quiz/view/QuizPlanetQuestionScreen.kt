@@ -1,5 +1,7 @@
 package com.example.infoquizapp.presentation.quiz.view
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,15 +18,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -77,40 +75,39 @@ fun QuizPlanetQuestionScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = quiz.question, style = MaterialTheme.typography.bodyLarge)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    // Если вариантов ответа нет – текстовое поле
-                    if (quiz.options.isNullOrEmpty()) {
-                        OutlinedTextField(
-                            value = userAnswer,
-                            onValueChange = { newValue ->
-                                onAnswerChanged(newValue)
-                            },
-                            label = { Text("Введите ваш ответ") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    } else {
-                        // Если варианты есть – радио-кнопки
-                        var currentSelection by remember { mutableStateOf(userAnswer) }
-                        quiz.options?.forEach { option ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                    // Отображаем текст вопроса
+                    Text(
+                        text = quiz.question,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    // Если есть картинка, декодируем и отображаем её
+                    if (!quiz.image.isNullOrEmpty()) {
+                        // Декодируем Base64-строку в байты
+                        val imageBytes = Base64.decode(quiz.image, Base64.DEFAULT)
+                        // Декодируем байты в Bitmap
+                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        bitmap?.let {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Image(
+                                bitmap = it.asImageBitmap(),
+                                contentDescription = "Изображение вопроса",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
-                            ) {
-                                RadioButton(
-                                    selected = (currentSelection == option),
-                                    onClick = {
-                                        currentSelection = option
-                                        onAnswerChanged(option)
-                                    }
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = option)
-                            }
+                                    .height(200.dp),
+                                contentScale = ContentScale.Fit
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
+
+                    // Поле для ввода ответа
+                    OutlinedTextField(
+                        value = userAnswer,
+                        onValueChange = { newValue -> onAnswerChanged(newValue) },
+                        label = { Text("Введите ваш ответ") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
