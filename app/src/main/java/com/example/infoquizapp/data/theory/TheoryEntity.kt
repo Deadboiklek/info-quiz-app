@@ -9,5 +9,6 @@ data class TheoryEntity(
     val id: Int = 0,
     val title: String,
     val content: String,
-    val isRead: Boolean = false
+    val isRead: Boolean = false,
+    val image: Int? = null
 )

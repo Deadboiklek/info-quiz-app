@@ -1,5 +1,6 @@
 package com.example.infoquizapp.presentation.theory.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
