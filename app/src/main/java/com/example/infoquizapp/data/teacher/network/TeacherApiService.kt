@@ -9,11 +9,15 @@ import com.example.infoquizapp.data.teacher.model.TeacherProfile
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 
 sealed class Response<T>{
@@ -51,21 +55,45 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
         )
     }
 
-    suspend fun postQuiz(token: String, quiz: TeacherCreateQuiz): Response<QuizOut> {
-        return runCatching {
-            Response.Succes(client.post("$baseUrl/teacher/postquizzes") {
-                header("Authorization", "Bearer $token")
-                contentType(ContentType.Application.Json)
-                setBody(quiz)
-            }.body<QuizOut>())
-        }.fold(
-            onSuccess = { it },
-            onFailure = { ex ->
-                Log.e("TeacherApiService", "Ошибка создания квиза: ${ex.localizedMessage}", ex)
-                Response.Error(TeacherError.PostTeacherQuizError)
+    suspend fun postQuiz(
+        token: String,
+        question: String,
+        correctAnswer: String,
+        experienceReward: Int,
+        type: String,
+        imageBytes: ByteArray?
+    ): Response<QuizOut> = runCatching {
+        // multipart запрос
+        val httpResponse = client.submitFormWithBinaryData(
+            url = "$baseUrl/teacher/postquizzes",
+            formData = formData {
+                append("question", question)
+                append("correct_answer", correctAnswer)
+                append("experience_reward", experienceReward.toString())
+                append("type", type)
+                imageBytes?.let { bytes ->
+                    append(
+                        key = "file",
+                        value = bytes,
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, """filename="quiz_image.png"""")
+                            append(HttpHeaders.ContentType, ContentType.Image.PNG.toString())
+                        }
+                    )
+                }
             }
-        )
-    }
+        ) {
+            header("Authorization", "Bearer $token")
+        }
+
+        Response.Succes(httpResponse.body<QuizOut>())
+    }.fold(
+        onSuccess = { it },
+        onFailure = {
+            Log.e("TeacherApiService", "Ошибка создания квиза: ${it.localizedMessage}", it)
+            Response.Error(TeacherError.PostTeacherQuizError)
+        }
+    )
 
     suspend fun getTeacherQuizzes(token: String): Response<List<QuizOut>> {
         return runCatching {

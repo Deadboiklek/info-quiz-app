@@ -1,6 +1,11 @@
 package com.example.infoquizapp.presentation.teacher.view.addquiz
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +39,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,116 +58,100 @@ fun AddQuizScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsState()
     val token = TokenManager.getToken(context) ?: ""
+    val uiState by viewModel.state.collectAsState()
 
     var question by remember { mutableStateOf("") }
     var correctAnswer by remember { mutableStateOf("") }
-    var experienceRewardText by remember { mutableStateOf("") }
+    var expText by remember { mutableStateOf("") }
     var selectedType by remember { mutableStateOf("") }
+    var imageBytes by remember { mutableStateOf<ByteArray?>(null) }
+    var imagePreview by remember { mutableStateOf<ImageBitmap?>(null) }
 
-    // Если добавление прошло успешно, показать сообщение и выполнить навигацию
+    // Лаунчер для выбора файла из галереи
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            context.contentResolver.openInputStream(it)?.use { stream ->
+                val bytes = stream.readBytes()
+                if (bytes.size <= 2 * 1024 * 1024) {
+                    imageBytes = bytes
+                    val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    imagePreview = bmp.asImageBitmap()
+                } else {
+                    Toast.makeText(context, "Картинка > 2 МБ", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     LaunchedEffect(uiState) {
-        when (uiState) {
-            is PostTeacherQuizUiState.Success -> {
-                Toast.makeText(context, "Квест добавлен", Toast.LENGTH_SHORT).show()
-                onQuizAdded()
-                viewModel.resetState() // Сбрасываем состояние после навигации
-            }
-            is PostTeacherQuizUiState.Error -> {
-                Toast.makeText(context, (uiState as PostTeacherQuizUiState.Error).message, Toast.LENGTH_SHORT).show()
-                viewModel.resetState()
-            }
-            else -> {}
+        if (uiState is PostTeacherQuizUiState.Success) {
+            Toast.makeText(context, "Квиз добавлен", Toast.LENGTH_SHORT).show()
+            onQuizAdded()
+            viewModel.resetState()
+        }
+        if (uiState is PostTeacherQuizUiState.Error) {
+            Toast.makeText(context, (uiState as PostTeacherQuizUiState.Error).message, Toast.LENGTH_SHORT).show()
+            viewModel.resetState()
         }
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Добавление квиза") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад"
-                        )
-                    }
+            TopAppBar(title = { Text("Добавить квиз") }, navigationIcon = {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
                 }
-            )
+            })
         },
         bottomBar = {
-            // Кнопка всегда внизу
-            Box(
+            Button(
+                onClick = {
+                    val exp = expText.toIntOrNull() ?: 0
+                    viewModel.createQuiz(
+                        token, question, correctAnswer, exp, selectedType, imageBytes
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(50.dp)
                     .padding(16.dp)
-            ) {
-                Button(
-                    onClick = {
-                        val experienceReward = experienceRewardText.toIntOrNull() ?: 0
-                        val quizData = TeacherCreateQuiz(
-                            question = question,
-                            correctAnswer = correctAnswer,
-                            experienceReward = experienceReward,
-                            type = selectedType
-                        )
-                        viewModel.createQuiz(token, quizData)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                ) {
-                    Text("Добавить квиз")
-                }
-            }
+            ) { Text("Сохранить") }
         }
-    ) { paddingValues ->
-        // Основное содержимое с отступами (не растягивается до краев)
+    ) { padding ->
         Column(
-            modifier = Modifier
+            Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(padding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Многострочное поле для вопроса
             OutlinedTextField(
-                value = question,
-                onValueChange = { question = it },
+                question, { question = it },
                 label = { Text("Вопрос") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 100.dp), // Минимальная высота для многострочного ввода
-                maxLines = Int.MAX_VALUE,
-                singleLine = false
+                modifier = Modifier.fillMaxWidth()
             )
-
-            // Поле для ввода правильного ответа
             OutlinedTextField(
-                value = correctAnswer,
-                onValueChange = { correctAnswer = it },
+                correctAnswer, { correctAnswer = it },
                 label = { Text("Правильный ответ") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                modifier = Modifier.fillMaxWidth()
             )
-
-            // Поле для ввода награды опыта
             OutlinedTextField(
-                value = experienceRewardText,
-                onValueChange = { experienceRewardText = it },
+                expText, { expText = it },
                 label = { Text("Награда опыта") },
-                modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
+                modifier = Modifier.fillMaxWidth()
             )
-
-            // Выпадающий список для выбора типа вопроса
-            QuizTypeDropdown(
-                selectedType = selectedType,
-                onTypeSelected = { selectedType = it }
-            )
+            QuizTypeDropdown(selectedType) { selectedType = it }
+            Button(onClick = { launcher.launch("image/*") }) {
+                Text("Выбрать картинку")
+            }
+            imagePreview?.let {
+                Image(it, contentDescription = null, modifier = Modifier.fillMaxWidth().height(200.dp))
+            }
         }
     }
 }

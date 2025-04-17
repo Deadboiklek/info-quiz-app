@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.data.quiz.model.QuizOut
 import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.network.Response
-import com.example.infoquizapp.data.teacher.network.TeacherApiService
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizResult
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,38 +18,28 @@ sealed class PostTeacherQuizUiState {
     data class Error(val message: String) : PostTeacherQuizUiState()
 }
 
-class PostTeacherQuizViewModel(private val postTeacherQuizUseCase: PostTeacherQuizUseCase) : ViewModel() {
+class PostTeacherQuizViewModel(private val useCase: PostTeacherQuizUseCase) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<PostTeacherQuizUiState>(PostTeacherQuizUiState.Idle)
-    val uiState: StateFlow<PostTeacherQuizUiState> = _uiState
+    private val _state = MutableStateFlow<PostTeacherQuizUiState>(PostTeacherQuizUiState.Idle)
+    val state: StateFlow<PostTeacherQuizUiState> = _state
 
-    fun createQuiz(token: String, quiz: TeacherCreateQuiz) {
+    fun createQuiz(
+        token: String,
+        question: String,
+        correctAnswer: String,
+        experienceReward: Int,
+        type: String,
+        imageBytes: ByteArray?
+    ) {
         viewModelScope.launch {
-            _uiState.value = PostTeacherQuizUiState.Loading
-
-            val result: PostTeacherQuizResult = postTeacherQuizUseCase(token, quiz)
-            if(result.error != null) {
-                _uiState.value = PostTeacherQuizUiState.Error(result.error)
-            } else {
-                val response = result.response
-                when (response) {
-
-                    is Response.Error -> {
-                        _uiState.value = PostTeacherQuizUiState.Error(
-                            response.error.message ?: "Ошибка добавления квиза"
-                        )
-                    }
-
-                    is Response.Succes -> {
-                        _uiState.value = PostTeacherQuizUiState.Success(response.result)
-                    }
-                    null -> _uiState.value = PostTeacherQuizUiState.Error("Пустой ответ квиза")
-                }
-            }
+            _state.value = PostTeacherQuizUiState.Loading
+            val result = useCase(token, question, correctAnswer, experienceReward, type, imageBytes)
+            _state.value = result.quiz?.let { PostTeacherQuizUiState.Success(it) }
+                ?: PostTeacherQuizUiState.Error(result.error ?: "Unknown error")
         }
     }
 
     fun resetState() {
-        _uiState.value = PostTeacherQuizUiState.Idle
+        _state.value = PostTeacherQuizUiState.Idle
     }
 }
