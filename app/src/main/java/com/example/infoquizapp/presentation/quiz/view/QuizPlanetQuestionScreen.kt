@@ -3,6 +3,7 @@ package com.example.infoquizapp.presentation.quiz.view
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,9 +21,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -83,20 +92,56 @@ fun QuizPlanetQuestionScreen(
 
                     // Если есть картинка, декодируем и отображаем её
                     if (!quiz.image.isNullOrEmpty()) {
-                        // Декодируем Base64-строку в байты
                         val imageBytes = Base64.decode(quiz.image, Base64.DEFAULT)
-                        // Декодируем байты в Bitmap
                         val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         bitmap?.let {
                             Spacer(modifier = Modifier.height(16.dp))
-                            Image(
-                                bitmap = it.asImageBitmap(),
-                                contentDescription = "Изображение вопроса",
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(200.dp),
-                                contentScale = ContentScale.Fit
-                            )
+                                    .height(200.dp)
+                            ) {
+                                var scale by remember { mutableStateOf(1f) }
+                                var offset by remember { mutableStateOf(Offset.Zero) }
+
+                                Image(
+                                    bitmap = it.asImageBitmap(),
+                                    contentDescription = "Изображение вопроса",
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clipToBounds()
+                                        .pointerInput(Unit) {
+                                            detectTransformGestures(
+                                                panZoomLock = false,
+                                                onGesture = { centroid, pan, zoom, _ ->
+                                                    scale = (scale * zoom).coerceIn(1f, 5f)
+
+                                                    val extraWidth = (scale - 1) * size.width
+                                                    val extraHeight = (scale - 1) * size.height
+
+                                                    val maxX = extraWidth / 2
+                                                    val minX = -maxX
+                                                    val maxY = extraHeight / 2
+                                                    val minY = -maxY
+
+                                                    offset = Offset(
+                                                        x = (offset.x + pan.x * scale)
+                                                            .coerceIn(minX, maxX),
+                                                        y = (offset.y + pan.y * scale)
+                                                            .coerceIn(minY, maxY)
+                                                    )
+                                                }
+                                            )
+                                        }
+                                        .graphicsLayer {
+                                            scaleX = scale
+                                            scaleY = scale
+                                            translationX = offset.x
+                                            translationY = offset.y
+                                        },
+                                    contentScale = ContentScale.Fit
+                                )
+                            }
                             Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
