@@ -17,6 +17,17 @@ interface TeacherRepository {
         type: String,
         imageBytes: ByteArray?
     ): Response<QuizOut>
+
+    suspend fun updateTeacherQuiz(
+        token: String,
+        quizId: Int,
+        question: String,
+        correctAnswer: String,
+        experienceReward: Int,
+        type: String,
+        imageBytes: ByteArray?
+    ): Response<QuizOut>
+
     suspend fun getTeacherQuizzes(token: String): Response<List<QuizOut>>
     suspend fun deleteTeacherQuiz(token: String, quizId: Int): Response<QuizOut>
     suspend fun getTeacherStudents(token: String): Response<List<StudentInfo>>

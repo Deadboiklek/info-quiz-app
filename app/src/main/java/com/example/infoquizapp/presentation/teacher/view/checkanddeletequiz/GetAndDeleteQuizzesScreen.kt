@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.utils.TokenManager
 
@@ -32,6 +33,7 @@ import com.example.infoquizapp.utils.TokenManager
 @Composable
 fun GetAndDeleteQuizzesScreen(
     viewModel: GetAndDeleteQuizViewModel,
+    navController: NavController,
     onBack: () -> Unit              // Или кнопка "назад"
 ) {
     val quizzes by viewModel.quizzesState.collectAsState()
@@ -77,6 +79,7 @@ fun GetAndDeleteQuizzesScreen(
                     items(quizzes) { quiz ->
                         QuizListItem(
                             quiz = quiz,
+                            onEdit = { id -> navController.navigate("editQuiz/$id") },
                             onDeleteClick = {
                                 viewModel.deleteQuiz(token, quiz.id)
                                 Toast.makeText(context, "Квиз удалён", Toast.LENGTH_SHORT).show()
