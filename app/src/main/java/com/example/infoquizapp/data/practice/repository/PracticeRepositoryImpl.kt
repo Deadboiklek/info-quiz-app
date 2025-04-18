@@ -31,6 +31,66 @@ class PracticeRepositoryImpl(private val practiceDao: PracticeDao) : PracticeRep
                         isDone = false,
                         type = "type1"
                     ),
+                    PracticeEntity(
+                        title = "Задание 2",
+                        description = "Анализ и декодирование информации (шифры, кодирование, однозначность расшифровки)",
+                        isDone = false,
+                        type = "type2"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 3",
+                        description = "Работа с переменными, логическими выражениями и числовыми условиями",
+                        isDone = false,
+                        type = "type3"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 4",
+                        description = "Формальные описания реальных объектов и процессов (анализ схем и таблиц)",
+                        isDone = false,
+                        type = "type4"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 5",
+                        description = "Простой линейный алгоритм для формального исполнителя",
+                        isDone = false,
+                        type = "type5"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 6",
+                        description = "Анализ программ с условными операторами",
+                        isDone = false,
+                        type = "type6"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 7",
+                        description = "Работа с IP-адресами, электронной почтой и адресами файлов",
+                        isDone = false,
+                        type = "type7"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 8",
+                        description = "Работа с логическими запросами (И, ИЛИ, НЕ) и расчёт количества найденных страниц",
+                        isDone = false,
+                        type = "type8"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 9",
+                        description = "Поиск путей в графах между городами с учётом условий (прохождение через пункт или его исключение)",
+                        isDone = false,
+                        type = "type9"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 10",
+                        description = "Сравнение чисел в различных системах счисления. Перевод чисел, поиск наибольшего/наименьшего, сумма и количество цифр",
+                        isDone = false,
+                        type = "type10"
+                    ),
+                    PracticeEntity(
+                        title = "Задание 11",
+                        description = "Использование поиска в операционной системе и текстовом редакторе",
+                        isDone = false,
+                        type = "type11"
+                    ),
                 )
                 practiceDao.insertAllPractice(initialData)
             }

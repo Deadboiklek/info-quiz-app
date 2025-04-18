@@ -19,7 +19,18 @@ import androidx.compose.ui.Modifier
 @Composable
 fun QuizTypeDropdown(selectedType: String, onTypeSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val types = listOf("type1", "type2", "type3")
+    val types = listOf(
+        "type1",
+        "type2",
+        "type3",
+        "type4",
+        "type5",
+        "type6",
+        "type7",
+        "type8",
+        "type9",
+        "type10"
+    )
 
     ExposedDropdownMenuBox(
         expanded = expanded,

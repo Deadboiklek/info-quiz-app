@@ -4,6 +4,6 @@ import com.example.infoquizapp.data.quiz.model.QuizOut
 import com.example.infoquizapp.data.teacher.network.Response
 
 data class PostTeacherQuizResult(
-    val response: Response<QuizOut>?,
+    val quiz: QuizOut?,
     val error: String?
 )
