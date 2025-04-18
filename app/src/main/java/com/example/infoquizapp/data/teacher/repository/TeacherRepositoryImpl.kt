@@ -17,6 +17,17 @@ class TeacherRepositoryImpl(private val teacherApiService: TeacherApiService) : 
         type: String,
         imageBytes: ByteArray?
     ) = teacherApiService.postQuiz(token, question, correctAnswer, experienceReward, type, imageBytes)
+
+    override suspend fun updateTeacherQuiz(
+        token: String,
+        quizId: Int,
+        question: String,
+        correctAnswer: String,
+        experienceReward: Int,
+        type: String,
+        imageBytes: ByteArray?
+    ) = teacherApiService.updateQuiz(token, quizId, question, correctAnswer, experienceReward, type, imageBytes)
+
     override suspend fun getTeacherQuizzes(token: String) = teacherApiService.getTeacherQuizzes(token)
     override suspend fun deleteTeacherQuiz(token: String, quizId: Int) = teacherApiService.deleteTeacherQuiz(token, quizId)
     override suspend fun getTeacherStudents(token: String): Response<List<StudentInfo>> =

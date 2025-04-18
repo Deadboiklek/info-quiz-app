@@ -18,6 +18,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 
 sealed class Response<T>{
@@ -94,6 +95,43 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
             Response.Error(TeacherError.PostTeacherQuizError)
         }
     )
+
+    suspend fun updateQuiz(
+        token: String,
+        quizId: Int,
+        question: String,
+        correctAnswer: String,
+        experienceReward: Int,
+        type: String,
+        imageBytes: ByteArray?
+    ): Response<QuizOut> = runCatching {
+        val response = client.submitFormWithBinaryData(
+            url = "$baseUrl/teacher/quizzes/$quizId",
+            formData = formData {
+                append("question", question)
+                append("correct_answer", correctAnswer)
+                append("experience_reward", experienceReward.toString())
+                append("type", type)
+                imageBytes?.let { bytes ->
+                    append(
+                        key = "file",
+                        value = bytes,
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentDisposition, """filename="quiz.png"""")
+                            append(HttpHeaders.ContentType, ContentType.Image.PNG.toString())
+                        }
+                    )
+                }
+            }
+        ) {
+            header("Authorization", "Bearer $token")
+            method = HttpMethod.Put
+        }
+
+        Response.Succes(response.body<QuizOut>())
+    }.getOrElse {
+        Response.Error(TeacherError.PostTeacherQuizError)
+    }
 
     suspend fun getTeacherQuizzes(token: String): Response<List<QuizOut>> {
         return runCatching {

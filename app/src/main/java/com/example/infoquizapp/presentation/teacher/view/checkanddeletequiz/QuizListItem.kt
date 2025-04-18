@@ -25,12 +25,14 @@ import com.example.infoquizapp.data.quiz.model.QuizOut
 @Composable
 fun QuizListItem(
     quiz: QuizOut,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onEdit: (Int)->Unit
 ) {
     Card(
         elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onEdit(quiz.id) }
     ) {
         Row(
             modifier = Modifier

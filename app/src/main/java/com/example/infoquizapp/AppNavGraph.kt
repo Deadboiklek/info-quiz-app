@@ -1,6 +1,15 @@
 package com.example.infoquizapp
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,9 +38,11 @@ import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.view.addquiz.AddQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
+import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.EditQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.GetAndDeleteQuizzesScreen
 import com.example.infoquizapp.presentation.teacher.view.checkstatistics.StudentListScreen
 import com.example.infoquizapp.presentation.teacher.view.checkstatistics.StudentStatisticsScreen
+import com.example.infoquizapp.presentation.teacher.viewmodel.EditQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.StudentListViewModel
@@ -42,6 +53,8 @@ import com.example.infoquizapp.presentation.theory.viewmodel.TheoryViewModel
 import com.example.infoquizapp.presentation.trial.view.TrialScreen
 import com.example.infoquizapp.presentation.trial.view.TrialTestScreen
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
+import com.example.infoquizapp.utils.TokenManager
+import kotlinx.coroutines.flow.map
 import org.kodein.di.DI
 import org.kodein.di.instance
 
@@ -304,7 +317,8 @@ fun AppNavGraph(
             val getAndDeleteQuizViewModel : GetAndDeleteQuizViewModel by di.instance()
             GetAndDeleteQuizzesScreen(
                 viewModel = getAndDeleteQuizViewModel,
-                onBack = { navController.navigateUp() }
+                onBack = { navController.navigateUp() },
+                navController = navController
             )
         }
 
@@ -335,6 +349,45 @@ fun AppNavGraph(
                 navController = navController,
                 onBack = { navController.navigateUp() }
             )
+        }
+
+        composable("editQuiz/{quizId}") { backStackEntry ->
+            val quizId = backStackEntry.arguments?.getString("quizId")?.toIntOrNull() ?: return@composable
+            val token = TokenManager.getToken(LocalContext.current) ?: return@composable
+
+            // Shared ViewModel holding list of quizzes
+            val listVm: GetAndDeleteQuizViewModel by di.instance()
+            val editVm: EditQuizViewModel by di.instance()
+
+            // Trigger load of quizzes if not already loaded
+            LaunchedEffect(token) {
+                listVm.loadTeacherQuizzes(token)
+            }
+
+            // Find the QuizOut by ID from the list state
+            val quizItem by listVm.quizzesState
+                .map { quizList -> quizList.find { it.id == quizId } }
+                .collectAsState(initial = null)
+
+            // Once we have the quiz, load into EditQuizViewModel
+            quizItem?.let { quiz ->
+                LaunchedEffect(quiz) {
+                    editVm.loadQuiz(quiz)
+                }
+            }
+
+            // If quiz not found yet, show loader or error
+            if (quizItem == null) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                EditQuizScreen(
+                    vm = editVm,
+                    quizId = quizId,
+                    onBack = { navController.popBackStack() },
+                )
+            }
         }
     }
 }

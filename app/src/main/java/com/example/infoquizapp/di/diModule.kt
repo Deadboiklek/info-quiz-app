@@ -53,6 +53,7 @@ import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherQuizzesUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherStudentsUseCase
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
+import com.example.infoquizapp.domain.teacher.usecases.UpdateTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
 import com.example.infoquizapp.domain.theory.usecases.GetTheoryUseCase
@@ -66,6 +67,7 @@ import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
+import com.example.infoquizapp.presentation.teacher.viewmodel.EditQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.GetAndDeleteQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.PostTeacherQuizViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.StudentListViewModel
@@ -200,6 +202,7 @@ val appModule = DI.Module("appModule") {
     bind<DeleteTeacherQuizUseCase>() with singleton { DeleteTeacherQuizUseCase(instance()) }
     bind<GetTeacherStudentsUseCase>() with singleton { GetTeacherStudentsUseCase(instance()) }
     bind<GetStudentStatisticsUseCase>() with singleton { GetStudentStatisticsUseCase(instance()) }
+    bind<UpdateTeacherQuizUseCase>() with singleton { UpdateTeacherQuizUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -233,4 +236,6 @@ val appModule = DI.Module("appModule") {
     bind<StudentListViewModel>() with singleton { StudentListViewModel(instance()) }
     //getstudentstatistics
     bind<StudentStatisticsViewModel>() with singleton { StudentStatisticsViewModel(instance()) }
+    //updateteacherquiz
+    bind<EditQuizViewModel>() with singleton { EditQuizViewModel(instance(), instance()) }
 }
