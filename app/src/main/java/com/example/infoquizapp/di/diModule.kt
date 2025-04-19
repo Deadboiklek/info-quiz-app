@@ -1,5 +1,8 @@
 package com.example.infoquizapp.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import com.example.infoquizapp.data.AppDatabase
 import com.example.infoquizapp.data.achievement.network.ApiAchievementsService
@@ -114,6 +117,13 @@ val appModule = DI.Module("appModule") {
             .build()
     }
 
+    
+
+    bind<DataStore<Preferences>>() with singleton {
+        val ctx: Context = instance()
+        ctx.dataStore
+    }
+
     bind<TheoryDao>() with singleton { instance<AppDatabase>().theoryDao() }
     bind<PracticeDao>() with singleton { instance<AppDatabase>().practiceDao() }
 
@@ -219,7 +229,7 @@ val appModule = DI.Module("appModule") {
     //quiz
     bind<QuizViewModel>() with singleton { QuizViewModel(instance(), instance()) }
     //main
-    bind<MainViewModel>() with singleton { MainViewModel(instance()) }
+    bind<MainViewModel>() with singleton { MainViewModel(instance(), instance()) }
     //trial
     bind<TrialViewModel>() with singleton { TrialViewModel(instance(), instance()) }
     //practice
