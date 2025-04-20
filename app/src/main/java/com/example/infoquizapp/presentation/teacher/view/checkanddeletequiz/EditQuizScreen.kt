@@ -89,7 +89,7 @@ fun EditQuizScreen(vm: EditQuizViewModel, quizId: Int, onBack: ()->Unit) {
     }
 
     Scaffold(topBar = {
-        TopAppBar(title={ Text("Редактировать квиз") }, navigationIcon = {
+        TopAppBar(title={ Text("Редактировать задание") }, navigationIcon = {
             IconButton(onClick=onBack){ Icon(Icons.AutoMirrored.Filled.ArrowBack,"") }
         })
     }, bottomBar = {
