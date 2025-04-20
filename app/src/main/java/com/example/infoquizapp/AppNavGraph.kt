@@ -39,6 +39,7 @@ import com.example.infoquizapp.presentation.quiz.view.TestResultScreen
 import com.example.infoquizapp.presentation.quiz.viewmodel.QuizViewModel
 import com.example.infoquizapp.presentation.teacher.view.addquiz.AddQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.TeacherMainScreen
+import com.example.infoquizapp.presentation.teacher.view.TeacherProfileEditScreen
 import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.EditQuizScreen
 import com.example.infoquizapp.presentation.teacher.view.checkanddeletequiz.GetAndDeleteQuizzesScreen
 import com.example.infoquizapp.presentation.teacher.view.checkstatistics.StudentListScreen
@@ -109,6 +110,9 @@ sealed class Routes(val route: String) {
     }
     object ProfileEdit : Routes("profileedit/{token}") {
         fun createRoute(token: String): String = "profileedit/$token"
+    }
+    object TeacherProfileEdit : Routes("teacherprofileedit/{token}") {
+        fun createRoute(token: String): String = "teacherprofileedit/$token"
     }
 }
 
@@ -298,8 +302,10 @@ fun AppNavGraph(
             route = Routes.TeacherMain.route
         ) {
             val teacherProfileViewModel: TeacherProfileViewModel by di.instance()
+            val authViewModel: AuthViewModel by di.instance()
             TeacherMainScreen(
                 viewModel = teacherProfileViewModel,
+                authViewModel = authViewModel,
                 navController = navController
             )
         }
@@ -405,6 +411,18 @@ fun AppNavGraph(
                     onBack = { navController.popBackStack() },
                 )
             }
+        }
+
+        composable(route = Routes.TeacherProfileEdit.route) {
+
+            val profileViewModel: TeacherProfileViewModel by di.instance()
+            val authViewModel: AuthViewModel by di.instance()
+
+            TeacherProfileEditScreen(
+                vm = profileViewModel,
+                authVm = authViewModel,
+                nav = navController
+            )
         }
     }
 }

@@ -5,6 +5,7 @@ import com.example.infoquizapp.data.teacher.model.StudentInfo
 import com.example.infoquizapp.data.teacher.model.StudentStatistics
 import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.model.TeacherProfile
+import com.example.infoquizapp.data.teacher.model.TeacherUpdate
 import com.example.infoquizapp.data.teacher.network.Response
 
 interface TeacherRepository {
@@ -28,6 +29,7 @@ interface TeacherRepository {
         imageBytes: ByteArray?
     ): Response<QuizOut>
 
+    suspend fun updateProfile(token: String, update: TeacherUpdate): Response<TeacherProfile>
     suspend fun getTeacherQuizzes(token: String): Response<List<QuizOut>>
     suspend fun deleteTeacherQuiz(token: String, quizId: Int): Response<QuizOut>
     suspend fun getTeacherStudents(token: String): Response<List<StudentInfo>>

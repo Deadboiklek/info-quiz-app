@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.infoquizapp.Routes
+import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileUiState
 import com.example.infoquizapp.presentation.teacher.viewmodel.TeacherProfileViewModel
 import com.example.infoquizapp.utils.TokenManager
@@ -39,13 +41,14 @@ import com.example.infoquizapp.utils.TokenManager
 @Composable
 fun TeacherMainScreen(
     viewModel: TeacherProfileViewModel,
+    authViewModel: AuthViewModel,
     navController: NavController
 ) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
 
     LaunchedEffect(token) {
-        viewModel.loadTeacherProfile(token)
+        viewModel.load(token)
     }
 
     val uiState by viewModel.uiState.collectAsState()
@@ -106,6 +109,17 @@ fun TeacherMainScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
+
+                    // Сбрасываем editState перед навигацией
+                    Button(
+                        onClick = {
+                            viewModel.resetEdit()
+                            navController.navigate(Routes.TeacherProfileEdit.route)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Изменить профиль")
+                    }
 
                     Card(
                         modifier = Modifier
@@ -169,6 +183,17 @@ fun TeacherMainScreen(
                                 color = MaterialTheme.colorScheme.onBackground
                             )
                         }
+                    }
+
+                    TextButton(onClick = {
+                        authViewModel.logout()
+                        TokenManager.clearToken(context)
+                        navController.navigate(Routes.Login.route) {
+                            popUpTo(Routes.Main.route) { inclusive = true }
+                        }
+                    }
+                    ) {
+                        Text("Выйти из аккаунта", color = MaterialTheme.colorScheme.error)
                     }
                 }
             }
