@@ -57,6 +57,7 @@ import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherQuizzesUseCase
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherStudentsUseCase
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
+import com.example.infoquizapp.domain.teacher.usecases.UpdateTeacherProfileUseCase
 import com.example.infoquizapp.domain.teacher.usecases.UpdateTeacherQuizUseCase
 import com.example.infoquizapp.domain.theory.repository.TheoryRepository
 import com.example.infoquizapp.domain.theory.usecases.GetAllTheoryUseCase
@@ -215,6 +216,7 @@ val appModule = DI.Module("appModule") {
     bind<GetTeacherStudentsUseCase>() with singleton { GetTeacherStudentsUseCase(instance()) }
     bind<GetStudentStatisticsUseCase>() with singleton { GetStudentStatisticsUseCase(instance()) }
     bind<UpdateTeacherQuizUseCase>() with singleton { UpdateTeacherQuizUseCase(instance()) }
+    bind<UpdateTeacherProfileUseCase>() with singleton { UpdateTeacherProfileUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -239,7 +241,7 @@ val appModule = DI.Module("appModule") {
     //game
     bind<GameViewModel>() with singleton { GameViewModel(instance(), instance()) }
     //teacherprofile
-    bind<TeacherProfileViewModel>() with singleton { TeacherProfileViewModel(instance()) }
+    bind<TeacherProfileViewModel>() with singleton { TeacherProfileViewModel(instance(), instance()) }
     //postteqcherquest
     bind<PostTeacherQuizViewModel>() with singleton { PostTeacherQuizViewModel(instance()) }
     //getanddeletequiz

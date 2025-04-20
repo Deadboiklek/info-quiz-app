@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,7 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.infoquizapp.presentation.quiz.view.QuizQuestionItem
+import com.example.infoquizapp.presentation.trial.viewmodel.TrialResultState
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialUiState
 import com.example.infoquizapp.presentation.trial.viewmodel.TrialViewModel
 import com.example.infoquizapp.utils.TokenManager
@@ -38,82 +40,66 @@ import com.example.infoquizapp.utils.TokenManager
 fun TrialTestScreen(
     viewModel: TrialViewModel,
     onExit: () -> Unit,
+    onShowResults: (correct: Int, total: Int) -> Unit
 ) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
-    //при старте загружаем пробник, состоит из заданий всех типов(1 тип = 1 задание)
+
     LaunchedEffect(token) {
+        viewModel.resetTrial()
         viewModel.loadTrial(token)
     }
 
     val trialState by viewModel.trialState.collectAsState()
-    // локальное состояние для выбранных ответов: Map(quiz id -> user answer)
-    var userAnswers by remember { mutableStateOf(mutableMapOf<Int, String>()) }
+    val answerResults by viewModel.answerResults.collectAsState()
 
-    Scaffold (
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Пробник",
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.primary),
-                actions = {
-                    TextButton(onClick = onExit) {
-                        Text(text = "Закрыть", color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.background
-    ) { paddingValues ->
-        Column (modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)) {
-            when(trialState) {
-                TrialUiState.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
+    // Флаг: ответы уже проверены
+    val isChecked = answerResults.isNotEmpty()
+
+    // Локально выбираемые ответы
+    var userAnswers by remember { mutableStateOf(mutableStateMapOf<Int, String>()) }
+
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("Пробник") }, actions = {
+            TextButton(onClick = onExit) { Text("Закрыть") }
+        })
+    }) { paddingValues ->
+        Column(Modifier.fillMaxSize().padding(paddingValues)) {
+            when (trialState) {
+                is TrialUiState.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
                 }
                 is TrialUiState.Success -> {
                     val quizzes = (trialState as TrialUiState.Success).quizzes
-                    LazyColumn(modifier = Modifier.weight(1f)) {
+                    LazyColumn(Modifier.weight(1f)) {
                         items(quizzes) { quiz ->
                             QuizQuestionItem(
                                 quiz = quiz,
                                 selectedAnswer = userAnswers[quiz.id] ?: "",
-                                onAnswerSelected = { answer ->
-                                    userAnswers[quiz.id] = answer
-                                }
+                                onAnswerSelected = { ans -> if (!isChecked) userAnswers[quiz.id] = ans },
+                                feedback = answerResults[quiz.id]
                             )
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                            Divider(Modifier.padding(vertical = 8.dp))
                         }
                     }
                     Button(
                         onClick = {
-                            userAnswers.forEach{ (quizId, answer) ->
-                                viewModel.submitAnswer(quizId, answer, token) { result ->
-                                    println("Quiz $quizId: ${if (result.response?.isCorrect == true) "Верно" 
-                                    else "Неверно, правильный ответ: ${result.response?.correctAnswer}"}")
-                                }
+                            if (!isChecked) {
+                                viewModel.submitTrial(userAnswers.toMap(), token)
+                            } else {
+                                // Подсчитанные правильные ответы
+                                val correct = answerResults.count { it.value.isCorrect }
+                                val total = quizzes.size
+                                onShowResults(correct, total)
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Отправить тест")
+                        Text(if (!isChecked) "Проверить ответы" else "Завершить пробник")
                     }
                 }
-                is TrialUiState.Error -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            text = (trialState as TrialUiState.Error).message,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
+                is TrialUiState.Error -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text((trialState as TrialUiState.Error).message, color = MaterialTheme.colorScheme.error)
                 }
                 TrialUiState.Idle -> Unit
             }

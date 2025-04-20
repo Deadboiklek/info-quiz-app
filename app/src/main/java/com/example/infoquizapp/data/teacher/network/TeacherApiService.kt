@@ -6,6 +6,7 @@ import com.example.infoquizapp.data.teacher.model.StudentInfo
 import com.example.infoquizapp.data.teacher.model.StudentStatistics
 import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.model.TeacherProfile
+import com.example.infoquizapp.data.teacher.model.TeacherUpdate
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -13,6 +14,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -55,6 +57,25 @@ class TeacherApiService(private val client: HttpClient, private val baseUrl: Str
             }
         )
     }
+
+    suspend fun updateTeacherProfile(
+        token: String,
+        payload: TeacherUpdate
+    ): Response<TeacherProfile> =
+        runCatching<Response<TeacherProfile>> {
+            Response.Succes(
+                client.patch("$baseUrl/teacher/profileupdate") {
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    contentType(ContentType.Application.Json)
+                    setBody(payload)
+                }.body()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = {
+                Response.Error(TeacherError.GetTeacherProfileError)
+            }
+        )
 
     suspend fun postQuiz(
         token: String,

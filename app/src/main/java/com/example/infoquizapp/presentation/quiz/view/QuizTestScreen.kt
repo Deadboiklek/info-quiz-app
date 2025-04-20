@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,11 +32,14 @@ import com.example.infoquizapp.presentation.quiz.viewmodel.TestResultUiState
 import com.example.infoquizapp.utils.TokenManager
 
 @Composable
-fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizType: String) {
+fun QuizTestScreen(
+    navController: NavController,
+    viewModel: QuizViewModel,
+    quizType: String
+) {
     val context = LocalContext.current
     val token = TokenManager.getToken(context) ?: ""
 
-    // Загружаем тест при старте экрана
     LaunchedEffect(quizType, token) {
         viewModel.resetTest()
         viewModel.loadTest(quizType, token)
@@ -43,13 +47,19 @@ fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizT
 
     val testState by viewModel.testQuizzesState.collectAsState()
     val testResultState by viewModel.testResultState.collectAsState()
+    val answerResult by viewModel.answerResult.collectAsState()
 
-    // Локальное состояние для отслеживания текущего вопроса
-    var currentQuestionIndex by remember { mutableStateOf(0) }
-    // Локальное состояние для ответов пользователя (можно синхронизировать с ViewModel.userAnswers)
-    var userAnswers by remember { mutableStateOf(mutableMapOf<Int, String>()) }
+    // Локальное состояние ответов пользователя
+    val userAnswers = remember { mutableStateMapOf<Int, String>() }
+    // Текущий индекс вопроса
+    var currentIndex by remember { mutableStateOf(0) }
 
-    // Если тест успешно отправлен, переходим к экрану результата
+    // Сбрасываем результат проверки при смене вопроса
+    LaunchedEffect(currentIndex) {
+        viewModel.resetAnswerResult()
+    }
+
+    // После завершения теста навигация к результатам
     LaunchedEffect(testResultState) {
         if (testResultState is TestResultUiState.Success) {
             navController.navigate(Routes.TestResult.route) {
@@ -66,32 +76,29 @@ fun QuizTestScreen(navController: NavController, viewModel: QuizViewModel, quizT
         }
         is TestQuizzesUiState.Success -> {
             val quizzes = (testState as TestQuizzesUiState.Success).quizzes
-            // Защита от некорректного индекса
-            if (quizzes.isNotEmpty() && currentQuestionIndex in quizzes.indices) {
+            if (quizzes.isNotEmpty() && currentIndex in quizzes.indices) {
+                val quiz = quizzes[currentIndex]
                 QuizPlanetQuestionScreen(
-                    quiz = quizzes[currentQuestionIndex],
+                    quiz = quiz,
                     totalQuestions = quizzes.size,
-                    currentIndex = currentQuestionIndex,
-                    userAnswer = userAnswers[quizzes[currentQuestionIndex].id] ?: "",
+                    currentIndex = currentIndex,
+                    userAnswer = userAnswers[quiz.id] ?: "",
+                    answerResult = answerResult,
                     onAnswerChanged = { answer ->
-                        userAnswers = userAnswers.toMutableMap().apply {
-                            this[quizzes[currentQuestionIndex].id] = answer
+                        userAnswers[quiz.id] = answer
+                    },
+                    onCheckAnswer = {
+                        val answer = userAnswers[quiz.id] ?: ""
+                        viewModel.checkAnswer(quiz.id, answer, token)
+                        // сохраняем локально для подсчёта
+                        if (answerResult?.isCorrect == true) {
+                            // ничего не делаем — опыт начисляется в ViewModel
                         }
                     },
-                    onNext = {
-                        // Переход к следующему вопросу
-                        if (currentQuestionIndex < quizzes.lastIndex) {
-                            currentQuestionIndex++
-                        }
-                    },
-                    onBack = {
-                        if (currentQuestionIndex > 0) {
-                            currentQuestionIndex--
-                        }
-                    },
-                    onSubmit = {
-                        // Отправляем тест – перебираем все ответы и отправляем их на сервер
-                        viewModel.submitTest(userAnswers, token)
+                    onNext = { if (currentIndex < quizzes.lastIndex) currentIndex++ },
+                    onBack = { if (currentIndex > 0) currentIndex-- },
+                    onSubmitTest = {
+                        viewModel.submitTest(userAnswers.toMap(), token)
                     }
                 )
             }

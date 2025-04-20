@@ -49,7 +49,7 @@ fun GetAndDeleteQuizzesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Мои квизы") },
+                title = { Text("Мои задания") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")

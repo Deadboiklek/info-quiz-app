@@ -88,7 +88,7 @@ fun AddQuizScreen(
 
     LaunchedEffect(uiState) {
         if (uiState is PostTeacherQuizUiState.Success) {
-            Toast.makeText(context, "Квиз добавлен", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Задание добавлено", Toast.LENGTH_SHORT).show()
             onQuizAdded()
             viewModel.resetState()
         }
@@ -100,7 +100,7 @@ fun AddQuizScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Добавить квиз") }, navigationIcon = {
+            TopAppBar(title = { Text("Добавить задание") }, navigationIcon = {
                 IconButton(onClick = onBack) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
                 }
