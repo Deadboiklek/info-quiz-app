@@ -3,10 +3,15 @@ package com.example.infoquizapp.data.profile.network
 import android.util.Log
 import com.example.infoquizapp.data.profile.model.UserOut
 import com.example.infoquizapp.data.profile.model.UserStatistics
+import com.example.infoquizapp.data.profile.model.UserUpdate
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.patch
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.http.headers
 
 sealed class Response<T>{
@@ -22,6 +27,10 @@ sealed class Response<T>{
 sealed class ProfileError (val message: String?) {
     data object GetProfileError: ProfileError("Ошибка получения профиля")
     data object GetStatisticsError: ProfileError("Ошибка получения статистики")
+    object UsernameTaken : ProfileError("Username уже занят")
+    object EmailTaken    : ProfileError("Email уже зарегистрирован")
+    object TooShortPassword : ProfileError("Пароль слишком короткий")
+    object Unknown       : ProfileError("Ошибка обновления профиля")
 }
 
 class ApiProfileService(private val client: HttpClient, private val baseUrl: String) {
@@ -53,5 +62,21 @@ class ApiProfileService(private val client: HttpClient, private val baseUrl: Str
             }
         )
     }
+
+    suspend fun updateProfile(
+        token: String,
+        payload: UserUpdate
+    ): Response<UserOut> = kotlin.runCatching {
+        Response.Succes(client.patch("$baseUrl/user/profileupdate") {
+            header("Authorization", "Bearer $token")
+            contentType(ContentType.Application.Json)
+            setBody(payload)
+        }.body<UserOut>())
+    }.fold(
+        onSuccess = { it },
+        onFailure = {
+            Response.Error(ProfileError.Unknown)
+        }
+    )
 
 }

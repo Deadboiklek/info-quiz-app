@@ -1,5 +1,8 @@
 package com.example.infoquizapp.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import com.example.infoquizapp.data.AppDatabase
 import com.example.infoquizapp.data.achievement.network.ApiAchievementsService
@@ -37,6 +40,7 @@ import com.example.infoquizapp.domain.practice.usecases.MarkPracticeAsDoneUseCas
 import com.example.infoquizapp.domain.profile.repository.ProfileRepository
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
 import com.example.infoquizapp.domain.profile.usecases.GetStatisticsUseCase
+import com.example.infoquizapp.domain.profile.usecases.UpdateProfileUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestUseCase
@@ -114,6 +118,13 @@ val appModule = DI.Module("appModule") {
             .build()
     }
 
+    
+
+    bind<DataStore<Preferences>>() with singleton {
+        val ctx: Context = instance()
+        ctx.dataStore
+    }
+
     bind<TheoryDao>() with singleton { instance<AppDatabase>().theoryDao() }
     bind<PracticeDao>() with singleton { instance<AppDatabase>().practiceDao() }
 
@@ -173,6 +184,7 @@ val appModule = DI.Module("appModule") {
     //profile
     bind<GetProfileUseCase>() with singleton { GetProfileUseCase(instance()) }
     bind<GetStatisticsUseCase>() with singleton { GetStatisticsUseCase(instance()) }
+    bind<UpdateProfileUseCase>() with singleton { UpdateProfileUseCase(instance()) }
     //achievement
     bind<GetAllAchievementsUseCase>() with singleton { GetAllAchievementsUseCase(instance()) }
     bind<GetUserAchievementsUseCase>() with singleton { GetUserAchievementsUseCase(instance()) }
@@ -208,7 +220,7 @@ val appModule = DI.Module("appModule") {
     // auth
     bind<AuthViewModel>() with singleton { AuthViewModel(instance(), instance(), instance()) }
     //profile
-    bind<ProfileViewModel>() with singleton { ProfileViewModel(instance()) }
+    bind<ProfileViewModel>() with singleton { ProfileViewModel(instance(), instance()) }
     bind<StatisticsViewModel>() with singleton { StatisticsViewModel(instance()) }
     //achievement
     bind<AchievementsViewModel>() with singleton { AchievementsViewModel(instance(), instance()) }
@@ -219,7 +231,7 @@ val appModule = DI.Module("appModule") {
     //quiz
     bind<QuizViewModel>() with singleton { QuizViewModel(instance(), instance()) }
     //main
-    bind<MainViewModel>() with singleton { MainViewModel(instance()) }
+    bind<MainViewModel>() with singleton { MainViewModel(instance(), instance()) }
     //trial
     bind<TrialViewModel>() with singleton { TrialViewModel(instance(), instance()) }
     //practice

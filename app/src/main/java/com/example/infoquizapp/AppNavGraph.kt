@@ -28,6 +28,7 @@ import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.view.MainScreen
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
+import com.example.infoquizapp.presentation.profile.view.ProfileEditScreen
 import com.example.infoquizapp.presentation.profile.view.ProfileScreen
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
@@ -105,6 +106,9 @@ sealed class Routes(val route: String) {
     }
     object Game : Routes("game/{token}") {
         fun createRoute(token: String): String = "game/$token"
+    }
+    object ProfileEdit : Routes("profileedit/{token}") {
+        fun createRoute(token: String): String = "profileedit/$token"
     }
 }
 
@@ -348,6 +352,19 @@ fun AppNavGraph(
                 viewModel = studentListViewModel,
                 navController = navController,
                 onBack = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Routes.ProfileEdit.route
+        ) {
+            val profileViewModel : ProfileViewModel by di.instance()
+            val authViewModel: AuthViewModel by di.instance()
+
+            ProfileEditScreen(
+                profileViewModel = profileViewModel,
+                authViewModel = authViewModel,
+                navController = navController
             )
         }
 

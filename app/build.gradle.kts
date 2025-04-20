@@ -80,4 +80,6 @@ dependencies {
     implementation(libs.compose.markdown)
 
     implementation(libs.androidx.core.splashscreen)
+
+    implementation(libs.androidx.datastore.preferences)
 }
