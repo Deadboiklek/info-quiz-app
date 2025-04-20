@@ -37,6 +37,9 @@ class QuizViewModel(
     private val _testResultState = MutableStateFlow<TestResultUiState>(TestResultUiState.Idle)
     val testResultState: StateFlow<TestResultUiState> = _testResultState
 
+    private val _answerResult = MutableStateFlow<AnswerOut?>(null)
+    val answerResult: StateFlow<AnswerOut?> = _answerResult
+
     private var _userAnswers = mutableMapOf<Int, String>()
     val userAnswers: Map<Int, String> get() = _userAnswers
 
@@ -60,7 +63,6 @@ class QuizViewModel(
         }
     }
 
-    // Новый метод для отправки всех ответов и подсчета правильных
     fun submitTest(userAnswers: Map<Int, String>, token: String) {
         viewModelScope.launch {
             var correctAnswers = 0
@@ -72,10 +74,30 @@ class QuizViewModel(
         }
     }
 
-    // Новый метод для сброса состояния
+    fun checkAnswer(quizId: Int, answer: String, token: String) {
+        viewModelScope.launch {
+            val result = submitAnswerUseCase(AnswerIn(quizId, answer), token)
+            // Сохраняем локально результат проверки
+            _answerResult.value = result.response
+            if (result.response?.isCorrect == true) {
+                // Запоминаем ответ для подсчёта в конце
+                _userAnswers[quizId] = answer
+            }
+        }
+    }
+
+    fun setUserAnswer(quizId: Int, answer: String) {
+        _userAnswers[quizId] = answer
+    }
+
     fun resetTest() {
         _userAnswers.clear()  // Очистить ответы
         _testResultState.value = TestResultUiState.Idle
         _testQuizzesState.value = TestQuizzesUiState.Idle
+        resetAnswerResult()
+    }
+
+    fun resetAnswerResult() {
+        _answerResult.value = null
     }
 }
