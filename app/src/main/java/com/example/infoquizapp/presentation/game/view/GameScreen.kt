@@ -1,14 +1,12 @@
 package com.example.infoquizapp.presentation.game.view
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +28,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.infoquizapp.R
 import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
@@ -39,7 +36,7 @@ import com.example.infoquizapp.utils.TokenManager
 @Composable
 fun GameScreen(
     viewModel: GameViewModel,
-    onExit: () -> Unit // Callback для выхода на предыдущий экран
+    onExit: () -> Unit
 ) {
 
     val context = LocalContext.current

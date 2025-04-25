@@ -6,7 +6,6 @@ import com.example.infoquizapp.data.quiz.model.AnswerIn
 import com.example.infoquizapp.data.quiz.model.AnswerOut
 import com.example.infoquizapp.data.quiz.model.QuizOut
 import com.example.infoquizapp.domain.quiz.usecases.GetTrialTestUseCase
-import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerResult
 import com.example.infoquizapp.domain.quiz.usecases.SubmitAnswerUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

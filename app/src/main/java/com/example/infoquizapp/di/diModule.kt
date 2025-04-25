@@ -19,6 +19,7 @@ import com.example.infoquizapp.data.TheoryDao
 import com.example.infoquizapp.data.gamequiz.network.ApiGameQuizService
 import com.example.infoquizapp.data.gamequiz.repository.GameQuizRepositoryImpl
 import com.example.infoquizapp.data.practice.repository.PracticeRepositoryImpl
+import com.example.infoquizapp.data.profile.repository.LeaderboardRepositoryImpl
 import com.example.infoquizapp.data.quest.network.ApiQuestsService
 import com.example.infoquizapp.data.teacher.network.TeacherApiService
 import com.example.infoquizapp.data.teacher.repository.TeacherRepositoryImpl
@@ -37,12 +38,13 @@ import com.example.infoquizapp.domain.practice.repository.PracticeRepository
 import com.example.infoquizapp.domain.practice.usecases.GetAllPracticeUseCase
 import com.example.infoquizapp.domain.practice.usecases.GetPracticeUseCase
 import com.example.infoquizapp.domain.practice.usecases.MarkPracticeAsDoneUseCase
+import com.example.infoquizapp.domain.profile.repository.LeaderboardRepository
 import com.example.infoquizapp.domain.profile.repository.ProfileRepository
+import com.example.infoquizapp.domain.profile.usecases.GetLeaderboardUseCase
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
 import com.example.infoquizapp.domain.profile.usecases.GetStatisticsUseCase
 import com.example.infoquizapp.domain.profile.usecases.UpdateProfileUseCase
 import com.example.infoquizapp.domain.quest.repository.QuestRepository
-import com.example.infoquizapp.domain.quest.usecases.CompleteQuestResult
 import com.example.infoquizapp.domain.quest.usecases.CompleteQuestUseCase
 import com.example.infoquizapp.domain.quest.usecases.GetAllQuestsUseCase
 import com.example.infoquizapp.domain.quest.usecases.GetUserQuestsUseCase
@@ -68,6 +70,7 @@ import com.example.infoquizapp.presentation.auth.viewmodel.AuthViewModel
 import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
+import com.example.infoquizapp.presentation.profile.viewmodel.LeaderboardViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.presentation.quest.viewmodel.QuestsViewModel
@@ -92,7 +95,6 @@ import kotlinx.serialization.json.Json
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
-import org.kodein.di.provider
 import org.kodein.di.singleton
 
 val appModule = DI.Module("appModule") {
@@ -118,8 +120,6 @@ val appModule = DI.Module("appModule") {
             .fallbackToDestructiveMigration()
             .build()
     }
-
-    
 
     bind<DataStore<Preferences>>() with singleton {
         val ctx: Context = instance()
@@ -176,6 +176,8 @@ val appModule = DI.Module("appModule") {
     bind<GameQuizRepository>() with singleton { GameQuizRepositoryImpl(instance()) }
     //teacher
     bind<TeacherRepository>() with singleton { TeacherRepositoryImpl(instance()) }
+    //leaderboard
+    bind<LeaderboardRepository>() with singleton { LeaderboardRepositoryImpl(instance()) }
 
     //usecases
     // auth
@@ -217,6 +219,8 @@ val appModule = DI.Module("appModule") {
     bind<GetStudentStatisticsUseCase>() with singleton { GetStudentStatisticsUseCase(instance()) }
     bind<UpdateTeacherQuizUseCase>() with singleton { UpdateTeacherQuizUseCase(instance()) }
     bind<UpdateTeacherProfileUseCase>() with singleton { UpdateTeacherProfileUseCase(instance()) }
+    //leaderboard
+    bind<GetLeaderboardUseCase>() with singleton { GetLeaderboardUseCase(instance()) }
 
     //viewmodels
     // auth
@@ -252,4 +256,6 @@ val appModule = DI.Module("appModule") {
     bind<StudentStatisticsViewModel>() with singleton { StudentStatisticsViewModel(instance()) }
     //updateteacherquiz
     bind<EditQuizViewModel>() with singleton { EditQuizViewModel(instance(), instance()) }
+    //leaderboard
+    bind<LeaderboardViewModel>() with singleton { LeaderboardViewModel(instance()) }
 }

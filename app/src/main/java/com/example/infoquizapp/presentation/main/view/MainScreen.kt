@@ -15,9 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +27,7 @@ import com.example.infoquizapp.presentation.achievement.viewmodel.AchievementsVi
 import com.example.infoquizapp.presentation.achievementnotifier.GlobalAchievementNotifier
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AchievementsCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.AppBar
+import com.example.infoquizapp.presentation.main.view.mainscreencomponent.LeaderboardCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.QuestCard
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.TabBarComp
 import com.example.infoquizapp.presentation.main.view.mainscreencomponent.UserProgressBar
@@ -100,10 +98,9 @@ fun MainScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues) // Отступы от top/bottom bars
+                            .padding(paddingValues)
                     ) {
 
-                        // Основной контент
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -112,11 +109,16 @@ fun MainScreen(
 
                             Spacer(modifier = Modifier.height(16.dp))
 
+                            LeaderboardCard(
+                                onLeaderboardCardClick = { navController.navigate(Routes.LeaderBoardScreen.route) }
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
                             QuestCard(
                                 onQuestClick = {
                                     navController.navigate(Routes.Quest.createRoute(token))
-                                },
-                                token = token
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
@@ -127,7 +129,6 @@ fun MainScreen(
                             )
                         }
 
-                        // Уведомление — поверх, но с отступом сверху, чтобы не перекрыть TopAppBar
                         GlobalAchievementNotifier(
                             viewModel = achievementsViewModel,
                             modifier = Modifier

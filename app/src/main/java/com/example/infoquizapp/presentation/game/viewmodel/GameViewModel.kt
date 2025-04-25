@@ -16,10 +16,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-// Функция для вычисления расстояния
 fun Offset.distance(): Float = sqrt(x * x + y * y)
 
-// Состояние игры
 data class GameState(
     val spaceshipPosition: Offset = Offset(150f, 600f),
     val asteroids: List<Asteroid> = emptyList(),
@@ -42,11 +40,9 @@ class GameViewModel(
     private var gameIsRunning = true
     private var quizRequested = false
 
-    // Новый множитель скорости, который увеличивается после каждого верного ответа
     private var gameSpeedMultiplier = 1f
 
     fun startGame(token: String, screenWidth: Float, screenHeight: Float) {
-        // Устанавливаем позицию корабля чуть ниже центра экрана
         _gameState.value = GameState(
             spaceshipPosition = Offset(screenWidth / 2, screenHeight / 2 + 40f)
         )
@@ -73,7 +69,6 @@ class GameViewModel(
     private fun updateGameState(token: String, screenWidth: Float, screenHeight: Float) {
         val currentState = _gameState.value
 
-        // Обновляем астероиды с учетом gameSpeedMultiplier
         val movedAsteroids = currentState.asteroids.map { asteroid ->
             asteroid.copy(position = asteroid.position.copy(y = asteroid.position.y + asteroid.speed * gameSpeedMultiplier))
         }
@@ -85,7 +80,6 @@ class GameViewModel(
         var lives = currentState.lives
         var score = currentState.score
 
-        // Проверяем столкновения корабля с астероидами
         val remainingAsteroids = onScreenAsteroids.filter { asteroid ->
             val distance = (asteroid.position - spaceshipPos).distance()
             val collisionDistance = (asteroid.size / 2 + spaceshipRadius)
@@ -109,7 +103,6 @@ class GameViewModel(
             return
         }
 
-        // Генерация нового астероида с учётом gameSpeedMultiplier не влияет на генерацию, только на движение
         val newAsteroids = if (remainingAsteroids.size < 5) {
             val maxAttempts = 10
             var newAsteroid: Asteroid? = null
@@ -117,8 +110,8 @@ class GameViewModel(
                 val randomX = Random.nextFloat() * screenWidth
                 val candidate = Asteroid(
                     position = Offset(randomX, -Random.nextFloat() * 50f),
-                    size = (30f + Random.nextFloat() * 20f) * 2,  // если нужно увеличить размер, но здесь можно оставить прежним
-                    speed = (3f + Random.nextFloat() * 4f) * 4     // если нужно увеличить базовую скорость, но уже умножается на multiplier
+                    size = (30f + Random.nextFloat() * 20f) * 2,
+                    speed = (3f + Random.nextFloat() * 4f) * 4
                 )
                 if (remainingAsteroids.all { existing ->
                         (existing.position - candidate.position).distance() >
@@ -133,34 +126,28 @@ class GameViewModel(
             remainingAsteroids
         }
 
-        // Логика появления и движения монстра
         var isPausedForQuestion = currentState.isPausedForQuestion
         var monster: Monster? = currentState.monster
         if (monster == null && Random.nextInt(1000) < 5) {
-            // С небольшим шансом создать сложного монстра (10% шанс)
             val difficulty = if (Random.nextFloat() < 0.3f) "hard" else "normal"
             monster = Monster(
                 position = Offset(0f, -60f),
-                width = screenWidth,  // монстр занимает всю ширину экрана
+                width = screenWidth,
                 height = 540f,
-                speed = 3f * gameSpeedMultiplier,  // скорость с учетом множителя
+                speed = 3f * gameSpeedMultiplier,
                 difficulty = difficulty
             )
         } else if (monster != null) {
-            // Двигаем монстра вертикально вниз
             monster = monster.copy(position = monster.position.copy(y = monster.position.y + monster.speed))
-            // Проверка столкновения: если корабль входит в вертикальную область монстра
             if (spaceshipPos.y + spaceshipRadius > monster.position.y &&
                 spaceshipPos.y - spaceshipRadius < monster.position.y + monster.height
             ) {
                 if (!quizRequested) {
                     isPausedForQuestion = true
                     quizRequested = true
-                    // Вызываем запрос вопроса с учетом сложности монстра
                     fetchGameQuiz(token, monster.difficulty)
                 }
             }
-            // Если монстр ушел за нижнюю границу экрана, сбрасываем его
             if (monster.position.y > screenHeight) {
                 monster = null
             }
@@ -185,7 +172,6 @@ class GameViewModel(
         }
     }
 
-    // При ответе на вопрос: если ответ правильный, увеличиваем multiplier
     fun onAnswerSelected(option: Int, token: String) {
         val currentState = _gameState.value
         var lives = currentState.lives
@@ -195,7 +181,6 @@ class GameViewModel(
             val selectedAnswer = if (option == 1) quiz.option1 else quiz.option2
             if (selectedAnswer == quiz.correctAnswer) {
                 score += quiz.experienceReward
-                // Увеличиваем множитель скорости
                 gameSpeedMultiplier *= 1.1f
                 viewModelScope.launch {
                     completeGameQuizUseCase(quiz.experienceReward, quiz.id, token)
@@ -227,7 +212,6 @@ class GameViewModel(
     }
 
     fun resetGame() {
-        // Отмена игрового цикла и сброс состояния
         gameJob?.cancel()
         _gameState.value = GameState()
         gameIsRunning = false

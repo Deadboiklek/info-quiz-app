@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.data.profile.model.UserOut
 import com.example.infoquizapp.data.profile.network.Response
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
-import com.example.infoquizapp.domain.profile.usecases.ProfileResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

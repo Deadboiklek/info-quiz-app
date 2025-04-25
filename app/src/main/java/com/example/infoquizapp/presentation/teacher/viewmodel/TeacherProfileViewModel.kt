@@ -6,7 +6,6 @@ import com.example.infoquizapp.data.teacher.model.TeacherProfile
 import com.example.infoquizapp.data.teacher.model.TeacherUpdate
 import com.example.infoquizapp.data.teacher.network.Response
 import com.example.infoquizapp.domain.teacher.usecases.GetTeacherProfileUseCase
-import com.example.infoquizapp.domain.teacher.usecases.TeacherProfileResult
 import com.example.infoquizapp.domain.teacher.usecases.UpdateTeacherProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
