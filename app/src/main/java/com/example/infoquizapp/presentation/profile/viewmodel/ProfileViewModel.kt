@@ -3,7 +3,6 @@ package com.example.infoquizapp.presentation.profile.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.domain.profile.usecases.GetProfileUseCase
-import com.example.infoquizapp.domain.profile.usecases.ProfileResult
 import com.example.infoquizapp.data.profile.network.Response
 import com.example.infoquizapp.data.profile.model.UserOut
 import com.example.infoquizapp.data.profile.model.UserUpdate

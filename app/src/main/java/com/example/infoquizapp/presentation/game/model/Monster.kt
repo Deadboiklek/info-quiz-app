@@ -7,5 +7,5 @@ data class Monster(
     val width: Float,
     val height: Float = 60f,
     val speed: Float = 3f,
-    val difficulty: String = "normal" // "normal" по умолчанию, или "hard"
+    val difficulty: String = "normal"
 )

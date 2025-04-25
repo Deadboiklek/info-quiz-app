@@ -1,5 +1,6 @@
 package com.example.infoquizapp.presentation.profile.view.profilescreencomponent
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.infoquizapp.R
 
 @Composable
 fun UserProfileSection(name: String) {
@@ -24,7 +29,6 @@ fun UserProfileSection(name: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Градиентный аватар, не знаю нахуя, можно было и не градиентный
         Box(
             modifier = Modifier
                 .size(100.dp)
@@ -37,9 +41,15 @@ fun UserProfileSection(name: String) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text("AC", color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold)
+            Image(
+                painter = painterResource(id = R.drawable.avatar),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                ,
+                contentScale = ContentScale.Crop
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))

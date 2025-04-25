@@ -2,7 +2,6 @@ package com.example.infoquizapp.data.teacher.repository
 
 import com.example.infoquizapp.data.teacher.model.StudentInfo
 import com.example.infoquizapp.data.teacher.model.StudentStatistics
-import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
 import com.example.infoquizapp.data.teacher.model.TeacherUpdate
 import com.example.infoquizapp.data.teacher.network.Response
 import com.example.infoquizapp.data.teacher.network.TeacherApiService

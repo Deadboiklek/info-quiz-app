@@ -28,8 +28,10 @@ import com.example.infoquizapp.presentation.game.viewmodel.GameViewModel
 import com.example.infoquizapp.presentation.main.view.MainScreen
 import com.example.infoquizapp.presentation.main.viewmodel.MainViewModel
 import com.example.infoquizapp.presentation.practice.viewmodel.PracticeViewModel
+import com.example.infoquizapp.presentation.profile.view.LeaderboardScreen
 import com.example.infoquizapp.presentation.profile.view.ProfileEditScreen
 import com.example.infoquizapp.presentation.profile.view.ProfileScreen
+import com.example.infoquizapp.presentation.profile.viewmodel.LeaderboardViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.ProfileViewModel
 import com.example.infoquizapp.presentation.profile.viewmodel.StatisticsViewModel
 import com.example.infoquizapp.presentation.quest.view.QuestScreen
@@ -75,6 +77,8 @@ sealed class Routes(val route: String) {
     object GetAndDeleteQuizScreen : Routes("getanddeletequizscreen")
     object StudentsListScreen : Routes("studentslistscreen")
     object StudentStatisticsScreen : Routes("studentstatistics/{studentId}")
+
+    object LeaderBoardScreen : Routes("leaderboard")
 
     object Profile : Routes("profile/{token}") {
         fun createRoute(token: String): String = "profile/$token"
@@ -398,28 +402,23 @@ fun AppNavGraph(
             val quizId = backStackEntry.arguments?.getString("quizId")?.toIntOrNull() ?: return@composable
             val token = TokenManager.getToken(LocalContext.current) ?: return@composable
 
-            // Shared ViewModel holding list of quizzes
             val listVm: GetAndDeleteQuizViewModel by di.instance()
             val editVm: EditQuizViewModel by di.instance()
 
-            // Trigger load of quizzes if not already loaded
             LaunchedEffect(token) {
                 listVm.loadTeacherQuizzes(token)
             }
 
-            // Find the QuizOut by ID from the list state
             val quizItem by listVm.quizzesState
                 .map { quizList -> quizList.find { it.id == quizId } }
                 .collectAsState(initial = null)
 
-            // Once we have the quiz, load into EditQuizViewModel
             quizItem?.let { quiz ->
                 LaunchedEffect(quiz) {
                     editVm.loadQuiz(quiz)
                 }
             }
 
-            // If quiz not found yet, show loader or error
             if (quizItem == null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -442,6 +441,16 @@ fun AppNavGraph(
                 vm = profileViewModel,
                 authVm = authViewModel,
                 nav = navController
+            )
+        }
+
+        composable(route = Routes.LeaderBoardScreen.route) {
+
+            val leaderBoardViewModel: LeaderboardViewModel by di.instance()
+
+            LeaderboardScreen(
+                viewModel = leaderBoardViewModel,
+                onBack = { navController.navigateUp() }
             )
         }
     }

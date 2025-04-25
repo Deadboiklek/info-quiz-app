@@ -40,7 +40,6 @@ fun AppBar(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Аватар пользователя
                 Image(
                     painter = painterResource(id = R.drawable.avatar),
                     contentDescription = "Profile Picture",
@@ -51,7 +50,6 @@ fun AppBar(
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                // Имя пользователя
                 Text(text = user.username,
                     style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier.clickable { onProfileClick(token) }

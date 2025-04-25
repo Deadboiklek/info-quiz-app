@@ -1,6 +1,7 @@
 package com.example.infoquizapp.data.profile.network
 
 import android.util.Log
+import com.example.infoquizapp.data.profile.model.LeaderboardOut
 import com.example.infoquizapp.data.profile.model.UserOut
 import com.example.infoquizapp.data.profile.model.UserStatistics
 import com.example.infoquizapp.data.profile.model.UserUpdate
@@ -12,7 +13,6 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.http.headers
 
 sealed class Response<T>{
     data class Succes<T>(
@@ -78,5 +78,20 @@ class ApiProfileService(private val client: HttpClient, private val baseUrl: Str
             Response.Error(ProfileError.Unknown)
         }
     )
+
+    suspend fun getLeaderboard(token: String): Response<LeaderboardOut> {
+        return kotlin.runCatching {
+            Response.Succes(
+                client.get("$baseUrl/user/leaderboard") {
+                    header("Authorization", "Bearer $token")
+                }.body<LeaderboardOut>()
+            )
+        }.fold(
+            onSuccess = { it },
+            onFailure = {
+                Response.Error(ProfileError.GetStatisticsError)
+            }
+        )
+    }
 
 }

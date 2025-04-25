@@ -3,9 +3,6 @@ package com.example.infoquizapp.presentation.teacher.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.infoquizapp.data.quiz.model.QuizOut
-import com.example.infoquizapp.data.teacher.model.TeacherCreateQuiz
-import com.example.infoquizapp.data.teacher.network.Response
-import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizResult
 import com.example.infoquizapp.domain.teacher.usecases.PostTeacherQuizUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
