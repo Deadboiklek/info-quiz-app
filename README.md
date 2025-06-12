@@ -19,4 +19,4 @@ ER-диаграмма и логическая модель данных - [БД.
 
 Диаграммы последовательности - [Диаграммы последовательности клиентской части.pdf](https://github.com/user-attachments/files/20710521/default.pdf)
 
-
+Пользовательский интерфейс - [Пользовательский интерфейс.pdf](https://github.com/user-attachments/files/20710658/default.pdf)
