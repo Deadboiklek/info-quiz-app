@@ -17,4 +17,6 @@ User Stories и Use Cases разрабатываемого приложения 
 
 ER-диаграмма и логическая модель данных - [БД.pdf](https://github.com/user-attachments/files/20710284/default.pdf)
 
+Диаграммы последовательности - [Диаграммы последовательности клиентской части.pdf](https://github.com/user-attachments/files/20710521/default.pdf)
+
 
