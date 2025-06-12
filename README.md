@@ -8,4 +8,5 @@
 - room
 
 User Stories и Use Cases разрабатываемого приложения - [Требования.pdf](https://github.com/user-attachments/files/20708568/default.pdf)
+
 Архитектура системы в нотации C4 - [Архитектура в нотации C4.pdf](https://github.com/user-attachments/files/20708843/C4.pdf)
