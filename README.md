@@ -14,3 +14,7 @@ User Stories и Use Cases разрабатываемого приложения 
 Модели бизнес-процессов клиентской части - [Модели бизнес-процессов клиентской части.pdf](https://github.com/user-attachments/files/20709243/-.pdf)
 
 Модели бизнес-процессов серверной части - [Модели бизнес-процессов серверной части.pdf](https://github.com/user-attachments/files/20709877/-.pdf)
+
+ER-диаграмма и логическая модель данных - [БД.pdf](https://github.com/user-attachments/files/20710284/default.pdf)
+
+
