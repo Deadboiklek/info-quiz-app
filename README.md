@@ -12,3 +12,5 @@ User Stories и Use Cases разрабатываемого приложения 
 Архитектура системы в нотации C4 - [Архитектура в нотации C4.pdf](https://github.com/user-attachments/files/20708843/C4.pdf)
 
 Модели бизнес-процессов клиентской части - [Модели бизнес-процессов клиентской части.pdf](https://github.com/user-attachments/files/20709243/-.pdf)
+
+Модели бизнес-процессов серверной части - [Модели бизнес-процессов серверной части.pdf](https://github.com/user-attachments/files/20709877/-.pdf)
